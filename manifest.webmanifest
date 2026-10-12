@@ -1,0 +1,39 @@
+{
+  "name": "Watuireng Poultry — Input Harian",
+  "short_name": "Watuireng",
+  "description": "Aplikasi PWA Input Harian Peternakan Ayam Layer Watuireng dengan Mode Offline dan Sinkronisasi Otomatis",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Harian Kandang",
+      "short_name": "Harian",
+      "url": "./index.html#/input/harian",
+      "description": "Input telur dan pakan kandang"
+    },
+    {
+      "name": "Stok Telur",
+      "short_name": "Stok",
+      "url": "./index.html#/input/telur_stok",
+      "description": "Input stok & kirim telur"
+    },
+    {
+      "name": "Antrean Offline",
+      "short_name": "Antrean",
+      "url": "./index.html#/queue",
+      "description": "Lihat antrean data offline"
+    }
+  ]
+}

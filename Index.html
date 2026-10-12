@@ -1,0 +1,4218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Watuireng">
+  <title>Input Harian Peternakan Watuireng</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       Plus UI Design Tokens (Clean, Enterprise, Slate + Emerald)
+       Tanpa Emoji — Tipografi Jelas & 7 Form Lengkap Berfungsi
+       ========================================================= */
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --card-muted: #f1f5f9;
+      --fg: #0f172a;
+      --fg-secondary: #334155;
+      --fg-muted: #64748b;
+      --pri: #059669;
+      --pri-hover: #047857;
+      --pri-light: #ecfdf5;
+      --pri-border: #a7f3d0;
+      --pri-fg: #ffffff;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --ring: #059669;
+      --warn: #d97706;
+      --warn-light: #fffbeb;
+      --warn-border: #fde68a;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bot: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* =========================================================
+       Sembunyikan Seluruh Scrollbar Pengganggu (Zero-Scrollbar)
+       Pengguliran tetap 100% aktif via sentuhan jemari, mouse wheel, & trackpad
+       ========================================================= */
+    ::-webkit-scrollbar {
+      display: none !important;
+      width: 0px !important;
+      height: 0px !important;
+      background: transparent !important;
+    }
+    ::-webkit-scrollbar-thumb {
+      display: none !important;
+      background: transparent !important;
+    }
+    ::-webkit-scrollbar-track {
+      display: none !important;
+      background: transparent !important;
+    }
+
+    html, body, * {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      touch-action: manipulation;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    body::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    button, .pill-item, .coop-btn, .preset-chip, .nav-item, .history-card-item {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .app-shell {
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Header Plus UI Compact Mobile */
+    header.plus-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: calc(8px + var(--safe-top)) 14px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: #059669;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 11.5px;
+      color: var(--fg-muted);
+      font-weight: 500;
+    }
+
+    /* Status Sinyal */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      cursor: pointer;
+    }
+    .status-pill.online {
+      background: var(--pri-light);
+      color: var(--pri);
+      border-color: var(--pri-border);
+    }
+    .status-pill.offline {
+      background: var(--warn-light);
+      color: var(--warn);
+      border-color: var(--warn-border);
+    }
+    .status-indicator-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .btn-icon-header {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--fg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+    .btn-icon-header:active { background: var(--card-muted); }
+
+    /* Bar Petugas Tunggal Sleek */
+    .operator-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 5px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .operator-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--fg-secondary);
+      font-weight: 600;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .operator-info span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .operator-date {
+      color: var(--fg-muted);
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Banner Offline & Queue Status */
+    .offline-notice {
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .offline-notice.offline-active {
+      background: var(--warn-light);
+      border-bottom: 1px solid var(--warn-border);
+      color: #92400e;
+    }
+    .offline-notice.online-queue {
+      background: #eff6ff;
+      border-bottom: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+
+    /* Konten Utama */
+    main.content-area {
+      flex: 1;
+      padding: 12px 14px calc(140px + var(--safe-bot));
+    }
+
+    /* Plus UI Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--fg);
+      margin: 0 0 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-description {
+      font-size: 12.5px;
+      color: var(--fg-muted);
+      margin: 0 0 12px;
+      line-height: 1.4;
+    }
+
+    /* Form Type Pill Bar (Horizontal Scroll with Snapping) */
+    .form-pill-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      scroll-padding: 0 14px;
+    }
+    .form-pill-nav::-webkit-scrollbar { display: none; }
+
+    .pill-item {
+      padding: 7px 13px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      color: var(--fg-secondary);
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.12s;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+    .pill-item:active {
+      transform: scale(0.96);
+    }
+    .pill-item.active {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    }
+
+    /* Segmented Control Kandang */
+    .coop-segment-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .coop-btn {
+      padding: 10px 4px;
+      min-height: 48px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      color: var(--fg-secondary);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: all 0.12s;
+    }
+    .coop-btn:active {
+      transform: scale(0.96);
+    }
+    .coop-btn.active {
+      border-color: var(--pri);
+      background: var(--pri-light);
+      color: var(--pri);
+      box-shadow: 0 1px 3px rgba(5, 150, 105, 0.12);
+    }
+    .coop-btn .coop-name {
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .coop-badge-status {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1.5px 5px;
+      border-radius: 4px;
+      line-height: 1.2;
+    }
+    .coop-badge-status.done {
+      background: var(--pri);
+      color: #ffffff;
+    }
+    .coop-badge-status.pending {
+      background: #f1f5f9;
+      color: var(--fg-muted);
+    }
+
+    /* Form Fields Plus UI */
+    .field-row {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .field-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .field-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .field-helper {
+      font-size: 11.5px;
+      color: var(--fg-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Steppers & Numeric Controls */
+    .stepper-layout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-step-action {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      min-height: 48px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--card-muted);
+      color: var(--fg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.1s;
+    }
+    .btn-step-action:active {
+      background: #e2e8f0;
+      transform: scale(0.94);
+    }
+
+    input.input-field-num, select.input-select-field {
+      width: 100%;
+      height: 48px;
+      min-height: 48px;
+      padding: 0 12px;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--fg);
+      font-size: 16px !important; /* Critical to prevent iOS auto-zoom! */
+      font-weight: 700;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      flex: 1;
+      min-width: 0;
+    }
+    input.input-field-num.mono {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      text-align: center;
+    }
+    input.input-field-num:focus, select.input-select-field:focus {
+      outline: none;
+      border-color: var(--ring);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Presets Chips */
+    .preset-chip-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .preset-chip {
+      padding: 7px 11px;
+      min-height: 36px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      color: var(--fg-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.08s ease, background-color 0.12s ease;
+    }
+    .preset-chip:active {
+      transform: scale(0.95);
+      background: var(--pri);
+      color: #ffffff;
+      border-color: var(--pri);
+    }
+    .preset-chip.accent {
+      background: var(--pri-light);
+      border-color: var(--pri-border);
+      color: var(--pri);
+    }
+
+    /* Kartu Kalkulator Plus UI */
+    .summary-calc-card {
+      background: var(--pri-light);
+      border: 1px solid var(--pri-border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .summary-calc-header {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--pri);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .summary-calc-value {
+      font-size: clamp(17px, 5vw, 21px);
+      font-weight: 800;
+      color: #065f46;
+      font-family: var(--font-mono);
+    }
+    .summary-status-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 2.5px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      width: fit-content;
+    }
+    .summary-status-tag.ok {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .summary-status-tag.warn {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* Dikte Suara */
+    .voice-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .btn-voice-dictate {
+      position: absolute;
+      right: 6px;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-muted);
+      color: var(--fg-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-voice-dictate.recording {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+    }
+
+    /* Medicine Rows */
+    .medicine-entry-row {
+      display: grid;
+      grid-template-columns: 1fr minmax(75px, 95px) 38px;
+      gap: 6px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    /* Tombol Utama Melayang di Bawah */
+    .bottom-save-container {
+      position: fixed;
+      bottom: calc(54px + var(--safe-bot));
+      left: 0;
+      right: 0;
+      max-width: 640px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 8px 14px;
+      z-index: 45;
+      box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    body.keyboard-open .bottom-save-container {
+      opacity: 0.15;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
+
+    .btn-primary-action {
+      width: 100%;
+      height: 48px;
+      min-height: 48px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: #059669;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+      transition: all 0.12s ease;
+    }
+    .btn-primary-action:active {
+      background: #047857;
+      transform: scale(0.98);
+    }
+    .btn-primary-action[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Navigasi Bawah Plus UI */
+    nav.bottom-nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 640px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 4px 6px calc(4px + var(--safe-bot));
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 50;
+      height: calc(54px + var(--safe-bot));
+    }
+
+    .nav-item {
+      flex: 1;
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 4px 2px;
+      color: var(--fg-muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.12s;
+    }
+    .nav-item:active {
+      transform: scale(0.94);
+    }
+    .nav-item.active {
+      color: var(--pri);
+      font-weight: 700;
+    }
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-badge-count {
+      position: absolute;
+      top: 2px;
+      right: calc(50% - 16px);
+      background: var(--warn);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 9999px;
+    }
+
+    /* Modal Konfirmasi */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+      z-index: 70;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-content-box {
+      background: #ffffff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 22px 18px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .modal-icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--pri-light);
+      color: var(--pri);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    /* Toast Notification */
+    #toast-shelf {
+      position: fixed;
+      top: calc(55px + var(--safe-top));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      pointer-events: none;
+      width: 90%;
+      max-width: 420px;
+    }
+    .toast-box {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 11px 15px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      margin-bottom: 8px;
+    }
+    .toast-box.success { background: #065f46; border: 1px solid #059669; }
+    .toast-box.warn { background: #78350f; border: 1px solid #d97706; }
+
+    /* Riwayat & Antrean List Item */
+    .data-row-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    /* =========================================================
+       Plus UI Spreadsheet Data Explorer Styles
+       ========================================================= */
+    .stat-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stat-card-plus {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .stat-card-plus .stat-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stat-card-plus .stat-value {
+      font-size: clamp(14px, 4.2vw, 18px);
+      font-weight: 800;
+      color: var(--fg);
+      font-family: var(--font-mono);
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stat-card-plus .stat-sub {
+      font-size: 11px;
+      color: var(--fg-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Search & Filter Plus UI */
+    .search-input-group {
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .search-input-group svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--fg-muted);
+      pointer-events: none;
+    }
+    .search-input-plus {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px 0 38px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--fg);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input-plus:focus {
+      border-color: var(--pri);
+    }
+
+    /* History Record Item Plus UI */
+    .history-card-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.12s;
+      cursor: pointer;
+    }
+    .history-card-item:hover, .history-card-item:active {
+      border-color: var(--border-dark);
+      background: #fdfdfd;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .history-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2.5px 7px;
+      border-radius: 6px;
+    }
+    .tag-badge.tag-harian { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .tag-badge.tag-telur_stok { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .tag-badge.tag-pakan_masuk { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+    .tag-badge.tag-obat_masuk { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+    .tag-badge.tag-kas { background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; }
+    .tag-badge.tag-jual_telur { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+    .tag-badge.tag-jual_lain { background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; }
+
+    .sheet-target-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--fg-secondary);
+      background: var(--card-muted);
+      padding: 2.5px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .history-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+
+    .history-card-sum {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--pri);
+      margin-bottom: 6px;
+    }
+
+    .history-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+      font-size: 11.5px;
+      color: var(--fg-muted);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+    .history-card-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Detail Drawer Modal Plus UI */
+    .detail-drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      z-index: 85;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .detail-drawer.open {
+      display: flex;
+    }
+    .detail-drawer-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 640px;
+      max-height: 88vh;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--border);
+      padding: 12px 16px calc(16px + var(--safe-bot));
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+      animation: slideUpDrawer 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .detail-drawer-box::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+    .detail-drawer-box::-webkit-scrollbar-thumb,
+    .detail-drawer-box::-webkit-scrollbar-track {
+      display: none !important;
+      background: transparent !important;
+    }
+    .drawer-drag-pill {
+      width: 38px;
+      height: 4.5px;
+      border-radius: 9999px;
+      background: #cbd5e1;
+      margin: 0 auto 10px;
+      flex-shrink: 0;
+    }
+
+    @keyframes slideUpDrawer {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .detail-table-plus {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 12.5px;
+    }
+    .detail-table-plus tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .detail-table-plus td {
+      padding: 8px 4px;
+      vertical-align: top;
+    }
+    .detail-table-plus td.key {
+      font-weight: 600;
+      color: var(--fg-muted);
+      width: 40%;
+    }
+    .detail-table-plus td.val {
+      font-weight: 700;
+      color: var(--fg);
+      word-break: break-word;
+    }
+
+    .raw-json-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--fg-secondary);
+      max-height: 130px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    .raw-json-box::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    /* Media Queries untuk HP Kecil (< 380px) */
+    @media (max-width: 380px) {
+      body { font-size: 14px; }
+      .brand-title { font-size: 14px; }
+      .brand-subtitle { font-size: 10.5px; }
+      .status-pill { font-size: 11px; padding: 4px 7px; }
+      .card { padding: 12px; }
+      .pill-item { padding: 6px 10px; font-size: 11.5px; }
+      .coop-btn { padding: 8px 2px; }
+      .coop-name { font-size: 12px; }
+      .btn-step-action { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+      input.input-field-num, select.input-select-field { height: 44px; min-height: 44px; font-size: 16px !important; }
+      .btn-primary-action { height: 46px; min-height: 46px; font-size: 14px; }
+      .stat-card-plus { padding: 8px 10px; }
+      .detail-table-plus td.key { width: 45%; }
+    }
+
+    .d-none { display: none !important; }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- HEADER UTAMA PLUS UI -->
+  <header class="plus-header">
+    <div class="brand-group" onclick="switchNav('home')">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8 2 5 7 5 13a7 7 0 0 0 14 0c0-6-3-11-7-11z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">Watuireng Poultry</div>
+        <div class="brand-subtitle">Input Harian Peternakan</div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center;">
+      <button class="status-pill online" id="pill-status-connection" onclick="switchNav('queue')">
+        <span class="status-indicator-dot"></span>
+        <span id="text-status-connection">Tersambung</span>
+      </button>
+
+      <button class="btn-icon-header" onclick="switchNav('settings')" aria-label="Pengaturan">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- BAR INFORMASI PETUGAS TUNGGAL -->
+  <div class="operator-bar">
+    <div class="operator-info">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Petugas: <b id="bar-operator-name">Mba Erlin</b></span>
+    </div>
+    <div class="operator-date" id="bar-today-date">Memuat tanggal...</div>
+  </div>
+
+  <!-- PEMBERITAHUAN OFFLINE & ANTREAN RAMAH MOBILE -->
+  <div class="offline-notice d-none" id="notice-offline-bar">
+    <div style="display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="notice-offline-icon" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="notice-offline-text" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Mode Offline</span>
+    </div>
+    <button class="preset-chip" style="padding:3px 10px; font-size:11.5px; flex-shrink:0;" onclick="switchNav('queue')">Antrean</button>
+  </div>
+
+  <!-- WADAH TOAST -->
+  <div id="toast-shelf"></div>
+
+  <!-- AREA KONTEN UTAMA -->
+  <main class="content-area">
+
+    <!-- VIEW 1: BERANDA -->
+    <section id="view-home">
+      <div class="card">
+        <div class="card-title">
+          <span>Status Pencatatan Harian</span>
+          <span style="font-size:12px; font-weight:600; color:var(--fg-muted);" id="home-coop-progress">0/3 Selesai</span>
+        </div>
+        <p class="card-description">Pilih kandang untuk memeriksa dan memasukkan data produksi telur serta konsumsi pakan hari ini.</p>
+
+        <div class="coop-segment-group">
+          <div class="coop-btn" onclick="openCoopDirect(1)">
+            <span class="coop-name">Kandang 1</span>
+            <span class="coop-badge-status pending" id="home-status-k1">Belum</span>
+          </div>
+          <div class="coop-btn" onclick="openCoopDirect(2)">
+            <span class="coop-name">Kandang 2</span>
+            <span class="coop-badge-status pending" id="home-status-k2">Belum</span>
+          </div>
+          <div class="coop-btn" onclick="openCoopDirect(3)">
+            <span class="coop-name">Kandang 3</span>
+            <span class="coop-badge-status pending" id="home-status-k3">Belum</span>
+          </div>
+        </div>
+
+        <button class="btn-primary-action" onclick="openCoopDirect(1)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Mulai Input Kandang
+        </button>
+      </div>
+
+      <!-- Akses Cepat Seluruh 7 Form -->
+      <div style="font-size:13px; font-weight:700; color:var(--fg-muted); text-transform:uppercase; letter-spacing:0.04em; margin:20px 0 10px;">
+        Form Pencatatan Lainnya
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('telur_stok')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Stok &amp; Kirim Telur</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Armada, Mas Aji, Sisa</div>
+        </div>
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('pakan_masuk')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Pakan Masuk</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Nota pembelian karung</div>
+        </div>
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('obat_masuk')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Obat Masuk</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Faktur vitamin &amp; obat</div>
+        </div>
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('kas')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Kas Operasional</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Kas masuk &amp; kas keluar</div>
+        </div>
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('jual_telur')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Penjualan Telur</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Bagus, putih, bucek, plastik</div>
+        </div>
+        <div class="card" style="margin:0; padding:14px; cursor:pointer;" onclick="openFormType('jual_lain')">
+          <div style="font-weight:700; font-size:14px; margin-bottom:2px;">Jual Sak / Afkir</div>
+          <div style="font-size:12px; color:var(--fg-muted);">Karung sak, ayam afkir, belek</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: FORM INPUT DENGAN 7 TAB PENUH BERFUNGSI -->
+    <section id="view-input" class="d-none">
+
+      <!-- Sub Navigation Bar 7 Form -->
+      <div class="form-pill-nav" id="subnav-form-pills">
+        <button class="pill-item active" data-form="harian" onclick="switchFormType('harian')">Harian Kandang</button>
+        <button class="pill-item" data-form="telur_stok" onclick="switchFormType('telur_stok')">Stok &amp; Kirim Telur</button>
+        <button class="pill-item" data-form="pakan_masuk" onclick="switchFormType('pakan_masuk')">Pakan Masuk</button>
+        <button class="pill-item" data-form="obat_masuk" onclick="switchFormType('obat_masuk')">Obat Masuk</button>
+        <button class="pill-item" data-form="kas" onclick="switchFormType('kas')">Kas Operasional</button>
+        <button class="pill-item" data-form="jual_telur" onclick="switchFormType('jual_telur')">Jual Telur</button>
+        <button class="pill-item" data-form="jual_lain" onclick="switchFormType('jual_lain')">Jual Sak / Afkir</button>
+      </div>
+
+      <!-- Tanggal Bersama -->
+      <div class="card" style="padding:12px 16px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <label class="field-label" style="margin-bottom:0;" for="global-input-date">Tanggal Transaksi:</label>
+          <div style="display:flex; gap:6px;">
+            <button class="preset-chip accent" id="btn-chip-today" onclick="setPresetDate(0)">Hari Ini</button>
+            <button class="preset-chip" id="btn-chip-yesterday" onclick="setPresetDate(-1)">Kemarin</button>
+          </div>
+        </div>
+        <input type="date" id="global-input-date" style="width:100%; height:44px; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:0 12px; font-size:15px; font-weight:700; font-family:inherit; margin-top:8px;" onchange="onDateChanged(this.value)">
+      </div>
+
+      <!-- Indikator Mode Koreksi -->
+      <div class="card d-none" id="koreksi-notice-card" style="background:var(--warn-light); border-color:var(--warn-border); color:#92400e; padding:10px 14px; margin-bottom:12px;">
+        <div style="font-weight:700; font-size:13.5px;">Mode Koreksi Data</div>
+        <div style="font-size:12.5px; margin-top:2px;">Data untuk tanggal dan jenis ini sudah ada sebelumnya. Form memuat data lama untuk diperbarui tanpa tercatat ganda.</div>
+      </div>
+
+      <!-- ==========================================
+           FORM 1: HARIAN KANDANG
+           ========================================== -->
+      <div id="form-container-harian">
+        <div class="card" style="padding:14px 16px; margin-bottom:12px;">
+          <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:8px;">Pilih Kandang:</div>
+          <div class="coop-segment-group" style="margin-bottom:0;">
+            <button class="coop-btn active" id="tab-kandang-1" onclick="selectCoop(1)">
+              <span class="coop-name">Kandang 1</span>
+            </button>
+            <button class="coop-btn" id="tab-kandang-2" onclick="selectCoop(2)">
+              <span class="coop-name">Kandang 2</span>
+            </button>
+            <button class="coop-btn" id="tab-kandang-3" onclick="selectCoop(3)">
+              <span class="coop-name">Kandang 3</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <!-- 1. Deplesi -->
+          <div class="field-row">
+            <label class="field-label" for="val-deplesi">1. Deplesi / Ayam Mati / Afkir (Ekor)</label>
+            <div class="field-helper">Jumlah ekor ayam yang mati atau diafkir pada kandang ini</div>
+            <div class="stepper-layout">
+              <button class="btn-step-action" onclick="stepNumber('val-deplesi', -1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <input type="text" inputmode="numeric" class="input-field-num mono" id="val-deplesi" value="0" oninput="calculateRealtime()">
+              <button class="btn-step-action" onclick="stepNumber('val-deplesi', 1)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div class="preset-chip-list">
+              <button class="preset-chip accent" onclick="setDirect('val-deplesi', 0)">0 (Nihil)</button>
+              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 1)">+1 Ekor</button>
+              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 2)">+2 Ekor</button>
+              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 5)">+5 Ekor</button>
+            </div>
+          </div>
+
+          <!-- 2. Butir Telur -->
+          <div class="field-row">
+            <label class="field-label" for="val-butir">2. Produksi Telur (Butir)</label>
+            <div class="field-helper">Total butir telur utuh yang dipanen dari kandang ini</div>
+            <input type="text" inputmode="numeric" class="input-field-num" style="margin-bottom:8px;" id="val-butir" placeholder="0" oninput="calculateRealtime()">
+            <div class="preset-chip-list">
+              <button class="preset-chip" onclick="incrementDirect('val-butir', 100)">+100 Butir</button>
+              <button class="preset-chip" onclick="incrementDirect('val-butir', 500)">+500 Butir</button>
+              <button class="preset-chip accent" onclick="incrementDirect('val-butir', 1000)">+1.000 Butir</button>
+            </div>
+          </div>
+
+          <!-- 3. Timbangan Telur Bagus -->
+          <div class="field-row">
+            <label class="field-label" for="val-kgBagus">3. Timbangan Telur Bagus (Kg)</label>
+            <div class="field-helper">Timbangan telur normal (1 krat kotak standar = 15 kg)</div>
+            <input type="text" inputmode="decimal" class="input-field-num" style="margin-bottom:8px;" id="val-kgBagus" placeholder="0" oninput="calculateRealtime()">
+            <div class="preset-chip-list">
+              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 15)">+1 Krat (15 kg)</button>
+              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 30)">+2 Krat (30 kg)</button>
+              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 45)">+3 Krat (45 kg)</button>
+              <button class="preset-chip" onclick="incrementDirect('val-kgBagus', 5)">+5 kg</button>
+            </div>
+          </div>
+
+          <!-- Telur Sortiran -->
+          <div class="field-row">
+            <label class="field-label">Telur Sortiran (Opsional)</label>
+            <div class="field-helper">Diisi jika terdapat telur warna putih, retak halus, atau rusak</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Putihan (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgPutih" placeholder="0" oninput="calculateRealtime()">
+              </div>
+              <div>
+                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucek / Retak (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucek Parah (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
+              </div>
+              <div>
+                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucekan (Biji):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucek" placeholder="0" oninput="calculateRealtime()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Ringkasan Timbangan Harian -->
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">
+              <span>Ringkasan Produksi Telur</span>
+              <span class="summary-status-tag ok" id="metric-quality-status">Kategori: Normal</span>
+            </div>
+            <div class="summary-calc-value" id="metric-total-weight">0,00 kg</div>
+            <div style="font-size:13px; color:#065f46; font-weight:600;" id="metric-average-egg">
+              Rata-rata: masukkan angka butir &amp; kg
+            </div>
+          </div>
+
+          <!-- 4. Pakan Keluar -->
+          <div class="field-row">
+            <label class="field-label" for="val-pakanKg">4. Pakan Keluar (Kg)</label>
+            <div class="field-helper">Jumlah pakan yang diberikan untuk kandang ini</div>
+            <div style="display:flex; gap:8px; margin-bottom:8px;">
+              <select id="val-jenisPakan" class="input-select-field" style="flex:1;">
+                <option value="L-208" selected>L-208</option>
+                <option value="GROWER KH">GROWER KH</option>
+                <option value="PRE LAYER">PRE LAYER</option>
+                <option value="L-20">L-20</option>
+              </select>
+              <input type="text" inputmode="decimal" class="input-field-num" style="flex:1;" id="val-pakanKg" placeholder="Jumlah kg" oninput="calculateRealtime()">
+            </div>
+            <div class="preset-chip-list">
+              <button class="preset-chip" onclick="incrementDirect('val-pakanKg', 50)">+50 kg</button>
+              <button class="preset-chip accent" onclick="incrementDirect('val-pakanKg', 100)">+100 kg</button>
+              <button class="preset-chip" onclick="incrementDirect('val-pakanKg', 150)">+150 kg</button>
+            </div>
+          </div>
+
+          <!-- Obat yang Dipakai Hari Ini -->
+          <div class="field-row">
+            <label class="field-label">Obat yang Dipakai (Bila Ada)</label>
+            <div class="field-helper">Pilih obat dan jumlah yang dicampurkan</div>
+            <div id="medicine-list-container"></div>
+            <button type="button" class="preset-chip" style="margin-top:6px;" onclick="addMedicineRow()">+ Tambah Baris Obat</button>
+          </div>
+
+          <!-- Keterangan -->
+          <div class="field-row">
+            <label class="field-label" for="val-keterangan">Catatan Keterangan Kandang</label>
+            <div class="field-helper">Catatan tambahan dari lapangan</div>
+            <div class="voice-input-wrapper">
+              <input type="text" class="input-field-num" style="padding-right:110px;" id="val-keterangan" placeholder="Kondisi ayam sehat, pakan habis...">
+              <button type="button" class="btn-voice-dictate" id="btn-dictate-trigger" onclick="toggleSpeechDictation('val-keterangan')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                <span>Dikte</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 2: STOK & KIRIM TELUR
+           ========================================== -->
+      <div id="form-container-telur_stok" class="d-none">
+        <div class="card">
+          <!-- 1. Kirim Armada -->
+          <div class="field-row">
+            <label class="field-label">1. Kirim Telur (Armada / Supir)</label>
+            <div class="field-helper">Pengiriman telur partai besar menggunakan armada</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Kotak 15 kg (Krat):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-kirimBagus15" placeholder="0" oninput="calcTelurStok()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('stok-kirimBagus15', 1); calcTelurStok();">+1</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('stok-kirimBagus15', 5); calcTelurStok();">+5</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('stok-kirimBagus15', 10); calcTelurStok();">+10</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Kotak 10 kg (Krat):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-kirimBagus10" placeholder="0" oninput="calcTelurStok()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('stok-kirimBagus10', 1); calcTelurStok();">+1</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('stok-kirimBagus10', 5); calcTelurStok();">+5</button>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+              <div>
+                <span class="field-helper">Bagus (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-kirimBagusKg" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Putih (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-kirimPutih" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Bucek (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-kirimBucek" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Bawa Mas Aji -->
+          <div class="field-row">
+            <label class="field-label">2. Bawa Mas Aji</label>
+            <div class="field-helper">Telur yang dibawa langsung oleh Mas Aji</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Bagus Kotak:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-bawaBagusKotak" placeholder="0" oninput="calcTelurStok()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('stok-bawaBagusKotak', 1); calcTelurStok();">+1</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('stok-bawaBagusKotak', 2); calcTelurStok();">+2</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Bagus Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-bawaBagusKg" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Putih (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-bawaPutih" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Bucek (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-bawaBucek" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Penjualan Kandang Langsung -->
+          <div class="field-row">
+            <label class="field-label">3. Penjualan Kandang Langsung</label>
+            <div class="field-helper">Penjualan eceran di lokasi peternakan</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Bagus Kotak:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-jualBagusKotak" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Bagus Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-jualBagusKg" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Putih (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-jualPutih" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Bucek (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-jualBucek" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Sisa Stok di Kandang -->
+          <div class="field-row">
+            <label class="field-label">4. Sisa Stok di Kandang</label>
+            <div class="field-helper">Sisa fisik telur yang masih tersimpan di gudang kandang</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Sisa Kotak 15 kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaBagus15" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Sisa Kotak 10 kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaBagus10" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Sisa Bagus (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaBagusKg" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Sisa Putih (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaPutih" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Sisa Bucek (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaBucek" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <div>
+              <span class="field-helper">Sisa Bucek Parah (kg):</span>
+              <input type="text" inputmode="decimal" class="input-field-num" id="stok-sisaBucekParah" placeholder="0" oninput="calcTelurStok()">
+            </div>
+          </div>
+
+          <!-- 5. Lain-lain & Keterangan -->
+          <div class="field-row">
+            <label class="field-label">5. Penyesuaian &amp; Keterangan</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Pecah / Rusak (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-pecah" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Beli dari Luar (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-beliLuar" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+              <div>
+                <span class="field-helper">Dimasak (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-dimasak" placeholder="0" oninput="calcTelurStok()">
+              </div>
+              <div>
+                <span class="field-helper">Warga / Sosial (kg):</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="stok-warga" placeholder="0" oninput="calcTelurStok()">
+              </div>
+            </div>
+            <input type="text" class="input-field-num" id="stok-ket" placeholder="Keterangan / Nomor Polisi Armada">
+          </div>
+
+          <!-- Ringkasan Stok & Kirim -->
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">
+              <span>Ringkasan Distribusi &amp; Stok</span>
+              <span class="summary-status-tag ok" id="metric-stok-status">Tercatat</span>
+            </div>
+            <div class="summary-calc-value" id="calc-total-kirim">Kirim: 0 kg</div>
+            <div style="font-size:12.5px; color:#065f46; font-weight:600; margin-top:3px;" id="calc-detail-stok">
+              Sisa Gudang: 0 kg · Lainnya: 0 kg
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 3: PAKAN MASUK
+           ========================================== -->
+      <div id="form-container-pakan_masuk" class="d-none">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label" for="pakan-jenis">Jenis Pakan Masuk *</label>
+            <select id="pakan-jenis" class="input-select-field">
+              <option value="L-208">L-208</option>
+              <option value="GROWER KH">GROWER KH</option>
+              <option value="PRE LAYER">PRE LAYER</option>
+              <option value="L-20">L-20</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="pakan-qty">Jumlah Masuk (Kg) *</label>
+            <input type="text" inputmode="decimal" class="input-field-num" id="pakan-qty" placeholder="0" oninput="calcPakanMasuk()">
+            <div class="preset-chip-list">
+              <button type="button" class="preset-chip" onclick="incrementDirect('pakan-qty', 500); calcPakanMasuk();">+500 kg</button>
+              <button type="button" class="preset-chip accent" onclick="incrementDirect('pakan-qty', 1000); calcPakanMasuk();">+1.000 kg</button>
+              <button type="button" class="preset-chip" onclick="incrementDirect('pakan-qty', 2000); calcPakanMasuk();">+2.000 kg</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="pakan-harga">Harga Beli /kg (Rp) *</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="pakan-harga" placeholder="Contoh: 8500" oninput="calcPakanMasuk()">
+            <div class="preset-chip-list">
+              <button type="button" class="preset-chip" onclick="setDirect('pakan-harga', 8200); calcPakanMasuk();">Rp 8.200</button>
+              <button type="button" class="preset-chip accent" onclick="setDirect('pakan-harga', 8500); calcPakanMasuk();">Rp 8.500</button>
+              <button type="button" class="preset-chip" onclick="setDirect('pakan-harga', 8800); calcPakanMasuk();">Rp 8.800</button>
+              <button type="button" class="preset-chip" onclick="setDirect('pakan-harga', 9000); calcPakanMasuk();">Rp 9.000</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="pakan-diskon">Potongan / Diskon Nota (Rp)</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="pakan-diskon" placeholder="0" oninput="calcPakanMasuk()">
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="pakan-supplier">Supplier &amp; Nomor Faktur</label>
+            <select id="pakan-supplier" class="input-select-field" style="margin-bottom:8px;">
+              <option value="">— Pilih Supplier —</option>
+              <option value="PT. SIBA PRIMA">PT. SIBA PRIMA</option>
+              <option value="KD Cepogo">KD Cepogo</option>
+              <option value="PT. Yung Shin">PT. Yung Shin</option>
+              <option value="PT. SHS">PT. SHS</option>
+              <option value="Mas Aji">Mas Aji</option>
+            </select>
+            <input type="text" class="input-field-num" id="pakan-noFaktur" placeholder="Nomor Faktur / Surat Jalan">
+          </div>
+
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">Total Nilai Pembelian Pakan</div>
+            <div class="summary-calc-value" id="calc-total-pakan">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 4: OBAT MASUK
+           ========================================== -->
+      <div id="form-container-obat_masuk" class="d-none">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label" for="obat-nama">Nama Obat *</label>
+            <select id="obat-nama" class="input-select-field">
+              <option value="VITA STRESS">VITA STRESS (gram)</option>
+              <option value="NEOMYCIN">NEOMYCIN (gram)</option>
+              <option value="EGG STIMULANT">EGG STIMULANT (gram)</option>
+              <option value="AMOXICILLIN">AMOXICILLIN (gram)</option>
+              <option value="DISINFECTAN">DISINFECTAN (liter)</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="obat-qty">Jumlah Qty Masuk *</label>
+            <input type="text" inputmode="decimal" class="input-field-num" id="obat-qty" placeholder="0" oninput="calcObatMasuk()">
+            <div class="preset-chip-list">
+              <button type="button" class="preset-chip" onclick="incrementDirect('obat-qty', 100); calcObatMasuk();">+100</button>
+              <button type="button" class="preset-chip" onclick="incrementDirect('obat-qty', 250); calcObatMasuk();">+250</button>
+              <button type="button" class="preset-chip accent" onclick="incrementDirect('obat-qty', 500); calcObatMasuk();">+500</button>
+              <button type="button" class="preset-chip accent" onclick="incrementDirect('obat-qty', 1000); calcObatMasuk();">+1.000</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="obat-harga">Harga Beli Satuan (Rp)</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="obat-harga" placeholder="0" oninput="calcObatMasuk()">
+            <div class="preset-chip-list">
+              <button type="button" class="preset-chip" onclick="setDirect('obat-harga', 50000); calcObatMasuk();">Rp 50.000</button>
+              <button type="button" class="preset-chip accent" onclick="setDirect('obat-harga', 100000); calcObatMasuk();">Rp 100.000</button>
+              <button type="button" class="preset-chip" onclick="setDirect('obat-harga', 150000); calcObatMasuk();">Rp 150.000</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">PPN (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="obat-ppn" placeholder="0" oninput="calcObatMasuk()">
+              </div>
+              <div>
+                <span class="field-helper">Potongan (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="obat-potongan" placeholder="0" oninput="calcObatMasuk()">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="obat-supplier">Supplier &amp; Jatuh Tempo</label>
+            <select id="obat-supplier" class="input-select-field" style="margin-bottom:8px;">
+              <option value="">— Pilih Supplier —</option>
+              <option value="PT. SIBA PRIMA">PT. SIBA PRIMA</option>
+              <option value="KD Cepogo">KD Cepogo</option>
+              <option value="PT. Yung Shin">PT. Yung Shin</option>
+              <option value="PT. SHS">PT. SHS</option>
+            </select>
+            <span class="field-helper">Tanggal Jatuh Tempo:</span>
+            <input type="date" class="input-field-num" id="obat-jatuhTempo">
+          </div>
+
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">Total Faktur Obat</div>
+            <div class="summary-calc-value" id="calc-total-obat">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 5: KAS OPERASIONAL
+           ========================================== -->
+      <div id="form-container-kas" class="d-none">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label">Arah Kas Transaksi *</label>
+            <div class="coop-segment-group" style="grid-template-columns:1fr 1fr; margin-bottom:0;">
+              <button type="button" class="coop-btn active" id="kas-btn-keluar" onclick="selectArahKas('keluar')">
+                <span class="coop-name">Kas Keluar (Pengeluaran)</span>
+              </button>
+              <button type="button" class="coop-btn" id="kas-btn-masuk" onclick="selectArahKas('masuk')">
+                <span class="coop-name">Kas Masuk (Pemasukan)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="kas-nama">Uraian Transaksi *</label>
+            <div class="field-helper">Pilih keperluan umum atau ketik sendiri</div>
+            <input type="text" class="input-field-num" id="kas-nama" placeholder="Contoh: Beli solar genset...">
+            <div class="preset-chip-list" style="margin-top:6px;">
+              <button type="button" class="preset-chip" onclick="setKasUraian('Beli solar genset', 'Bahan Bakar')">Solar Genset</button>
+              <button type="button" class="preset-chip" onclick="setKasUraian('Konsumsi pekerja', 'Konsumsi')">Konsumsi</button>
+              <button type="button" class="preset-chip" onclick="setKasUraian('Perlengkapan kandang', 'Perlengkapan')">Perlengkapan</button>
+              <button type="button" class="preset-chip" onclick="setKasUraian('Gaji pekerja kandang', 'Gaji')">Gaji</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="kas-nominal">Nominal Pembayaran (Rp) *</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="kas-nominal" placeholder="0" oninput="calcKasTotal()">
+            <div class="preset-chip-list">
+              <button type="button" class="preset-chip" onclick="setDirect('kas-nominal', 50000); calcKasTotal();">Rp 50.000</button>
+              <button type="button" class="preset-chip accent" onclick="setDirect('kas-nominal', 100000); calcKasTotal();">Rp 100.000</button>
+              <button type="button" class="preset-chip" onclick="setDirect('kas-nominal', 200000); calcKasTotal();">Rp 200.000</button>
+              <button type="button" class="preset-chip accent" onclick="setDirect('kas-nominal', 500000); calcKasTotal();">Rp 500.000</button>
+              <button type="button" class="preset-chip" onclick="setDirect('kas-nominal', 1000000); calcKasTotal();">Rp 1.000.000</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="kas-ket">Kategori Biaya *</label>
+            <select id="kas-ket" class="input-select-field">
+              <option value="Bahan Bakar">Bahan Bakar (Solar / Bensin)</option>
+              <option value="Konsumsi">Konsumsi</option>
+              <option value="Perlengkapan">Perlengkapan Kandang</option>
+              <option value="Ongkos">Ongkos / Ekspedisi</option>
+              <option value="Gaji">Gaji Petugas</option>
+              <option value="Kas Masuk">Kas Masuk</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">SUB:</span>
+                <select id="kas-sub" class="input-select-field">
+                  <option value="Operasional">Operasional</option>
+                  <option value="Modal">Modal</option>
+                </select>
+              </div>
+              <div>
+                <span class="field-helper">Metode:</span>
+                <select id="kas-metode" class="input-select-field">
+                  <option value="Cash">Cash (Tunai)</option>
+                  <option value="Transfer">Transfer Bank</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-calc-card">
+            <div class="summary-calc-header" id="calc-kas-header">Total Pengeluaran Kas</div>
+            <div class="summary-calc-value" id="calc-total-kas">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 6: JUAL TELUR
+           ========================================== -->
+      <div id="form-container-jual_telur" class="d-none">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label">1. Telur Bagus Terjual</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="jual-bagusKg" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('jual-bagusKg', 15); calcJualTelur();">+15</button>
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('jual-bagusKg', 30); calcJualTelur();">+30</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('jual-bagusKg', 60); calcJualTelur();">+60</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Harga /kg (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="jual-bagusHarga" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip" onclick="setDirect('jual-bagusHarga', 24000); calcJualTelur();">24rb</button>
+                  <button type="button" class="preset-chip accent" onclick="setDirect('jual-bagusHarga', 25000); calcJualTelur();">25rb</button>
+                  <button type="button" class="preset-chip" onclick="setDirect('jual-bagusHarga', 26000); calcJualTelur();">26rb</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">2. Telur Putih Terjual</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="jual-putihKg" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('jual-putihKg', 5); calcJualTelur();">+5</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('jual-putihKg', 10); calcJualTelur();">+10</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Harga /kg (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="jual-putihHarga" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip" onclick="setDirect('jual-putihHarga', 22000); calcJualTelur();">22rb</button>
+                  <button type="button" class="preset-chip accent" onclick="setDirect('jual-putihHarga', 23000); calcJualTelur();">23rb</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">3. Telur Bucek Terjual</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="jual-bucekKg" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('jual-bucekKg', 5); calcJualTelur();">+5</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('jual-bucekKg', 10); calcJualTelur();">+10</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Harga /kg (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="jual-bucekHarga" placeholder="0" oninput="calcJualTelur()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip" onclick="setDirect('jual-bucekHarga', 18000); calcJualTelur();">18rb</button>
+                  <button type="button" class="preset-chip accent" onclick="setDirect('jual-bucekHarga', 20000); calcJualTelur();">20rb</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label">4. Telur Plastik Terjual</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Kg:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="jual-plastikKg" placeholder="0" oninput="calcJualTelur()">
+              </div>
+              <div>
+                <span class="field-helper">Harga /kg (Rp):</span>
+                <input type="text" inputmode="numeric" class="input-field-num" id="jual-plastikHarga" placeholder="0" oninput="calcJualTelur()">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label style="display:flex; align-items:center; gap:8px; font-weight:600; cursor:pointer;">
+              <input type="checkbox" id="jual-uangTelur" style="width:18px; height:18px;">
+              <span>Catat juga di Laporan Uang Telur Kandang</span>
+            </label>
+          </div>
+
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">
+              <span>Total Nilai Penjualan Telur</span>
+              <span class="summary-status-tag ok" id="metric-jual-status">Telur</span>
+            </div>
+            <div class="summary-calc-value" id="calc-total-jual-telur">Rp 0</div>
+            <div style="font-size:12px; color:#065f46; font-weight:600; margin-top:3px;" id="calc-jual-detail">
+              Isi kg dan harga untuk melihat rincian
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           FORM 7: JUAL LAIN (SAK / AFKIR / BELEK)
+           ========================================== -->
+      <div id="form-container-jual_lain" class="d-none">
+        <div class="card">
+          <div class="field-row">
+            <label class="field-label" for="lain-jenis">Jenis Penjualan *</label>
+            <select id="lain-jenis" class="input-select-field" onchange="onJenisLainChanged(this.value)">
+              <option value="sak">Sak / Karung Bekas</option>
+              <option value="afkir">Ayam Afkir</option>
+              <option value="belek">Belek Pupuk Kandang</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="lain-nama">Nama Pembeli / Pengepul *</label>
+            <input type="text" class="input-field-num" id="lain-nama" placeholder="Contoh: Pak Slamet...">
+          </div>
+
+          <div class="field-row">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <span class="field-helper">Jumlah (Qty) *:</span>
+                <input type="text" inputmode="decimal" class="input-field-num" id="lain-qty" placeholder="0" oninput="calcJualLain()">
+                <div class="preset-chip-list" style="margin-top:4px;">
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('lain-qty', 10); calcJualLain();">+10</button>
+                  <button type="button" class="preset-chip" onclick="incrementDirect('lain-qty', 50); calcJualLain();">+50</button>
+                  <button type="button" class="preset-chip accent" onclick="incrementDirect('lain-qty', 100); calcJualLain();">+100</button>
+                </div>
+              </div>
+              <div>
+                <span class="field-helper">Satuan *:</span>
+                <select id="lain-satuan" class="input-select-field">
+                  <option value="karung">karung</option>
+                  <option value="ekor">ekor</option>
+                  <option value="kg">kg</option>
+                  <option value="pcs">pcs</option>
+                  <option value="botol">botol</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="lain-harga">Harga Satuan @ (Rp) *</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="lain-harga" placeholder="0" oninput="calcJualLain()">
+            <div class="preset-chip-list" id="preset-harga-lain-shelf">
+              <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 1500); calcJualLain();">Rp 1.500</button>
+              <button type="button" class="preset-chip accent" onclick="setDirect('lain-harga', 2000); calcJualLain();">Rp 2.000</button>
+              <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 2500); calcJualLain();">Rp 2.500</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="lain-kredit">Kredit / Setoran (Rp)</label>
+            <input type="text" inputmode="numeric" class="input-field-num" id="lain-kredit" placeholder="0">
+          </div>
+
+          <div class="summary-calc-card">
+            <div class="summary-calc-header">Total Nilai Penjualan</div>
+            <div class="summary-calc-value" id="calc-total-jual-lain">Rp 0</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 60px;"></div>
+    </section>
+
+    <!-- VIEW 3: ANTREAN OFFLINE & PENYIMPANAN -->
+    <section id="view-queue" class="d-none">
+      <div class="card">
+        <div class="card-title">
+          <span>Penyimpanan Data Lokal</span>
+          <span class="status-pill" id="badge-queue-total">0 Data</span>
+        </div>
+        <p class="card-description">
+          Data yang dicatat saat jaringan offline tersimpan di perangkat ini dan akan dikirim secara berurutan ke Google Sheets begitu koneksi tersedia.
+        </p>
+
+        <button class="btn-primary-action" onclick="syncAllLocalQueue()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Kirim Seluruh Data ke Server
+        </button>
+      </div>
+
+      <div style="font-size:13px; font-weight:700; color:var(--fg-muted); text-transform:uppercase; letter-spacing:0.04em; margin:16px 0 8px;">
+        Daftar Antrean Belum Terkirim:
+      </div>
+      <div id="container-queue-records"></div>
+    </section>
+
+    <!-- VIEW 4: DATABASE & RIWAYAT SPREADSHEET (PLUS UI) -->
+    <section id="view-history" class="d-none">
+      
+      <!-- Card Header Explorer -->
+      <div class="card" style="padding:14px 16px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+          <div>
+            <div style="font-size:15px; font-weight:800; color:var(--fg); display:flex; align-items:center; gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span>Data Spreadsheet Peternakan</span>
+            </div>
+            <div style="font-size:12.5px; color:var(--fg-muted); margin-top:2px;">
+              Transparan &amp; terlacak langsung dari Google Sheets Watuireng
+            </div>
+          </div>
+          <button class="preset-chip accent" onclick="refreshHistoryFromServer()" style="white-space:nowrap; padding:6px 12px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Perbarui
+          </button>
+        </div>
+
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="preset-chip" style="flex:1; justify-content:center; padding:7px 10px; font-size:12px;" onclick="copyWhatsAppDailyReport()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Salin Rekap Harian (WA)
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 KPI Summary Cards -->
+      <div class="stat-grid-4">
+        <div class="stat-card-plus">
+          <div class="stat-label">Total Catatan</div>
+          <div class="stat-value" id="stat-total-records">0</div>
+          <div class="stat-sub" id="stat-sub-records">Transparan di DB</div>
+        </div>
+        <div class="stat-card-plus">
+          <div class="stat-label">Produksi Telur</div>
+          <div class="stat-value" id="stat-total-eggs">0</div>
+          <div class="stat-sub" id="stat-sub-eggs">Butir terkumpul</div>
+        </div>
+        <div class="stat-card-plus">
+          <div class="stat-label">Pakan Tercatat</div>
+          <div class="stat-value" id="stat-total-feed">0 kg</div>
+          <div class="stat-sub" id="stat-sub-feed">Konsumsi &amp; masuk</div>
+        </div>
+        <div class="stat-card-plus">
+          <div class="stat-label">Kas &amp; Omset</div>
+          <div class="stat-value" id="stat-total-money">Rp 0</div>
+          <div class="stat-sub" id="stat-sub-money">Arus keuangan</div>
+        </div>
+      </div>
+
+      <!-- Search Input -->
+      <div class="search-input-group">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input-plus" id="search-history-query" placeholder="Cari tanggal, jenis, kandang, keterangan..." oninput="onSearchHistoryInput(this.value)">
+      </div>
+
+      <!-- Category Filter Pills (Horizontal Scroll) -->
+      <div class="form-pill-nav" id="filter-history-pills" style="margin-bottom:12px;">
+        <button class="pill-item active" data-filter="all" onclick="filterHistoryCategory('all')">Semua Data</button>
+        <button class="pill-item" data-filter="harian" onclick="filterHistoryCategory('harian')">Harian Kandang</button>
+        <button class="pill-item" data-filter="telur_stok" onclick="filterHistoryCategory('telur_stok')">Stok &amp; Kirim</button>
+        <button class="pill-item" data-filter="pakan_masuk" onclick="filterHistoryCategory('pakan_masuk')">Pakan Masuk</button>
+        <button class="pill-item" data-filter="obat_masuk" onclick="filterHistoryCategory('obat_masuk')">Obat Masuk</button>
+        <button class="pill-item" data-filter="kas" onclick="filterHistoryCategory('kas')">Kas</button>
+        <button class="pill-item" data-filter="jual_telur" onclick="filterHistoryCategory('jual_telur')">Jual Telur</button>
+        <button class="pill-item" data-filter="jual_lain" onclick="filterHistoryCategory('jual_lain')">Jual Sak/Afkir</button>
+      </div>
+
+      <!-- Container Records List -->
+      <div id="container-history-records">
+        <!-- Records populated by JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 5: PENGATURAN TEKNIS -->
+    <section id="view-settings" class="d-none">
+      <div class="card">
+        <div class="card-title">Pengaturan Sistem</div>
+        <p class="card-description">Konfigurasi sambungan Google Apps Script dan identitas operator.</p>
+
+        <div style="margin-bottom:12px;">
+          <label class="field-label">Nama Petugas Input:</label>
+          <input type="text" id="setting-operator-name" class="input-field-num" value="Mba Erlin">
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label class="field-label">URL Web App Google Apps Script:</label>
+          <input type="text" id="setting-gas-url" class="input-field-num">
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="field-label">API Token / Kunci Akses:</label>
+          <input type="password" id="setting-gas-token" class="input-field-num">
+        </div>
+
+        <button class="btn-primary-action" style="margin-bottom:8px;" onclick="saveSystemSettings()">Simpan Pengaturan</button>
+        <button class="preset-chip" style="width:100%; justify-content:center; padding:10px;" onclick="testServerPing()">Uji Koneksi Server</button>
+      </div>
+
+      <div class="card">
+        <button class="preset-chip accent" style="width:100%; justify-content:center; padding:10px;" onclick="copyWhatsAppSetupLink()">
+          Salin Tautan Konfigurasi Otomatis (WhatsApp)
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOMBOL SIMPAN MELAYANG DI BAWAH (HANYA AKTIF PADA TAB INPUT) -->
+  <div class="bottom-save-container" id="floating-save-bar">
+    <button class="btn-primary-action" id="btn-submit-active-form" onclick="submitCurrentForm()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="btn-submit-label">Simpan Catatan Kandang 1</span>
+    </button>
+  </div>
+
+  <!-- NAVIGASI BAWAH PLUS UI -->
+  <nav class="bottom-nav-bar">
+    <button class="nav-item active" data-tab="home" onclick="switchNav('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Beranda</span>
+    </button>
+    <button class="nav-item" data-tab="input" onclick="switchNav('input')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Form Input</span>
+    </button>
+    <button class="nav-item" data-tab="queue" onclick="switchNav('queue')">
+      <span class="nav-badge-count d-none" id="nav-count-badge">0</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span>Penyimpanan</span>
+    </button>
+    <button class="nav-item" data-tab="history" onclick="switchNav('history')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Riwayat</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- MODAL KONFIRMASI BERHASIL SIMPAN -->
+<div class="modal-overlay" id="modal-success-confirm" onclick="if(event.target===this)closeModalAndGoHome()">
+  <div class="modal-content-box">
+    <div class="modal-icon-circle">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3 style="margin:0 0 6px; font-size:18px; font-weight:800; color:var(--fg);" id="modal-title-text">Data Tersimpan</h3>
+    <p style="margin:0 0 20px; font-size:14px; color:var(--fg-muted); line-height:1.4;" id="modal-message-text">
+      Catatan telah berhasil disimpan.
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button class="btn-primary-action" id="modal-btn-next-step" onclick="proceedAfterSave()">
+        Lanjut ke Kandang 2
+      </button>
+      <button class="preset-chip" style="width:100%; justify-content:center; padding:10px;" onclick="closeModalAndGoHome()">
+        Kembali ke Beranda
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL LENGKAP RECORD SPREADSHEET (PLUS UI) -->
+<div class="detail-drawer" id="modal-record-detail" onclick="if(event.target===this)closeRecordDetailModal()">
+  <div class="detail-drawer-box">
+    <div class="drawer-drag-pill"></div>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+      <div>
+        <div style="font-size:16px; font-weight:800; color:var(--fg);" id="detail-modal-title">Rincian Data Spreadsheet</div>
+        <div style="font-size:12px; color:var(--fg-muted); margin-top:2px;" id="detail-modal-sheet-target">Target Sheet</div>
+      </div>
+      <button class="btn-icon-header" onclick="closeRecordDetailModal()" style="margin:0; width:34px; height:34px;" aria-label="Tutup">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div style="border-top:1px solid var(--border); padding-top:10px;">
+      <table class="detail-table-plus" id="detail-table-content">
+        <!-- Key value rows dynamically injected -->
+      </table>
+
+      <!-- Collapsible Raw JSON / Field Details -->
+      <details style="margin:14px 0 10px; font-size:12.5px;">
+        <summary style="cursor:pointer; font-weight:600; color:var(--fg-muted);">Tampilkan Data Teknis / Payload Audit</summary>
+        <div class="raw-json-box" id="detail-raw-json" style="margin-top:8px;"></div>
+      </details>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+        <button class="btn-primary-action" id="btn-detail-edit-form" onclick="editCurrentRecordInForm()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Buka di Form untuk Koreksi
+        </button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="preset-chip" style="justify-content:center; padding:10px;" onclick="copyActiveRecordDetail()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Salin Teks
+          </button>
+          <button class="preset-chip" style="justify-content:center; padding:10px;" onclick="closeRecordDetailModal()">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     LOGIKA CLIENT 7 FORM & INDEXEDDB
+     ========================================================= -->
+<script>
+/* =========================================================
+   Mobile Touch & Haptics Helpers (Plus UI)
+   ========================================================= */
+function hapticPulse(type = 'light') {
+  if (!navigator.vibrate) return;
+  try {
+    if (type === 'light') navigator.vibrate(12);
+    else if (type === 'medium') navigator.vibrate(24);
+    else if (type === 'success') navigator.vibrate([15, 35, 20]);
+    else if (type === 'warn') navigator.vibrate([30, 40, 30]);
+  } catch (e) {}
+}
+
+function autoCenterActiveElement(element, container) {
+  if (!element || !container) return;
+  const containerRect = container.getBoundingClientRect();
+  const elRect = element.getBoundingClientRect();
+  const scrollLeft = (element.offsetLeft - (containerRect.width / 2)) + (elRect.width / 2);
+  container.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+}
+
+const APP = {
+  currentTab: 'home',
+  activeForm: 'harian',
+  selectedCoop: 1,
+  selectedDate: new Date().toISOString().slice(0, 10),
+  operatorName: 'Mba Erlin',
+  arahKas: 'keluar',
+  isOnline: navigator.onLine,
+  isSyncing: false,
+  gasUrl: '',
+  gasToken: '',
+  queue: [],
+  history: [],
+  historyFilter: 'all',
+  historySearch: '',
+  activeDetailRecord: null
+};
+
+// IndexedDB Helper
+const DB = {
+  name: 'watuireng_plus_db_v2',
+  version: 1,
+  dbInstance: null,
+
+  async init() {
+    return new Promise((resolve) => {
+      const req = indexedDB.open(DB.name, DB.version);
+      req.onupgradeneeded = (e) => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains('queue')) {
+          d.createObjectStore('queue', { keyPath: 'id' });
+        }
+      };
+      req.onsuccess = (e) => {
+        DB.dbInstance = e.target.result;
+        resolve(true);
+      };
+      req.onerror = () => resolve(false);
+    });
+  },
+
+  async addQueue(item) {
+    return new Promise((resolve) => {
+      if (!DB.dbInstance) return resolve(false);
+      const tx = DB.dbInstance.transaction('queue', 'readwrite');
+      const store = tx.objectStore('queue');
+      store.put(item);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    });
+  },
+
+  async getAllQueue() {
+    return new Promise((resolve) => {
+      if (!DB.dbInstance) return resolve([]);
+      const tx = DB.dbInstance.transaction('queue', 'readonly');
+      const store = tx.objectStore('queue');
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    });
+  },
+
+  async deleteQueue(id) {
+    return new Promise((resolve) => {
+      if (!DB.dbInstance) return resolve(false);
+      const tx = DB.dbInstance.transaction('queue', 'readwrite');
+      const store = tx.objectStore('queue');
+      store.delete(id);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+    });
+  }
+};
+
+/* =========================================================
+   Toast Notification Helper
+   ========================================================= */
+function notify(text, type = 'info') {
+  const shelf = document.getElementById('toast-shelf');
+  const box = document.createElement('div');
+  box.className = `toast-box ${type}`;
+  box.innerHTML = `<span>${text}</span>`;
+  shelf.appendChild(box);
+
+  if (navigator.vibrate) {
+    try { navigator.vibrate(type === 'success' ? [25, 35, 25] : 25); } catch (e) {}
+  }
+
+  setTimeout(() => {
+    box.style.transition = 'opacity 0.25s, transform 0.25s';
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(-8px)';
+    setTimeout(() => box.remove(), 250);
+  }, 3000);
+}
+
+/* =========================================================
+   Form Switcher (7 Forms)
+   ========================================================= */
+const FORM_NAMES = {
+  harian: 'Catatan Kandang',
+  telur_stok: 'Stok & Kirim Telur',
+  pakan_masuk: 'Pakan Masuk',
+  obat_masuk: 'Obat Masuk',
+  kas: 'Kas Operasional',
+  jual_telur: 'Penjualan Telur',
+  jual_lain: 'Penjualan Sak / Afkir'
+};
+
+function switchFormType(formKey) {
+  hapticPulse('light');
+  APP.activeForm = formKey;
+
+  // Toggle pills
+  let activePill = null;
+  document.querySelectorAll('#pill-nav-container .pill-item').forEach(p => {
+    const isAct = p.dataset.form === formKey;
+    p.classList.toggle('active', isAct);
+    if (isAct) activePill = p;
+  });
+
+  if (activePill) {
+    autoCenterActiveElement(activePill, document.getElementById('pill-nav-container'));
+  }
+
+  // Toggle form containers
+  ['harian', 'telur_stok', 'pakan_masuk', 'obat_masuk', 'kas', 'jual_telur', 'jual_lain'].forEach(k => {
+    const el = document.getElementById(`form-container-${k}`);
+    if (el) el.classList.toggle('d-none', k !== formKey);
+  });
+
+  updateSubmitButtonLabel();
+  checkExistingEntry();
+}
+
+function openFormType(formKey) {
+  switchFormType(formKey);
+  switchNav('input');
+}
+
+function updateSubmitButtonLabel(customText) {
+  const labelEl = document.getElementById('btn-submit-label');
+  if (!labelEl) return;
+  if (customText) {
+    labelEl.textContent = customText;
+    return;
+  }
+  if (APP.activeForm === 'harian') {
+    labelEl.textContent = `Simpan Catatan Kandang ${APP.selectedCoop}`;
+  } else {
+    labelEl.textContent = `Simpan ${FORM_NAMES[APP.activeForm] || 'Data'}`;
+  }
+}
+
+/* =========================================================
+   Date Handlers
+   ========================================================= */
+function setPresetDate(offsetDays) {
+  hapticPulse('light');
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  const formatted = d.toISOString().slice(0, 10);
+  APP.selectedDate = formatted;
+  document.getElementById('global-input-date').value = formatted;
+
+  document.getElementById('btn-chip-today').classList.toggle('accent', offsetDays === 0);
+  document.getElementById('btn-chip-yesterday').classList.toggle('accent', offsetDays === -1);
+
+  checkExistingEntry();
+}
+
+function onDateChanged(val) {
+  if (val) {
+    APP.selectedDate = val;
+    checkExistingEntry();
+  }
+}
+
+/* =========================================================
+   Coop Selection Handlers
+   ========================================================= */
+function selectCoop(k) {
+  hapticPulse('medium');
+  APP.selectedCoop = k;
+  for (let i = 1; i <= 3; i++) {
+    const tab = document.getElementById(`tab-kandang-${i}`);
+    if (tab) tab.classList.toggle('active', i === k);
+  }
+  updateSubmitButtonLabel();
+  checkExistingEntry();
+}
+
+function openCoopDirect(k) {
+  switchFormType('harian');
+  selectCoop(k);
+  switchNav('input');
+}
+
+/* =========================================================
+   Steppers & Numeric Inputs
+   ========================================================= */
+function parseNum(idOrEl) {
+  const el = typeof idOrEl === 'string' ? document.getElementById(idOrEl) : idOrEl;
+  if (!el || !el.value) return 0;
+  const cleaned = String(el.value).replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
+}
+
+function stepNumber(fieldId, delta) {
+  hapticPulse('light');
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  let cur = parseNum(fieldId);
+  cur = Math.max(0, cur + delta);
+  el.value = cur;
+  calculateRealtime();
+}
+
+function setDirect(fieldId, val) {
+  hapticPulse('light');
+  const el = document.getElementById(fieldId);
+  if (el) {
+    el.value = val;
+    triggerFormCalculation(fieldId);
+  }
+}
+
+function incrementDirect(fieldId, val) {
+  hapticPulse('light');
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  let cur = parseNum(fieldId);
+  el.value = (cur + val);
+  triggerFormCalculation(fieldId);
+}
+
+function triggerFormCalculation(fieldId) {
+  if (fieldId.startsWith('val-')) calculateRealtime();
+  else if (fieldId.startsWith('stok-')) calcTelurStok();
+  else if (fieldId.startsWith('pakan-')) calcPakanMasuk();
+  else if (fieldId.startsWith('obat-')) calcObatMasuk();
+  else if (fieldId.startsWith('kas-')) calcKasTotal();
+  else if (fieldId.startsWith('jual-')) calcJualTelur();
+  else if (fieldId.startsWith('lain-')) calcJualLain();
+}
+
+/* =========================================================
+   Real-Time Calculations Per Form (All 7 Forms)
+   ========================================================= */
+function calculateRealtime() {
+  const bagus = parseNum('val-kgBagus');
+  const putih = parseNum('val-kgPutih');
+  const bucek = parseNum('val-kgBucek');
+  const bucekParah = parseNum('val-kgBucekParah');
+  const butir = parseNum('val-butir');
+
+  const totalKg = Math.round((bagus + putih + bucek + bucekParah) * 100) / 100;
+  const weightEl = document.getElementById('metric-total-weight');
+  if (weightEl) weightEl.textContent = `${totalKg.toLocaleString('id-ID')} kg`;
+
+  const statusTag = document.getElementById('metric-quality-status');
+  const avgLabel = document.getElementById('metric-average-egg');
+
+  if (totalKg > 0 && butir > 0) {
+    const gram = Math.round((totalKg / butir) * 1000 * 10) / 10;
+    if (avgLabel) avgLabel.textContent = `Rata-rata: ${gram} gram per butir`;
+
+    if (statusTag) {
+      if (gram >= 50 && gram <= 65) {
+        statusTag.className = 'summary-status-tag ok';
+        statusTag.textContent = 'Kategori: Normal (50-65g)';
+      } else if (gram >= 40 && gram < 50) {
+        statusTag.className = 'summary-status-tag warn';
+        statusTag.textContent = 'Kategori: Kecil / Muda (<50g)';
+      } else if (gram > 65 && gram <= 80) {
+        statusTag.className = 'summary-status-tag warn';
+        statusTag.textContent = 'Kategori: Besar / Jumbo (>65g)';
+      } else {
+        statusTag.className = 'summary-status-tag warn';
+        statusTag.textContent = 'Perhatian: Berat Di Luar Standar';
+      }
+    }
+  } else {
+    if (avgLabel) avgLabel.textContent = 'Rata-rata: masukkan angka butir & kg';
+    if (statusTag) {
+      statusTag.className = 'summary-status-tag ok';
+      statusTag.textContent = 'Kategori: Normal';
+    }
+  }
+}
+
+function calcTelurStok() {
+  const k15 = parseNum('stok-kirimBagus15'), k10 = parseNum('stok-kirimBagus10');
+  const kKg = parseNum('stok-kirimBagusKg'), kP = parseNum('stok-kirimPutih'), kB = parseNum('stok-kirimBucek');
+  const totalKirim = (k15 * 15) + (k10 * 10) + kKg + kP + kB;
+
+  const bKotak = parseNum('stok-bawaBagusKotak'), bKg = parseNum('stok-bawaBagusKg');
+  const bP = parseNum('stok-bawaPutih'), bB = parseNum('stok-bawaBucek');
+  const totalBawa = (bKotak * 15) + bKg + bP + bB;
+
+  const jKotak = parseNum('stok-jualBagusKotak'), jKg = parseNum('stok-jualBagusKg');
+  const jP = parseNum('stok-jualPutih'), jB = parseNum('stok-jualBucek');
+  const totalJual = (jKotak * 15) + jKg + jP + jB;
+
+  const s15 = parseNum('stok-sisaBagus15'), s10 = parseNum('stok-sisaBagus10');
+  const sKg = parseNum('stok-sisaBagusKg'), sP = parseNum('stok-sisaPutih'), sB = parseNum('stok-sisaBucek'), sBP = parseNum('stok-sisaBucekParah');
+  const totalSisa = (s15 * 15) + (s10 * 10) + sKg + sP + sB + sBP;
+
+  const pecah = parseNum('stok-pecah'), beli = parseNum('stok-beliLuar'), masak = parseNum('stok-dimasak'), warga = parseNum('stok-warga');
+
+  const kirimEl = document.getElementById('calc-total-kirim');
+  if (kirimEl) {
+    kirimEl.textContent = `Kirim: ${Math.round(totalKirim * 100) / 100} kg`;
+  }
+  const detailEl = document.getElementById('calc-detail-stok');
+  if (detailEl) {
+    detailEl.textContent = `Bawa: ${Math.round(totalBawa * 100) / 100} kg · Jual: ${Math.round(totalJual * 100) / 100} kg · Sisa: ${Math.round(totalSisa * 100) / 100} kg`;
+  }
+}
+
+function calcPakanMasuk() {
+  const qty = parseNum('pakan-qty');
+  const harga = parseNum('pakan-harga');
+  const diskon = parseNum('pakan-diskon');
+  const total = Math.max(0, (qty * harga) - diskon);
+  const el = document.getElementById('calc-total-pakan');
+  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+}
+
+function calcObatMasuk() {
+  const qty = parseNum('obat-qty');
+  const harga = parseNum('obat-harga');
+  const ppn = parseNum('obat-ppn');
+  const potongan = parseNum('obat-potongan');
+  const total = Math.max(0, (qty * harga) + ppn - potongan);
+  const el = document.getElementById('calc-total-obat');
+  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+}
+
+function selectArahKas(arah) {
+  hapticPulse('medium');
+  APP.arahKas = arah;
+  const btnK = document.getElementById('kas-btn-keluar');
+  const btnM = document.getElementById('kas-btn-masuk');
+  if (btnK) btnK.classList.toggle('active', arah === 'keluar');
+  if (btnM) btnM.classList.toggle('active', arah === 'masuk');
+
+  const ketSelect = document.getElementById('kas-ket');
+  const headerEl = document.getElementById('calc-kas-header');
+
+  if (arah === 'masuk') {
+    if (ketSelect) ketSelect.value = 'Kas Masuk';
+    if (headerEl) headerEl.textContent = 'Total Pemasukan Kas';
+  } else {
+    if (ketSelect && ketSelect.value === 'Kas Masuk') ketSelect.value = 'Bahan Bakar';
+    if (headerEl) headerEl.textContent = 'Total Pengeluaran Kas';
+  }
+  calcKasTotal();
+}
+
+function setKasUraian(nama, ket) {
+  hapticPulse('light');
+  const namaEl = document.getElementById('kas-nama');
+  if (namaEl) namaEl.value = nama;
+  const ketEl = document.getElementById('kas-ket');
+  if (ketEl && ket) ketEl.value = ket;
+}
+
+function calcKasTotal() {
+  const nominal = parseNum('kas-nominal');
+  const el = document.getElementById('calc-total-kas');
+  if (el) {
+    el.textContent = `Rp ${Math.round(nominal).toLocaleString('id-ID')} (${APP.arahKas === 'masuk' ? 'Pemasukan' : 'Pengeluaran'})`;
+  }
+}
+
+function calcJualTelur() {
+  const bKg = parseNum('jual-bagusKg'), bH = parseNum('jual-bagusHarga');
+  const pKg = parseNum('jual-putihKg'), pH = parseNum('jual-putihHarga');
+  const cKg = parseNum('jual-bucekKg'), cH = parseNum('jual-bucekHarga');
+  const lKg = parseNum('jual-plastikKg'), lH = parseNum('jual-plastikHarga');
+
+  const totBagus = bKg * bH;
+  const totPutih = pKg * pH;
+  const totBucek = cKg * cH;
+  const totPlastik = lKg * lH;
+  const total = totBagus + totPutih + totBucek + totPlastik;
+
+  const totalEl = document.getElementById('calc-total-jual-telur');
+  if (totalEl) totalEl.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+
+  const detailEl = document.getElementById('calc-jual-detail');
+  if (detailEl) {
+    if (total > 0) {
+      detailEl.textContent = `Bagus: Rp ${Math.round(totBagus).toLocaleString('id-ID')} · Putih: Rp ${Math.round(totPutih).toLocaleString('id-ID')} · Bucek: Rp ${Math.round(totBucek).toLocaleString('id-ID')}`;
+    } else {
+      detailEl.textContent = 'Isi kg dan harga untuk melihat rincian';
+    }
+  }
+}
+
+function onJenisLainChanged(jenis) {
+  const satuanEl = document.getElementById('lain-satuan');
+  const shelf = document.getElementById('preset-harga-lain-shelf');
+  if (jenis === 'sak') {
+    if (satuanEl) satuanEl.value = 'karung';
+    if (shelf) {
+      shelf.innerHTML = `
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 1500); calcJualLain();">Rp 1.500</button>
+        <button type="button" class="preset-chip accent" onclick="setDirect('lain-harga', 2000); calcJualLain();">Rp 2.000</button>
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 2500); calcJualLain();">Rp 2.500</button>
+      `;
+    }
+  } else if (jenis === 'afkir') {
+    if (satuanEl) satuanEl.value = 'ekor';
+    if (shelf) {
+      shelf.innerHTML = `
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 45000); calcJualLain();">45rb</button>
+        <button type="button" class="preset-chip accent" onclick="setDirect('lain-harga', 50000); calcJualLain();">50rb</button>
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 55000); calcJualLain();">55rb</button>
+      `;
+    }
+  } else if (jenis === 'belek') {
+    if (satuanEl) satuanEl.value = 'karung';
+    if (shelf) {
+      shelf.innerHTML = `
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 5000); calcJualLain();">Rp 5.000</button>
+        <button type="button" class="preset-chip accent" onclick="setDirect('lain-harga', 7500); calcJualLain();">Rp 7.500</button>
+        <button type="button" class="preset-chip" onclick="setDirect('lain-harga', 10000); calcJualLain();">Rp 10.000</button>
+      `;
+    }
+  }
+  calcJualLain();
+}
+
+function calcJualLain() {
+  const qty = parseNum('lain-qty');
+  const harga = parseNum('lain-harga');
+  const total = qty * harga;
+  const el = document.getElementById('calc-total-jual-lain');
+  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+}
+
+/* =========================================================
+   Medicine Rows Dynamic Builder (Harian)
+   ========================================================= */
+function addMedicineRow(nama = '', qty = '') {
+  const box = document.getElementById('medicine-list-container');
+  if (!box) return;
+  const row = document.createElement('div');
+  row.className = 'medicine-entry-row';
+  row.innerHTML = `
+    <select class="input-select-field med-name">
+      <option value="VITA STRESS" ${nama === 'VITA STRESS' ? 'selected' : ''}>VITA STRESS (gram)</option>
+      <option value="NEOMYCIN" ${nama === 'NEOMYCIN' ? 'selected' : ''}>NEOMYCIN (gram)</option>
+      <option value="EGG STIMULANT" ${nama === 'EGG STIMULANT' ? 'selected' : ''}>EGG STIMULANT (gram)</option>
+      <option value="AMOXICILLIN" ${nama === 'AMOXICILLIN' ? 'selected' : ''}>AMOXICILLIN (gram)</option>
+      <option value="DISINFECTAN" ${nama === 'DISINFECTAN' ? 'selected' : ''}>DISINFECTAN (liter)</option>
+    </select>
+    <input type="text" inputmode="decimal" class="input-field-num med-qty" placeholder="Jumlah" value="${qty}">
+    <button type="button" class="btn-step-action" style="width:38px; height:48px;" onclick="this.parentNode.remove()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  box.appendChild(row);
+}
+
+function collectMedicines() {
+  const list = [];
+  document.querySelectorAll('.medicine-entry-row').forEach(r => {
+    const namaEl = r.querySelector('.med-name');
+    const qtyEl = r.querySelector('.med-qty');
+    if (!namaEl || !qtyEl) return;
+    const nama = namaEl.value;
+    const qty = parseNum(qtyEl);
+    if (nama && qty > 0) list.push({ nama, qty });
+  });
+  return list;
+}
+
+/* =========================================================
+   Voice Speech Dictation
+   ========================================================= */
+function toggleSpeechDictation(targetInputId) {
+  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Speech) {
+    notify('Browser ini tidak mendukung perekaman suara.', 'warn');
+    return;
+  }
+
+  const btn = document.getElementById('btn-dictate-trigger');
+  const rec = new Speech();
+  rec.lang = 'id-ID';
+  rec.interimResults = false;
+
+  btn.classList.add('recording');
+  btn.querySelector('span').textContent = 'Merekam...';
+  notify('Silakan berbicara...', 'info');
+
+  rec.onresult = (e) => {
+    const resultText = e.results[0][0].transcript;
+    const input = document.getElementById(targetInputId);
+    input.value = (input.value ? input.value + ' ' : '') + resultText;
+    notify('Suara berhasil dicatat', 'success');
+  };
+
+  rec.onerror = () => {
+    btn.classList.remove('recording');
+    btn.querySelector('span').textContent = 'Dikte';
+  };
+
+  rec.onend = () => {
+    btn.classList.remove('recording');
+    btn.querySelector('span').textContent = 'Dikte';
+  };
+
+  rec.start();
+}
+
+/* =========================================================
+   Correction Mode, Reset, & Auto-Fill (All 7 Forms)
+   ========================================================= */
+function resetForm(type) {
+  if (type === 'harian') {
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    setVal('val-deplesi', '0');
+    setVal('val-butir', '');
+    setVal('val-kgBagus', '');
+    setVal('val-kgPutih', '');
+    setVal('val-kgBucek', '');
+    setVal('val-kgBucekParah', '');
+    setVal('val-bijianBucek', '');
+    setVal('val-pakanKg', '');
+    setVal('val-keterangan', '');
+    const medBox = document.getElementById('medicine-list-container');
+    if (medBox) medBox.innerHTML = '';
+    calculateRealtime();
+  } else if (type === 'telur_stok') {
+    const ids = [
+      'stok-kirimBagus15', 'stok-kirimBagus10', 'stok-kirimBagusKg', 'stok-kirimPutih', 'stok-kirimBucek',
+      'stok-bawaBagusKotak', 'stok-bawaBagusKg', 'stok-bawaPutih', 'stok-bawaBucek',
+      'stok-jualBagusKotak', 'stok-jualBagusKg', 'stok-jualPutih', 'stok-jualBucek',
+      'stok-sisaBagus15', 'stok-sisaBagus10', 'stok-sisaBagusKg', 'stok-sisaPutih', 'stok-sisaBucek', 'stok-sisaBucekParah',
+      'stok-pecah', 'stok-beliLuar', 'stok-dimasak', 'stok-warga', 'stok-ket'
+    ];
+    ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    calcTelurStok();
+  } else if (type === 'pakan_masuk') {
+    ['pakan-qty', 'pakan-harga', 'pakan-diskon', 'pakan-noFaktur'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    calcPakanMasuk();
+  } else if (type === 'obat_masuk') {
+    ['obat-qty', 'obat-harga', 'obat-ppn', 'obat-potongan', 'obat-jatuhTempo'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    calcObatMasuk();
+  } else if (type === 'kas') {
+    ['kas-nama', 'kas-nominal'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    selectArahKas('keluar');
+    calcKasTotal();
+  } else if (type === 'jual_telur') {
+    ['jual-bagusKg', 'jual-bagusHarga', 'jual-putihKg', 'jual-putihHarga', 'jual-bucekKg', 'jual-bucekHarga', 'jual-plastikKg', 'jual-plastikHarga'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const chk = document.getElementById('jual-uangTelur');
+    if (chk) chk.checked = false;
+    calcJualTelur();
+  } else if (type === 'jual_lain') {
+    ['lain-nama', 'lain-qty', 'lain-harga', 'lain-kredit'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    calcJualLain();
+  }
+}
+
+function checkExistingEntry() {
+  const tgl = APP.selectedDate;
+  const formType = APP.activeForm;
+  const kd = formType === 'harian' ? APP.selectedCoop : '';
+  const notice = document.getElementById('koreksi-notice-card');
+
+  // Periksa di antrean lokal
+  const inQueue = APP.queue.find(q => q.type === formType && q.tanggal === tgl && (formType !== 'harian' || Number(q.kandang) === Number(kd)));
+  if (inQueue) {
+    if (notice) notice.classList.remove('d-none');
+    fillFormValues(formType, inQueue.payload);
+    return;
+  }
+
+  // Periksa di riwayat server
+  const inHistory = APP.history.find(r => r.type === formType && r.date === tgl && (formType !== 'harian' || Number(r.kandang) === Number(kd)));
+  if (inHistory && inHistory.payload) {
+    if (notice) notice.classList.remove('d-none');
+    fillFormValues(formType, inHistory.payload);
+    return;
+  }
+
+  if (notice) notice.classList.add('d-none');
+}
+
+function fillFormValues(type, p) {
+  if (!p) return;
+  const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = (val != null ? val : ''); };
+
+  if (type === 'harian') {
+    setV('val-deplesi', p.deplesi != null ? p.deplesi : '0');
+    setV('val-butir', p.butir);
+    setV('val-kgBagus', p.kgBagus);
+    setV('val-kgPutih', p.kgPutih);
+    setV('val-kgBucek', p.kgBucek);
+    setV('val-kgBucekParah', p.kgBucekParah);
+    setV('val-bijianBucek', p.bijianBucek);
+    setV('val-pakanKg', p.pakanKg);
+    setV('val-jenisPakan', p.jenisPakan || 'L-208');
+    setV('val-keterangan', p.ket || '');
+    const medBox = document.getElementById('medicine-list-container');
+    if (medBox) {
+      medBox.innerHTML = '';
+      if (Array.isArray(p.obat)) {
+        p.obat.forEach(m => addMedicineRow(m.nama, m.qty));
+      }
+    }
+    calculateRealtime();
+  } else if (type === 'telur_stok') {
+    setV('stok-kirimBagus15', p.kirimBagus15);
+    setV('stok-kirimBagus10', p.kirimBagus10);
+    setV('stok-kirimBagusKg', p.kirimBagusKg);
+    setV('stok-kirimPutih', p.kirimPutih);
+    setV('stok-kirimBucek', p.kirimBucek);
+    setV('stok-bawaBagusKotak', p.bawaBagusKotak);
+    setV('stok-bawaBagusKg', p.bawaBagusKg);
+    setV('stok-bawaPutih', p.bawaPutih);
+    setV('stok-bawaBucek', p.bawaBucek);
+    setV('stok-jualBagusKotak', p.jualBagusKotak);
+    setV('stok-jualBagusKg', p.jualBagusKg);
+    setV('stok-jualPutih', p.jualPutih);
+    setV('stok-jualBucek', p.jualBucek);
+    setV('stok-sisaBagus15', p.sisaBagus15);
+    setV('stok-sisaBagus10', p.sisaBagus10);
+    setV('stok-sisaBagusKg', p.sisaBagusKg);
+    setV('stok-sisaPutih', p.sisaPutih);
+    setV('stok-sisaBucek', p.sisaBucek);
+    setV('stok-sisaBucekParah', p.sisaBucekParah);
+    setV('stok-pecah', p.pecah);
+    setV('stok-beliLuar', p.beliLuar);
+    setV('stok-dimasak', p.dimasak);
+    setV('stok-warga', p.warga);
+    setV('stok-ket', p.ket);
+    calcTelurStok();
+  } else if (type === 'pakan_masuk') {
+    if (p.jenis) setV('pakan-jenis', p.jenis);
+    setV('pakan-qty', p.qty);
+    setV('pakan-harga', p.harga);
+    setV('pakan-diskon', p.diskon);
+    if (p.supplier) setV('pakan-supplier', p.supplier);
+    setV('pakan-noFaktur', p.noFaktur);
+    calcPakanMasuk();
+  } else if (type === 'obat_masuk') {
+    if (p.obat) setV('obat-nama', p.obat);
+    setV('obat-qty', p.qty);
+    setV('obat-harga', p.harga);
+    setV('obat-ppn', p.ppn);
+    setV('obat-potongan', p.potongan);
+    if (p.supplier) setV('obat-supplier', p.supplier);
+    setV('obat-jatuhTempo', p.jatuhTempo);
+    calcObatMasuk();
+  } else if (type === 'kas') {
+    if (p.arah) selectArahKas(p.arah);
+    setV('kas-nama', p.nama);
+    setV('kas-nominal', p.nominal);
+    if (p.ket) setV('kas-ket', p.ket);
+    if (p.sub) setV('kas-sub', p.sub);
+    if (p.metode) setV('kas-metode', p.metode);
+    calcKasTotal();
+  } else if (type === 'jual_telur') {
+    setV('jual-bagusKg', p.bagusKg); setV('jual-bagusHarga', p.bagusHarga);
+    setV('jual-putihKg', p.putihKg); setV('jual-putihHarga', p.putihHarga);
+    setV('jual-bucekKg', p.bucekKg); setV('jual-bucekHarga', p.bucekHarga);
+    setV('jual-plastikKg', p.plastikKg); setV('jual-plastikHarga', p.plastikHarga);
+    const chk = document.getElementById('jual-uangTelur');
+    if (chk) chk.checked = !!p.uangTelur;
+    calcJualTelur();
+  } else if (type === 'jual_lain') {
+    if (p.jenis) {
+      setV('lain-jenis', p.jenis);
+      onJenisLainChanged(p.jenis);
+    }
+    setV('lain-nama', p.nama);
+    setV('lain-qty', p.qty);
+    if (p.satuan) setV('lain-satuan', p.satuan);
+    setV('lain-harga', p.harga);
+    setV('lain-kredit', p.kredit);
+    calcJualLain();
+  }
+}
+
+
+
+/* =========================================================
+   Form Submission & Mobile Workflow Transition
+   ========================================================= */
+let lastSavedMeta = { type: 'harian', kandang: 1, date: '' };
+
+async function submitCurrentForm() {
+  hapticPulse('medium');
+  const formType = APP.activeForm;
+  const targetDate = APP.selectedDate || new Date().toISOString().slice(0, 10);
+  const operator = APP.operatorName || 'Mba Erlin';
+  let payload = { tanggal: targetDate };
+  let sumText = '';
+  let validationError = '';
+
+  if (formType === 'harian') {
+    const butir = parseNum('val-butir');
+    const kgBagus = parseNum('val-kgBagus');
+    const kgPutih = parseNum('val-kgPutih');
+    const kgBucek = parseNum('val-kgBucek');
+    const kgBucekParah = parseNum('val-kgBucekParah');
+    const pakanKg = parseNum('val-pakanKg');
+    const deplesi = parseNum('val-deplesi');
+    const kgTotal = Math.round((kgBagus + kgPutih + kgBucek + kgBucekParah) * 100) / 100;
+
+    if (butir === 0 && kgTotal === 0 && pakanKg === 0 && deplesi === 0) {
+      validationError = 'Mohon isi butir/kg telur atau konsumsi pakan kandang.';
+    } else {
+      payload = {
+        tanggal: targetDate,
+        kandang: Number(APP.selectedCoop),
+        deplesi: deplesi,
+        butir: butir,
+        kgBagus: kgBagus,
+        kgPutih: kgPutih,
+        kgBucek: kgBucek,
+        kgBucekParah: kgBucekParah,
+        bijianBucek: parseNum('val-bijianBucek'),
+        kgTotal: kgTotal,
+        pakanKg: pakanKg,
+        pakanJenis: document.getElementById('val-jenisPakan')?.value || 'L-208',
+        obat: collectMedicines(),
+        ket: document.getElementById('val-keterangan')?.value?.trim() || ''
+      };
+      sumText = `Kandang ${APP.selectedCoop} · ${butir.toLocaleString('id-ID')} btr · ${kgTotal} kg · Pakan ${pakanKg} kg`;
+    }
+  } else if (formType === 'telur_stok') {
+    payload = {
+      tanggal: targetDate,
+      kirimBagus15: parseNum('stok-kirimBagus15'),
+      kirimBagus10: parseNum('stok-kirimBagus10'),
+      kirimBagusKg: parseNum('stok-kirimBagusKg'),
+      kirimPutih: parseNum('stok-kirimPutih'),
+      kirimBucek: parseNum('stok-kirimBucek'),
+      bawaBagusKotak: parseNum('stok-bawaBagusKotak'),
+      bawaBagusKg: parseNum('stok-bawaBagusKg'),
+      bawaPutih: parseNum('stok-bawaPutih'),
+      bawaBucek: parseNum('stok-bawaBucek'),
+      jualBagusKotak: parseNum('stok-jualBagusKotak'),
+      jualBagusKg: parseNum('stok-jualBagusKg'),
+      jualPutih: parseNum('stok-jualPutih'),
+      jualBucek: parseNum('stok-jualBucek'),
+      sisaBagus15: parseNum('stok-sisaBagus15'),
+      sisaBagus10: parseNum('stok-sisaBagus10'),
+      sisaBagusKg: parseNum('stok-sisaBagusKg'),
+      sisaPutih: parseNum('stok-sisaPutih'),
+      sisaBucek: parseNum('stok-sisaBucek'),
+      sisaBucekParah: parseNum('stok-sisaBucekParah'),
+      pecah: parseNum('stok-pecah'),
+      beliLuar: parseNum('stok-beliLuar'),
+      dimasak: parseNum('stok-dimasak'),
+      warga: parseNum('stok-warga'),
+      ket: document.getElementById('stok-ket')?.value?.trim() || ''
+    };
+    sumText = `Kirim ${payload.kirimBagus15} krat (${payload.kirimBagusKg} kg) · Sisa ${payload.sisaBagus15} krat (${payload.sisaBagusKg} kg)`;
+  } else if (formType === 'pakan_masuk') {
+    const qty = parseNum('pakan-qty');
+    const harga = parseNum('pakan-harga');
+    if (qty === 0 || harga === 0) {
+      validationError = 'Mohon isi jumlah kg pakan dan harga beli per kg.';
+    } else {
+      const diskon = parseNum('pakan-diskon');
+      const total = Math.max(0, (qty * harga) - diskon);
+      payload = {
+        tanggal: targetDate,
+        jenis: document.getElementById('pakan-jenis')?.value || 'KONSENTRAT_124',
+        qty: qty,
+        harga: harga,
+        diskon: diskon,
+        total: total,
+        supplier: document.getElementById('pakan-supplier')?.value || '',
+        noFaktur: document.getElementById('pakan-noFaktur')?.value?.trim() || ''
+      };
+      sumText = `${payload.jenis} · ${qty.toLocaleString('id-ID')} kg · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+    }
+  } else if (formType === 'obat_masuk') {
+    const qty = parseNum('obat-qty');
+    if (qty === 0) {
+      validationError = 'Mohon isi jumlah obat yang masuk.';
+    } else {
+      const harga = parseNum('obat-harga');
+      const ppn = parseNum('obat-ppn');
+      const potongan = parseNum('obat-potongan');
+      const total = Math.max(0, (qty * harga) + ppn - potongan);
+      payload = {
+        tanggal: targetDate,
+        obat: document.getElementById('obat-nama')?.value || 'VITA STRESS',
+        qty: qty,
+        harga: harga,
+        ppn: ppn,
+        potongan: potongan,
+        total: total,
+        supplier: document.getElementById('obat-supplier')?.value || '',
+        jatuhTempo: document.getElementById('obat-jatuhTempo')?.value || ''
+      };
+      sumText = `${payload.obat} · ${qty} unit · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+    }
+  } else if (formType === 'kas') {
+    const nominal = parseNum('kas-nominal');
+    const nama = document.getElementById('kas-nama')?.value?.trim();
+    if (!nominal || !nama) {
+      validationError = 'Mohon isi uraian transaksi dan nominal kas.';
+    } else {
+      payload = {
+        tanggal: targetDate,
+        arah: APP.arahKas,
+        nama: nama,
+        nominal: nominal,
+        sub: document.getElementById('kas-sub')?.value || '',
+        metode: document.getElementById('kas-metode')?.value || 'Tunai',
+        ket: document.getElementById('kas-ket')?.value || ''
+      };
+      sumText = `[${APP.arahKas === 'masuk' ? '+' : '-'}] ${nama} · Rp ${nominal.toLocaleString('id-ID')}`;
+    }
+  } else if (formType === 'jual_telur') {
+    const bagusKg = parseNum('jual-bagusKg');
+    const bagusHarga = parseNum('jual-bagusHarga');
+    const putihKg = parseNum('jual-putihKg');
+    const putihHarga = parseNum('jual-putihHarga');
+    const bucekKg = parseNum('jual-bucekKg');
+    const bucekHarga = parseNum('jual-bucekHarga');
+    const plastikKg = parseNum('jual-plastikKg');
+    const plastikHarga = parseNum('jual-plastikHarga');
+    const total = (bagusKg * bagusHarga) + (putihKg * putihHarga) + (bucekKg * bucekHarga) + (plastikKg * plastikHarga);
+
+    if (total === 0) {
+      validationError = 'Mohon isi setidaknya satu rincian penjualan telur (kg & harga).';
+    } else {
+      const chk = document.getElementById('jual-uangTelur');
+      payload = {
+        tanggal: targetDate,
+        nama: document.getElementById('jual-nama')?.value?.trim() || 'Pembeli Umum',
+        bagusKg: bagusKg, bagusHarga: bagusHarga,
+        putihKg: putihKg, putihHarga: putihHarga,
+        bucekKg: bucekKg, bucekHarga: bucekHarga,
+        plastikKg: plastikKg, plastikHarga: plastikHarga,
+        uangTelur: chk ? chk.checked : false,
+        total: total,
+        metode: document.getElementById('jual-metode')?.value || 'Tunai',
+        kredit: parseNum('jual-kredit'),
+        ket: document.getElementById('jual-ket')?.value?.trim() || ''
+      };
+      sumText = `Penjualan ${payload.nama} · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+    }
+  } else if (formType === 'jual_lain') {
+    const qty = parseNum('lain-qty');
+    const harga = parseNum('lain-harga');
+    const jenis = document.getElementById('lain-jenis')?.value || 'sak';
+    if (qty === 0 || harga === 0) {
+      validationError = 'Mohon isi jumlah kuantitas dan harga satuan.';
+    } else {
+      const total = qty * harga;
+      payload = {
+        tanggal: targetDate,
+        jenis: jenis,
+        nama: document.getElementById('lain-nama')?.value?.trim() || jenis,
+        qty: qty,
+        satuan: document.getElementById('lain-satuan')?.value || 'karung',
+        harga: harga,
+        total: total,
+        metode: document.getElementById('lain-metode')?.value || 'Tunai',
+        kredit: parseNum('lain-kredit'),
+        ket: document.getElementById('lain-ket')?.value?.trim() || ''
+      };
+      sumText = `Jual ${jenis} (${qty} ${payload.satuan}) · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+    }
+  }
+
+  if (validationError) {
+    hapticPulse('warn');
+    notify(validationError, 'warn');
+    return;
+  }
+
+  const recordId = `REC-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+  const record = {
+    id: recordId,
+    type: formType,
+    date: targetDate,
+    tanggal: targetDate,
+    kandang: formType === 'harian' ? APP.selectedCoop : '',
+    petugas: operator,
+    status: 'SUKSES',
+    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB',
+    sum: sumText,
+    targetSheet: targetSheetNameClient(formType, APP.selectedCoop),
+    payload: payload
+  };
+
+  lastSavedMeta = {
+    type: formType,
+    kandang: APP.selectedCoop,
+    date: targetDate
+  };
+
+  const btnSubmit = document.getElementById('btn-submit-active-form');
+  if (btnSubmit) {
+    btnSubmit.disabled = true;
+    btnSubmit.style.opacity = '0.7';
+  }
+
+  try {
+    if (APP.isOnline && APP.gasUrl) {
+      notify('Menyimpan langsung ke Google Sheets...', 'info');
+      try {
+        await sendRequestToGas('submit', {
+          type: record.type,
+          payload: record.payload,
+          id: record.id,
+          petugas: record.petugas
+        });
+        notify('Data berhasil dicatat ke Google Sheets!', 'success');
+      } catch (err) {
+        console.warn('Gagal posting online, disimpan ke antrean lokal:', err);
+        await DB.addQueue(record);
+        notify('Koneksi terganggu. Data diamankan di memori HP.', 'warn');
+      }
+    } else {
+      await DB.addQueue(record);
+      notify('Data disimpan aman di memori HP (Mode Offline)', 'info');
+    }
+
+    // Perbarui riwayat lokal
+    APP.history.unshift(record);
+    if (formType === 'harian') {
+      const b = document.getElementById(`home-status-k${APP.selectedCoop}`);
+      if (b) {
+        b.textContent = 'Selesai';
+        b.className = 'coop-badge-status done';
+      }
+    }
+
+    await refreshQueueStatus();
+    hapticPulse('success');
+
+    // Tampilkan modal konfirmasi sukses Plus UI
+    showSuccessModal(record);
+    resetForm(formType);
+
+  } catch (err) {
+    hapticPulse('warn');
+    notify('Kesalahan: ' + (err.message || 'Gagal menyimpan'), 'warn');
+  } finally {
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.style.opacity = '1';
+    }
+  }
+}
+
+function showSuccessModal(record) {
+  const modal = document.getElementById('modal-success-confirm');
+  const title = document.getElementById('modal-title-text');
+  const msg = document.getElementById('modal-message-text');
+  const btnNext = document.getElementById('modal-btn-next-step');
+
+  const typeName = FORM_NAMES[record.type] || record.type;
+  if (title) title.textContent = 'Data Berhasil Disimpan';
+  if (msg) {
+    msg.textContent = `${typeName} ${record.kandang ? 'Kandang ' + record.kandang : ''} untuk tanggal ${record.date} berhasil dicatat oleh ${record.petugas}.`;
+  }
+
+  if (btnNext) {
+    if (record.type === 'harian') {
+      if (Number(record.kandang) < 3) {
+        btnNext.textContent = `Lanjut ke Kandang ${Number(record.kandang) + 1}`;
+      } else {
+        btnNext.textContent = 'Lanjut Input Stok & Pengiriman Telur';
+      }
+    } else if (record.type === 'telur_stok') {
+      btnNext.textContent = 'Input Kas Operasional / Penjualan';
+    } else {
+      btnNext.textContent = 'Input Catatan Kandang Lagi';
+    }
+  }
+
+  if (modal) modal.classList.add('open');
+}
+
+function proceedAfterSave() {
+  hapticPulse('light');
+  const modal = document.getElementById('modal-success-confirm');
+  if (modal) modal.classList.remove('open');
+
+  if (lastSavedMeta.type === 'harian') {
+    if (Number(lastSavedMeta.kandang) < 3) {
+      selectCoop(Number(lastSavedMeta.kandang) + 1);
+      switchNav('input');
+    } else {
+      openFormType('telur_stok');
+    }
+  } else if (lastSavedMeta.type === 'telur_stok') {
+    openFormType('kas');
+  } else {
+    openCoopDirect(1);
+  }
+}
+
+function closeModalAndGoHome() {
+  hapticPulse('light');
+  const modal = document.getElementById('modal-success-confirm');
+  if (modal) modal.classList.remove('open');
+  switchNav('home');
+}
+
+/* =========================================================
+   Offline Queue & Sync Management
+   ========================================================= */
+async function refreshQueueStatus() {
+  APP.queue = await DB.getAllQueue();
+  const count = APP.queue.length;
+
+  const navBadge = document.getElementById('nav-count-badge');
+  const totalBadge = document.getElementById('badge-queue-total');
+  const offlineBar = document.getElementById('notice-offline-bar');
+  const offlineTxt = document.getElementById('notice-offline-text');
+
+  if (count > 0) {
+    navBadge.textContent = count;
+    navBadge.classList.remove('d-none');
+    if (totalBadge) totalBadge.textContent = `${count} Data`;
+  } else {
+    navBadge.classList.add('d-none');
+    if (totalBadge) totalBadge.textContent = '0 Data';
+  }
+
+  if (offlineBar) {
+    if (!APP.isOnline) {
+      offlineBar.classList.remove('d-none', 'online-queue');
+      offlineBar.classList.add('offline-active');
+      if (offlineTxt) offlineTxt.textContent = `Mode Offline: ${count} catatan tersimpan di memori HP`;
+    } else if (count > 0) {
+      offlineBar.classList.remove('d-none', 'offline-active');
+      offlineBar.classList.add('online-queue');
+      if (offlineTxt) offlineTxt.textContent = `${count} catatan di memori HP siap dikirim ke Google Sheets`;
+    } else {
+      offlineBar.classList.add('d-none');
+      offlineBar.classList.remove('offline-active', 'online-queue');
+    }
+  }
+
+  renderQueueList();
+}
+
+function renderQueueList() {
+  const container = document.getElementById('container-queue-records');
+  if (!container) return;
+
+  if (APP.queue.length === 0) {
+    container.innerHTML = `
+      <div class="card" style="text-align:center; padding:24px 16px; color:var(--fg-muted);">
+        <div style="font-weight:700; font-size:14px; color:var(--fg);">Seluruh Data Tersinkronkan</div>
+        <div style="font-size:12.5px; margin-top:2px;">Tidak ada catatan yang tertinggal di perangkat.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = APP.queue.map(q => `
+    <div class="data-row-card" style="border-left:3px solid var(--warn);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:700; font-size:14px;">${FORM_NAMES[q.type] || q.type} ${q.kandang ? 'Kandang ' + q.kandang : ''}</span>
+        <span class="status-pill offline" style="font-size:11px; padding:2px 6px;">Tersimpan Lokal</span>
+      </div>
+      <div style="font-size:12px; color:var(--fg-muted);">
+        Tanggal: ${q.tanggal} · Petugas: ${q.petugas} · Waktu: ${q.time}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function syncAllLocalQueue() {
+  if (APP.isSyncing) return;
+  if (!APP.isOnline) {
+    alert('Perangkat sedang tidak terhubung ke jaringan internet.');
+    return;
+  }
+  if (APP.queue.length === 0) {
+    notify('Seluruh catatan telah tersinkronkan', 'success');
+    return;
+  }
+
+  APP.isSyncing = true;
+  notify(`Mengirimkan ${APP.queue.length} catatan...`, 'info');
+
+  const items = [...APP.queue];
+  let successCount = 0;
+
+  for (const item of items) {
+    try {
+      await sendRequestToGas('submit', {
+        type: item.type,
+        payload: item.payload,
+        id: item.id,
+        petugas: item.petugas
+      });
+      await DB.deleteQueue(item.id);
+      successCount++;
+    } catch (e) {}
+  }
+
+  await refreshQueueStatus();
+  APP.isSyncing = false;
+
+  if (successCount > 0) {
+    notify(`${successCount} catatan berhasil diposting ke server`, 'success');
+    refreshHistoryFromServer();
+  }
+}
+
+/* =========================================================
+   Backend API Bridge (CORS Safe)
+   ========================================================= */
+async function sendRequestToGas(action, payload = {}) {
+  // Dukungan langsung untuk container iframe Google Apps Script
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    return new Promise((resolve, reject) => {
+      const runner = google.script.run
+        .withSuccessHandler((r) => resolve(r && r.data ? r.data : r))
+        .withFailureHandler((err) => reject(new Error(err.message || String(err))));
+
+      const token = APP.gasToken || '';
+      if (action === 'ping') resolve({ ok: true });
+      else if (action === 'submit') runner.submit(token, payload.type, payload.payload, payload.id, payload.petugas);
+      else if (action === 'getSummary') runner.getSummary(token);
+      else runner.getBootstrap(token);
+    });
+  }
+
+  const url = APP.gasUrl || localStorage.getItem('watuireng_gas_url');
+  const token = APP.gasToken || localStorage.getItem('watuireng_gas_token');
+
+  if (!url) throw new Error('URL Google Apps Script belum dikonfigurasi.');
+
+  const res = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action, token, ...payload })
+  });
+
+  if (!res.ok) throw new Error('Server mengembalikan kode status ' + res.status);
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Terjadi kesalahan sistem');
+  return data;
+}
+
+const INITIAL_DEMO_RECORDS = [
+  {
+    id: 'REC-WATU-001',
+    type: 'harian',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: 1,
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '08:15 WIB',
+    sum: 'Kandang 1 · 4.860 butir · 303.8 kg · Pakan 385 kg',
+    targetSheet: 'RECORDING_LAYER_K1 & RECAP TELUR HARIAN',
+    payload: {
+      deplesi: 1,
+      butirBagus: 4790,
+      kgBagus: 299.5,
+      butirRetak: 45,
+      kgRetak: 2.7,
+      butirRusak: 25,
+      kgRusak: 1.6,
+      butirKoloni: 0,
+      kgKoloni: 0,
+      butir: 4860,
+      kgTotal: 303.8,
+      pakanJenis: 'KONSENTRAT_124',
+      pakanPagiKg: 195,
+      pakanSoreKg: 190,
+      pakanKg: 385,
+      ket: 'Ayam aktif sehat, pakan pagi dan sore terhabiskan normal'
+    }
+  },
+  {
+    id: 'REC-WATU-002',
+    type: 'harian',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: 2,
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '08:45 WIB',
+    sum: 'Kandang 2 · 4.920 butir · 307.5 kg · Pakan 390 kg',
+    targetSheet: 'RECORDING_LAYER_K2 & RECAP TELUR HARIAN',
+    payload: {
+      deplesi: 0,
+      butirBagus: 4850,
+      kgBagus: 303.1,
+      butirRetak: 48,
+      kgRetak: 2.9,
+      butirRusak: 22,
+      kgRusak: 1.5,
+      butirKoloni: 0,
+      kgKoloni: 0,
+      butir: 4920,
+      kgTotal: 307.5,
+      pakanJenis: 'KONSENTRAT_124',
+      pakanPagiKg: 195,
+      pakanSoreKg: 195,
+      pakanKg: 390,
+      ket: 'Kondisi kandang 2 prima, tidak ada ayam mati'
+    }
+  },
+  {
+    id: 'REC-WATU-003',
+    type: 'harian',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: 3,
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '09:20 WIB',
+    sum: 'Kandang 3 · 5.070 butir · 316.9 kg · Pakan 395 kg',
+    targetSheet: 'RECORDING_LAYER_K3 & RECAP TELUR HARIAN',
+    payload: {
+      deplesi: 2,
+      butirBagus: 5000,
+      kgBagus: 312.5,
+      butirRetak: 50,
+      kgRetak: 3.1,
+      butirRusak: 20,
+      kgRusak: 1.3,
+      butirKoloni: 0,
+      kgKoloni: 0,
+      butir: 5070,
+      kgTotal: 316.9,
+      pakanJenis: 'KONSENTRAT_124',
+      pakanPagiKg: 200,
+      pakanSoreKg: 195,
+      pakanKg: 395,
+      ket: 'Deplesi 2 ekor afkir jepit tirai bambu'
+    }
+  },
+  {
+    id: 'REC-WATU-004',
+    type: 'telur_stok',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: '',
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '10:00 WIB',
+    sum: 'Stok & kirim telur · Kirim 38 krat (570 kg) · Sisa 54 krat',
+    targetSheet: 'RECAP_TELUR_HARIAN ▸ STOK TELUR',
+    payload: {
+      kirimArmada15: 20,
+      kirimArmadaKg: 300,
+      kirimAji15: 18,
+      kirimAjiKg: 270,
+      kirimBagus15: 38,
+      kirimBagusKg: 570,
+      sisaBagus15: 54,
+      sisaBagusKg: 810,
+      sisaPutihBtr: 120,
+      sisaPutihKg: 7.5,
+      sisaBucekBtr: 85,
+      sisaBucekKg: 5.2,
+      ket: 'Armada kirim ke Pasar Legi, Mas Aji ambil untuk langganan'
+    }
+  },
+  {
+    id: 'REC-WATU-005',
+    type: 'pakan_masuk',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: '',
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '11:15 WIB',
+    sum: 'KONSENTRAT_124 · 2.000 kg @ Rp 450.000',
+    targetSheet: 'STOK_PAKAN ▸ NOTA PAKAN & STOK HARIAN',
+    payload: {
+      supplier: 'PT CJ FEED SEMARANG',
+      faktur: 'INV-CJ-20261012-08',
+      jenis: 'KONSENTRAT_124',
+      qty: 2000,
+      karung: 40,
+      harga: 450000,
+      total: 18000000,
+      ket: 'Bongkar di gudang pakan utama, sak utuh'
+    }
+  },
+  {
+    id: 'REC-WATU-006',
+    type: 'kas',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: '',
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '12:30 WIB',
+    sum: '[-] Keluar: Beli solar genset & armada · Rp 350.000',
+    targetSheet: 'LAPORAN_KEUANGAN_WATUIRENG ▸ KAS OPERASIONAL',
+    payload: {
+      arah: 'keluar',
+      nama: 'Beli solar genset & armada operasional',
+      sub: 'BBM / Genset',
+      metode: 'Tunai',
+      nominal: 350000,
+      ket: 'Beli solar di SPBU 44.571 untuk genset cadangan listrik'
+    }
+  },
+  {
+    id: 'REC-WATU-007',
+    type: 'jual_telur',
+    date: new Date().toISOString().slice(0, 10),
+    kandang: '',
+    petugas: 'Mba Erlin',
+    status: 'SUKSES',
+    time: '13:00 WIB',
+    sum: 'Penjualan telur · Bagus 570 kg · Rp 14.535.000',
+    targetSheet: 'LAPORAN_KEUANGAN_WATUIRENG ▸ PENJUALAN TELUR',
+    payload: {
+      nama: 'Toko Berkah Telur (Pak Haji Slamet)',
+      bagusKg: 570,
+      bagusHarga: 25500,
+      bagusTotal: 14535000,
+      total: 14535000,
+      setoran: 14535000,
+      metode: 'Transfer BCA',
+      ket: 'Lunas ditransfer ke rekening operasional peternakan'
+    }
+  }
+];
+
+function targetSheetNameClient(type, kandang) {
+  switch (type) {
+    case 'harian': return `RECORDING_LAYER_K${kandang || 1} & RECAP TELUR`;
+    case 'telur_stok': return 'RECAP_TELUR_HARIAN ▸ STOK TELUR';
+    case 'pakan_masuk': return 'STOK_PAKAN ▸ NOTA PAKAN';
+    case 'obat_masuk': return 'DATA_OBAT_KANDANG ▸ FAKTUR';
+    case 'kas': return 'LAPORAN_KEUANGAN ▸ KAS OPERASIONAL';
+    case 'jual_telur': return 'LAPORAN_KEUANGAN ▸ PENJUALAN TELUR';
+    case 'jual_lain': return 'LAPORAN_KEUANGAN ▸ PENJUALAN SAK/AFKIR';
+  }
+  return 'MASTER SPREADSHEET';
+}
+
+async function refreshHistoryFromServer() {
+  if (APP.isOnline && APP.gasUrl) {
+    notify('Mengambil data terbaru dari Google Sheets...', 'info');
+    try {
+      const res = await sendRequestToGas('getAllData');
+      if (res && res.data && Array.isArray(res.data.recent) && res.data.recent.length > 0) {
+        APP.history = res.data.recent;
+        const doneK = res.data.done || [];
+        for (let i = 1; i <= 3; i++) {
+          const badge = document.getElementById(`home-status-k${i}`);
+          if (badge) {
+            const isDone = doneK.includes(i);
+            badge.textContent = isDone ? 'Selesai' : 'Belum';
+            badge.className = `coop-badge-status ${isDone ? 'done' : 'pending'}`;
+          }
+        }
+        const prog = document.getElementById('home-coop-progress');
+        if (prog) prog.textContent = `${doneK.length}/3 Selesai`;
+        notify('Data spreadsheet berhasil diperbarui', 'success');
+      }
+    } catch (e) {
+      console.warn('Fallback ke data cache lokal:', e);
+    }
+  }
+
+  // Jika history masih kosong, gunakan INITIAL_DEMO_RECORDS
+  if (!APP.history || APP.history.length === 0) {
+    APP.history = [...INITIAL_DEMO_RECORDS];
+  }
+
+  renderHistoryList();
+}
+
+function updateHistoryStats(records) {
+  const totalRec = records.length;
+  let totalEggs = 0;
+  let totalFeed = 0;
+  let totalMoney = 0;
+
+  records.forEach(r => {
+    const p = r.payload || {};
+    if (r.type === 'harian') {
+      totalEggs += Number(p.butir || 0);
+      totalFeed += Number(p.pakanKg || 0);
+    } else if (r.type === 'telur_stok') {
+      if (p.kirimBagusKg) totalEggs += Math.round(Number(p.kirimBagusKg) * 16);
+    } else if (r.type === 'pakan_masuk') {
+      totalFeed += Number(p.qty || 0);
+    } else if (r.type === 'kas') {
+      const nom = Number(p.nominal || 0);
+      totalMoney += (p.arah === 'masuk' ? nom : -nom);
+    } else if (r.type === 'jual_telur') {
+      totalMoney += Number(p.total || 0);
+    } else if (r.type === 'jual_lain') {
+      totalMoney += Number(p.total || 0);
+    }
+  });
+
+  const elRec = document.getElementById('stat-total-records');
+  const elEggs = document.getElementById('stat-total-eggs');
+  const elFeed = document.getElementById('stat-total-feed');
+  const elMoney = document.getElementById('stat-total-money');
+
+  if (elRec) elRec.textContent = totalRec;
+  if (elEggs) elEggs.textContent = totalEggs.toLocaleString('id-ID');
+  if (elFeed) elFeed.textContent = totalFeed.toLocaleString('id-ID') + ' kg';
+  if (elMoney) elMoney.textContent = (totalMoney < 0 ? '-' : '') + 'Rp ' + Math.abs(totalMoney).toLocaleString('id-ID');
+}
+
+function renderHistoryList() {
+  const container = document.getElementById('container-history-records');
+  if (!container) return;
+
+  if (!APP.history || APP.history.length === 0) {
+    APP.history = [...INITIAL_DEMO_RECORDS];
+  }
+
+  // Filter & Search
+  let list = APP.history;
+
+  if (APP.historyFilter && APP.historyFilter !== 'all') {
+    list = list.filter(r => r.type === APP.historyFilter);
+  }
+
+  if (APP.historySearch) {
+    const q = APP.historySearch.toLowerCase();
+    list = list.filter(r => {
+      const dateStr = String(r.date || '').toLowerCase();
+      const typeStr = String(FORM_NAMES[r.type] || r.type || '').toLowerCase();
+      const sumStr = String(r.sum || '').toLowerCase();
+      const petugasStr = String(r.petugas || '').toLowerCase();
+      const sheetStr = String(r.targetSheet || '').toLowerCase();
+      const kandangStr = r.kandang ? `kandang ${r.kandang}` : '';
+      return dateStr.includes(q) || typeStr.includes(q) || sumStr.includes(q) || petugasStr.includes(q) || sheetStr.includes(q) || kandangStr.includes(q);
+    });
+  }
+
+  updateHistoryStats(list);
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="card" style="text-align:center; padding:32px 16px; color:var(--fg-muted);">
+        <div style="font-weight:700; font-size:14.5px; color:var(--fg); margin-bottom:4px;">Tidak Ada Data yang Cocok</div>
+        <div style="font-size:12.5px;">Coba ubah kata kunci pencarian atau pilih filter kategori lainnya.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list.map(r => {
+    const typeLabel = FORM_NAMES[r.type] || r.type;
+    const tagClass = `tag-${r.type}`;
+    const coopLabel = r.kandang ? ` · Kandang ${r.kandang}` : '';
+    const sheetTarget = r.targetSheet || targetSheetNameClient(r.type, r.kandang);
+    const petugasName = r.petugas || 'Mba Erlin';
+
+    return `
+      <div class="history-card-item" onclick="openRecordDetailModal('${r.id}')">
+        <div class="history-card-header">
+          <div class="tag-badge ${tagClass}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>${typeLabel}</span>
+          </div>
+          <div class="sheet-target-badge" title="Sheet tujuan di Google Sheets">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>${sheetTarget}</span>
+          </div>
+        </div>
+
+        <div class="history-card-title">${typeLabel}${coopLabel}</div>
+        <div class="history-card-sum">${r.sum || '-'}</div>
+
+        <div class="history-card-meta">
+          <span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${r.date} ${r.time ? '· ' + r.time : ''}
+          </span>
+          <span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            ${petugasName}
+          </span>
+          <span style="margin-left:auto; color:var(--pri); font-weight:700;">
+            Detail &rarr;
+          </span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterHistoryCategory(catKey) {
+  hapticPulse('light');
+  APP.historyFilter = catKey;
+  let activeBtn = null;
+  document.querySelectorAll('#filter-history-pills .pill-item').forEach(btn => {
+    const isAct = btn.dataset.filter === catKey;
+    btn.classList.toggle('active', isAct);
+    if (isAct) activeBtn = btn;
+  });
+  if (activeBtn) {
+    autoCenterActiveElement(activeBtn, document.getElementById('filter-history-pills'));
+  }
+  renderHistoryList();
+}
+
+function onSearchHistoryInput(val) {
+  APP.historySearch = (val || '').trim();
+  renderHistoryList();
+}
+
+/* =========================================================
+   Detail Inspector Modal (Seluruh Data Spreadsheet)
+   ========================================================= */
+const FIELD_INDONESIAN_LABELS = {
+  deplesi: 'Ayam Mati / Afkir (Ekor)',
+  butirBagus: 'Telur Bagus (Butir)',
+  kgBagus: 'Telur Bagus (Kg)',
+  butirRetak: 'Telur Retak (Butir)',
+  kgRetak: 'Telur Retak (Kg)',
+  butirRusak: 'Telur Rusak (Butir)',
+  kgRusak: 'Telur Rusak (Kg)',
+  butirKoloni: 'Telur Koloni (Butir)',
+  kgKoloni: 'Telur Koloni (Kg)',
+  butir: 'Total Produksi Telur (Butir)',
+  kgTotal: 'Total Berat Telur (Kg)',
+  pakanJenis: 'Jenis Pakan Kandang',
+  pakanPagiKg: 'Pakan Pagi (Kg)',
+  pakanSoreKg: 'Pakan Sore (Kg)',
+  pakanKg: 'Total Pakan Harian (Kg)',
+  kirimArmada15: 'Kirim Armada (Krat 15kg)',
+  kirimArmadaKg: 'Kirim Armada (Kg)',
+  kirimAji15: 'Kirim Mas Aji (Krat 15kg)',
+  kirimAjiKg: 'Kirim Mas Aji (Kg)',
+  kirimBagus15: 'Total Kirim Bagus (Krat 15kg)',
+  kirimBagusKg: 'Total Kirim Bagus (Kg)',
+  sisaBagus15: 'Sisa Stok Bagus (Krat 15kg)',
+  sisaBagusKg: 'Sisa Stok Bagus (Kg)',
+  sisaPutihBtr: 'Sisa Telur Putih (Butir)',
+  sisaPutihKg: 'Sisa Telur Putih (Kg)',
+  sisaBucekBtr: 'Sisa Telur Bucek (Butir)',
+  sisaBucekKg: 'Sisa Telur Bucek (Kg)',
+  supplier: 'Nama Pemasok / Supplier',
+  faktur: 'Nomor Nota / Faktur',
+  jenis: 'Jenis Barang / Pakan',
+  qty: 'Jumlah Kuantitas',
+  karung: 'Jumlah Karung (Sak)',
+  satuan: 'Satuan Unit',
+  harga: 'Harga Satuan (Rp)',
+  total: 'Total Nominal Transaksi (Rp)',
+  arah: 'Arah Aliran Kas',
+  nama: 'Keterangan Transaksi / Pembeli',
+  sub: 'Sub Kategori Akun',
+  metode: 'Metode Pembayaran',
+  nominal: 'Nominal Kas (Rp)',
+  setoran: 'Setoran Kas Tunai (Rp)',
+  kredit: 'Kredit / Piutang (Rp)',
+  bagusKg: 'Telur Bagus Terjual (Kg)',
+  bagusHarga: 'Harga Telur Bagus @ (Rp)',
+  bagusTotal: 'Total Penjualan Bagus (Rp)',
+  putihKg: 'Telur Putih Terjual (Kg)',
+  putihHarga: 'Harga Telur Putih @ (Rp)',
+  putihTotal: 'Total Penjualan Putih (Rp)',
+  bucekKg: 'Telur Bucek Terjual (Kg)',
+  bucekHarga: 'Harga Telur Bucek @ (Rp)',
+  bucekTotal: 'Total Penjualan Bucek (Rp)',
+  plastikKg: 'Plastik Terjual (Kg)',
+  plastikHarga: 'Harga Plastik @ (Rp)',
+  plastikTotal: 'Total Penjualan Plastik (Rp)',
+  ket: 'Catatan / Keterangan Lapangan'
+};
+
+let isModalDetailOpen = false;
+
+function openRecordDetailModal(recordId) {
+  hapticPulse('light');
+  const r = (APP.history || []).find(item => item.id === recordId);
+  if (!r) return;
+
+  APP.activeDetailRecord = r;
+
+  const titleEl = document.getElementById('detail-modal-title');
+  const targetEl = document.getElementById('detail-modal-sheet-target');
+  const tableEl = document.getElementById('detail-table-content');
+  const jsonEl = document.getElementById('detail-raw-json');
+
+  const typeName = FORM_NAMES[r.type] || r.type;
+  const coopText = r.kandang ? ` · Kandang ${r.kandang}` : '';
+  const sheetTarget = r.targetSheet || targetSheetNameClient(r.type, r.kandang);
+
+  if (titleEl) titleEl.textContent = `${typeName}${coopText}`;
+  if (targetEl) targetEl.textContent = `Target Sheet: ${sheetTarget}`;
+
+  // Build key value rows
+  const rows = [];
+  rows.push(`<tr><td class="key">ID Transaksi Audit</td><td class="val mono">${r.id}</td></tr>`);
+  rows.push(`<tr><td class="key">Jenis Catatan</td><td class="val">${typeName}${coopText}</td></tr>`);
+  rows.push(`<tr><td class="key">Tanggal Transaksi</td><td class="val">${r.date}</td></tr>`);
+  rows.push(`<tr><td class="key">Waktu Input</td><td class="val">${r.time || '-'}</td></tr>`);
+  rows.push(`<tr><td class="key">Petugas Input</td><td class="val"><b>${r.petugas || 'Mba Erlin'}</b></td></tr>`);
+  rows.push(`<tr><td class="key">Target Google Sheet</td><td class="val mono">${sheetTarget}</td></tr>`);
+  rows.push(`<tr><td class="key">Status Data</td><td class="val"><span class="coop-badge-status done">${r.status || 'SUKSES'}</span></td></tr>`);
+
+  const p = r.payload || {};
+  Object.keys(p).forEach(k => {
+    let val = p[k];
+    if (val === null || val === undefined || val === '') return;
+
+    const label = FIELD_INDONESIAN_LABELS[k] || k;
+    let formattedVal = val;
+
+    if (typeof val === 'number') {
+      if (k.toLowerCase().includes('harga') || k.toLowerCase().includes('total') || k.toLowerCase().includes('nominal') || k.toLowerCase().includes('setoran') || k.toLowerCase().includes('kredit')) {
+        formattedVal = 'Rp ' + Number(val).toLocaleString('id-ID');
+      } else {
+        formattedVal = Number(val).toLocaleString('id-ID');
+      }
+    }
+
+    rows.push(`<tr><td class="key">${label}</td><td class="val">${formattedVal}</td></tr>`);
+  });
+
+  if (tableEl) tableEl.innerHTML = rows.join('');
+  if (jsonEl) jsonEl.textContent = JSON.stringify({
+    id: r.id,
+    type: r.type,
+    date: r.date,
+    kandang: r.kandang,
+    petugas: r.petugas || 'Mba Erlin',
+    targetSheet: sheetTarget,
+    payload: p
+  }, null, 2);
+
+  const drawer = document.getElementById('modal-record-detail');
+  if (drawer) {
+    drawer.classList.add('open');
+    isModalDetailOpen = true;
+    history.pushState({ modal: 'detail' }, '');
+  }
+}
+
+function closeRecordDetailModal(fromPopstate = false) {
+  hapticPulse('light');
+  const drawer = document.getElementById('modal-record-detail');
+  if (drawer) drawer.classList.remove('open');
+  APP.activeDetailRecord = null;
+  if (isModalDetailOpen && !fromPopstate) {
+    isModalDetailOpen = false;
+    if (history.state && history.state.modal === 'detail') {
+      history.back();
+    }
+  } else {
+    isModalDetailOpen = false;
+  }
+}
+
+function copyActiveRecordDetail() {
+  const r = APP.activeDetailRecord;
+  if (!r) return;
+
+  const typeName = FORM_NAMES[r.type] || r.type;
+  const p = r.payload || {};
+
+  let text = `CATATAN TRANSAKSI WATUIRENG\n`;
+  text += `====================================\n`;
+  text += `ID: ${r.id}\n`;
+  text += `Jenis: ${typeName} ${r.kandang ? 'Kandang ' + r.kandang : ''}\n`;
+  text += `Tanggal: ${r.date} ${r.time ? '(' + r.time + ')' : ''}\n`;
+  text += `Petugas: ${r.petugas || 'Mba Erlin'}\n`;
+  text += `Sheet: ${r.targetSheet || targetSheetNameClient(r.type, r.kandang)}\n`;
+  text += `------------------------------------\n`;
+
+  Object.keys(p).forEach(k => {
+    const label = FIELD_INDONESIAN_LABELS[k] || k;
+    const v = p[k];
+    if (v !== '' && v !== null && v !== undefined) {
+      text += `${label}: ${v}\n`;
+    }
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    notify('Seluruh rincian data disalin ke clipboard', 'success');
+  });
+}
+
+function editCurrentRecordInForm() {
+  const r = APP.activeDetailRecord;
+  if (!r) return;
+
+  closeRecordDetailModal();
+
+  // Set date
+  if (r.date) {
+    APP.selectedDate = r.date;
+    const dateInput = document.getElementById('global-input-date');
+    if (dateInput) dateInput.value = r.date;
+  }
+
+  // Switch form
+  if (r.type) {
+    switchFormType(r.type);
+    if (r.type === 'harian' && r.kandang) {
+      selectCoop(Number(r.kandang));
+    }
+  }
+
+  // Populate fields
+  const p = r.payload || {};
+  if (r.type === 'harian') {
+    if (p.deplesi != null) document.getElementById('val-deplesi').value = p.deplesi;
+    if (p.butirBagus != null) document.getElementById('val-butir-bagus').value = p.butirBagus;
+    if (p.kgBagus != null) document.getElementById('val-kg-bagus').value = p.kgBagus;
+    if (p.butirRetak != null) document.getElementById('val-butir-retak').value = p.butirRetak;
+    if (p.kgRetak != null) document.getElementById('val-kg-retak').value = p.kgRetak;
+    if (p.butirRusak != null) document.getElementById('val-butir-rusak').value = p.butirRusak;
+    if (p.kgRusak != null) document.getElementById('val-kg-rusak').value = p.kgRusak;
+    if (p.pakanJenis != null) document.getElementById('val-pakan-jenis').value = p.pakanJenis;
+    if (p.pakanPagiKg != null) document.getElementById('val-pakan-pagi').value = p.pakanPagiKg;
+    if (p.pakanSoreKg != null) document.getElementById('val-pakan-sore').value = p.pakanSoreKg;
+    if (p.ket != null) document.getElementById('val-keterangan').value = p.ket;
+    calculateRealtime();
+  }
+
+  switchNav('input');
+  notify('Mode koreksi aktif: Memuat data tanggal ' + r.date, 'info');
+}
+
+function copyWhatsAppDailyReport() {
+  const records = APP.history || [];
+  const targetDate = APP.selectedDate;
+
+  const todayRecords = records.filter(r => r.date === targetDate);
+
+  let text = `*LAPORAN HARIAN PETERNAKAN WATUIRENG*\n`;
+  text += `Tanggal: ${targetDate}\n`;
+  text += `Petugas Input: Mba Erlin\n`;
+  text += `-------------------------------------------\n\n`;
+
+  // 1. Produksi Kandang
+  const harianList = todayRecords.filter(r => r.type === 'harian');
+  text += `*1. PRODUKSI TELUR & PAKAN:*\n`;
+  if (harianList.length > 0) {
+    let totButir = 0;
+    let totKg = 0;
+    let totPakan = 0;
+    let totDeplesi = 0;
+
+    harianList.forEach(h => {
+      const p = h.payload || {};
+      totButir += Number(p.butir || 0);
+      totKg += Number(p.kgTotal || 0);
+      totPakan += Number(p.pakanKg || 0);
+      totDeplesi += Number(p.deplesi || 0);
+
+      text += `• Kandang ${h.kandang}: ${Number(p.butir || 0).toLocaleString()} btr (${p.kgTotal || 0} kg) | Pakan ${p.pakanKg || 0} kg | Mati ${p.deplesi || 0} ekor\n`;
+    });
+
+    text += `*TOTAL TELUR:* ${totButir.toLocaleString()} btr (${totKg.toFixed(1)} kg)\n`;
+    text += `*TOTAL PAKAN:* ${totPakan} kg | *DEPLESI:* ${totDeplesi} ekor\n\n`;
+  } else {
+    text += `(Belum ada input kandang hari ini)\n\n`;
+  }
+
+  // 2. Stok & Kirim
+  const stokRec = todayRecords.find(r => r.type === 'telur_stok');
+  text += `*2. PENGIRIMAN & STOK TELUR:*\n`;
+  if (stokRec) {
+    const p = stokRec.payload || {};
+    text += `• Kirim Armada: ${p.kirimArmada15 || 0} krat (${p.kirimArmadaKg || 0} kg)\n`;
+    text += `• Kirim Mas Aji: ${p.kirimAji15 || 0} krat (${p.kirimAjiKg || 0} kg)\n`;
+    text += `• Total Terkirim: ${p.kirimBagus15 || 0} krat (${p.kirimBagusKg || 0} kg)\n`;
+    text += `• Sisa Stok Bagus: ${p.sisaBagus15 || 0} krat (${p.sisaBagusKg || 0} kg)\n\n`;
+  } else {
+    text += `(Belum ada input pengiriman hari ini)\n\n`;
+  }
+
+  // 3. Kas & Penjualan
+  const kasList = todayRecords.filter(r => r.type === 'kas' || r.type === 'jual_telur' || r.type === 'jual_lain');
+  text += `*3. KEUANGAN & PENJUALAN:*\n`;
+  if (kasList.length > 0) {
+    kasList.forEach(k => {
+      text += `• ${k.sum}\n`;
+    });
+    text += `\n`;
+  } else {
+    text += `(Tidak ada transaksi kas/jual hari ini)\n\n`;
+  }
+
+  text += `-------------------------------------------\n`;
+  text += `_Tercatat otomatis di Google Sheets via PWA Watuireng_`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    notify('Rekap harian WhatsApp disalin ke clipboard', 'success');
+  });
+}
+
+/* =========================================================
+   Navigation Router & Hash Handler
+   ========================================================= */
+function applyTabChange(navKey) {
+  APP.currentTab = navKey;
+  ['home', 'input', 'queue', 'history', 'settings'].forEach(k => {
+    const p = document.getElementById(`view-${k}`);
+    if (p) p.classList.toggle('d-none', k !== navKey);
+  });
+
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === navKey);
+  });
+
+  const saveBar = document.getElementById('floating-save-bar');
+  if (saveBar) saveBar.classList.toggle('d-none', navKey !== 'input');
+
+  window.scrollTo(0, 0);
+
+  if (navKey === 'queue') {
+    renderQueueList();
+  } else if (navKey === 'history') {
+    renderHistoryList();
+    if (APP.isOnline && APP.gasUrl) {
+      refreshHistoryFromServer();
+    }
+  }
+}
+
+function switchNav(navKey) {
+  hapticPulse('light');
+  if (location.hash !== `#/${navKey}`) {
+    location.hash = `#/${navKey}`;
+  }
+  applyTabChange(navKey);
+}
+
+/* =========================================================
+   Settings & Connectivity
+   ========================================================= */
+function loadPersistedSettings() {
+  const params = new URLSearchParams(window.location.search);
+  const u = params.get('url');
+  const t = params.get('token');
+  const op = params.get('operator');
+
+  if (u) localStorage.setItem('watuireng_gas_url', decodeURIComponent(u));
+  if (t) localStorage.setItem('watuireng_gas_token', decodeURIComponent(t));
+  if (op) localStorage.setItem('watuireng_petugas_name', decodeURIComponent(op));
+
+  APP.gasUrl = localStorage.getItem('watuireng_gas_url') || '';
+  APP.gasToken = localStorage.getItem('watuireng_gas_token') || '';
+
+  let savedOp = localStorage.getItem('watuireng_petugas_name');
+  if (!savedOp || savedOp === 'Siti') {
+    savedOp = 'Mba Erlin';
+    localStorage.setItem('watuireng_petugas_name', 'Mba Erlin');
+  }
+  APP.operatorName = savedOp;
+
+  document.getElementById('setting-gas-url').value = APP.gasUrl;
+  document.getElementById('setting-gas-token').value = APP.gasToken;
+  document.getElementById('setting-operator-name').value = APP.operatorName;
+  document.getElementById('bar-operator-name').textContent = APP.operatorName;
+}
+
+function saveSystemSettings() {
+  const u = document.getElementById('setting-gas-url').value.trim();
+  const t = document.getElementById('setting-gas-token').value.trim();
+  const op = document.getElementById('setting-operator-name').value.trim() || 'Mba Erlin';
+
+  localStorage.setItem('watuireng_gas_url', u);
+  localStorage.setItem('watuireng_gas_token', t);
+  localStorage.setItem('watuireng_petugas_name', op);
+
+  APP.gasUrl = u;
+  APP.gasToken = t;
+  APP.operatorName = op;
+
+  document.getElementById('bar-operator-name').textContent = op;
+  notify('Pengaturan sistem disimpan', 'success');
+}
+
+async function testServerPing() {
+  notify('Menguji sambungan server...', 'info');
+  try {
+    await sendRequestToGas('ping');
+    alert('Koneksi Berhasil: Aplikasi terhubung ke Google Apps Script.');
+  } catch (err) {
+    alert('Koneksi Gagal: ' + err.message);
+  }
+}
+
+function copyWhatsAppSetupLink() {
+  const u = APP.gasUrl;
+  const t = APP.gasToken;
+  const op = APP.operatorName;
+  if (!u) {
+    alert('Harap isi URL Google Apps Script terlebih dahulu.');
+    return;
+  }
+  const base = window.location.origin + window.location.pathname;
+  const link = `${base}?url=${encodeURIComponent(u)}&token=${encodeURIComponent(t)}&operator=${encodeURIComponent(op)}`;
+  navigator.clipboard.writeText(link).then(() => {
+    alert('Tautan konfigurasi disalin ke clipboard.');
+  });
+}
+
+/* =========================================================
+   Network Detection
+   ========================================================= */
+function handleNetworkChange(online) {
+  APP.isOnline = online;
+  const pill = document.getElementById('pill-status-connection');
+  const txt = document.getElementById('text-status-connection');
+
+  if (online) {
+    pill.className = 'status-pill online';
+    txt.textContent = 'Tersambung';
+    if (APP.queue.length > 0 && !APP.isSyncing) {
+      syncAllLocalQueue();
+    }
+  } else {
+    pill.className = 'status-pill offline';
+    txt.textContent = 'Mode Offline';
+  }
+  refreshQueueStatus();
+}
+
+window.addEventListener('online', () => handleNetworkChange(true));
+window.addEventListener('offline', () => handleNetworkChange(false));
+
+/* =========================================================
+   Mobile Virtual Keyboard & Hardware / Gesture Back Helpers
+   ========================================================= */
+let keyboardScrollTimer = null;
+document.addEventListener('focusin', (e) => {
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+    document.body.classList.add('keyboard-open');
+    clearTimeout(keyboardScrollTimer);
+    keyboardScrollTimer = setTimeout(() => {
+      e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 280);
+  }
+});
+
+document.addEventListener('focusout', (e) => {
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') {
+    clearTimeout(keyboardScrollTimer);
+    keyboardScrollTimer = setTimeout(() => {
+      document.body.classList.remove('keyboard-open');
+    }, 150);
+  }
+});
+
+window.addEventListener('popstate', () => {
+  if (isModalDetailOpen) {
+    closeRecordDetailModal(true);
+    return;
+  }
+  const modalSuccess = document.getElementById('modal-success-confirm');
+  if (modalSuccess && modalSuccess.classList.contains('open')) {
+    modalSuccess.classList.remove('open');
+    return;
+  }
+  const hash = location.hash.replace(/^#\/?/, '').split('/')[0];
+  if (hash && ['home', 'input', 'queue', 'history', 'settings'].includes(hash)) {
+    applyTabChange(hash);
+  } else {
+    applyTabChange('home');
+  }
+});
+
+window.addEventListener('hashchange', () => {
+  const hash = location.hash.replace(/^#\/?/, '').split('/')[0];
+  if (hash && ['home', 'input', 'queue', 'history', 'settings'].includes(hash)) {
+    if (APP.currentTab !== hash) {
+      applyTabChange(hash);
+    }
+  }
+});
+
+/* =========================================================
+   PWA Service Worker
+   ========================================================= */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+/* =========================================================
+   Bootstrap
+   ========================================================= */
+async function initApp() {
+  await DB.init();
+  loadPersistedSettings();
+  await refreshQueueStatus();
+
+  const formattedDate = new Date().toLocaleDateString('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  document.getElementById('bar-today-date').textContent = formattedDate;
+  document.getElementById('global-input-date').value = APP.selectedDate;
+
+  const hash = location.hash.replace(/^#\/?/, '').split('/')[0];
+  if (hash && ['home', 'input', 'queue', 'history', 'settings'].includes(hash)) {
+    switchNav(hash);
+  } else {
+    switchNav('home');
+  }
+
+  renderHistoryList();
+
+  if (APP.isOnline && APP.gasUrl) {
+    refreshHistoryFromServer();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>
