@@ -68,7 +68,8 @@
       background: transparent !important;
     }
 
-    html, body, * {
+    *, *::before, *::after {
+      box-sizing: border-box;
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
@@ -97,12 +98,62 @@
 
     button, input, select, textarea {
       font-family: inherit;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    /* Pastikan seluruh grid dan flex container mengizinkan kolom menyusut sempurna (zero-overflow) */
+    [style*="display:grid"],
+    [style*="display: grid"],
+    [style*="grid-template-columns"],
+    .preview-metrics-grid,
+    .coop-segment-group,
+    .medicine-entry-row,
+    .stat-grid-4 {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    [style*="display:grid"] > *,
+    [style*="display: grid"] > *,
+    [style*="grid-template-columns"] > *,
+    .preview-metrics-grid > *,
+    .coop-segment-group > *,
+    .medicine-entry-row > *,
+    .stat-grid-4 > * {
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* 3-Kolom Grid: Optimasi Input agar tetap proporsional dan presisi di layar mobile */
+    [style*="grid-template-columns:1fr 1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr 1fr"] {
+      gap: 6px !important;
+    }
+
+    [style*="grid-template-columns:1fr 1fr 1fr"] input.input-field-num,
+    [style*="grid-template-columns: 1fr 1fr 1fr"] input.input-field-num {
+      padding: 0 6px !important;
+      font-size: 14.5px !important;
+      text-align: center;
+    }
+
+    [style*="grid-template-columns:1fr 1fr 1fr"] span.field-helper,
+    [style*="grid-template-columns: 1fr 1fr 1fr"] span.field-helper {
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
     }
 
     button, .pill-item, .coop-btn, .preset-chip, .nav-item, .history-card-item {
       touch-action: manipulation;
       user-select: none;
       -webkit-user-select: none;
+      box-sizing: border-box;
     }
 
     .app-shell {
@@ -276,6 +327,9 @@
       padding: 14px;
       margin-bottom: 12px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      box-sizing: border-box;
+      max-width: 100%;
+      overflow-x: clip;
     }
 
     .card-title {
@@ -367,8 +421,11 @@
     }
     .coop-btn .coop-name {
       font-weight: 700;
-      font-size: 13px;
-      white-space: nowrap;
+      font-size: 12.5px;
+      text-align: center;
+      line-height: 1.25;
+      white-space: normal;
+      word-break: break-word;
     }
     .coop-badge-status {
       font-size: 10px;
@@ -442,6 +499,7 @@
 
     input.input-field-num, select.input-select-field {
       width: 100%;
+      max-width: 100%;
       height: 48px;
       min-height: 48px;
       padding: 0 12px;
@@ -454,6 +512,7 @@
       transition: border-color 0.15s, box-shadow 0.15s;
       flex: 1;
       min-width: 0;
+      box-sizing: border-box;
     }
     input.input-field-num.mono {
       font-family: var(--font-mono);
@@ -577,10 +636,13 @@
     /* Medicine Rows */
     .medicine-entry-row {
       display: grid;
-      grid-template-columns: 1fr minmax(75px, 95px) 38px;
+      grid-template-columns: minmax(0, 1fr) minmax(65px, 85px) 38px;
       gap: 6px;
       margin-bottom: 8px;
       align-items: center;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     /* Tombol Utama Melayang di Bawah */
@@ -779,6 +841,9 @@
       border-radius: var(--radius-sm);
       padding: 10px 12px;
       margin: 12px 0;
+      box-sizing: border-box;
+      max-width: 100%;
+      overflow-x: clip;
     }
     details.optional-details-card summary {
       font-weight: 700;
@@ -1873,10 +1938,12 @@
             <label class="field-label">Arah Kas Transaksi *</label>
             <div class="coop-segment-group" style="grid-template-columns:1fr 1fr; margin-bottom:0;">
               <button type="button" class="coop-btn active" id="kas-btn-keluar" onclick="selectArahKas('keluar')">
-                <span class="coop-name">Kas Keluar (Pengeluaran)</span>
+                <span class="coop-name">Kas Keluar</span>
+                <span style="font-size:10.5px; opacity:0.85; font-weight:600;">(Pengeluaran)</span>
               </button>
               <button type="button" class="coop-btn" id="kas-btn-masuk" onclick="selectArahKas('masuk')">
-                <span class="coop-name">Kas Masuk (Pemasukan)</span>
+                <span class="coop-name">Kas Masuk</span>
+                <span style="font-size:10.5px; opacity:0.85; font-weight:600;">(Pemasukan)</span>
               </button>
             </div>
           </div>
