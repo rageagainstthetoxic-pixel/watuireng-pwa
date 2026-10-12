@@ -50,21 +50,91 @@ var APP = {
 };
 
 /* ================================================================
- *  MENU & SETUP (dijalankan dari spreadsheet "master")
+ *  MENU & SETUP (Aman dijalankan dari Google Sheets maupun Script Editor)
  * ================================================================ */
+function getUiSafe_() {
+  try {
+    return SpreadsheetApp.getUi();
+  } catch (e) {
+    return null;
+  }
+}
+
+function alertSafe_(message) {
+  var ui = getUiSafe_();
+  if (ui) {
+    try {
+      ui.alert(message);
+      return;
+    } catch (e) {}
+  }
+  Logger.log('[ALERT / INFO]\n' + message);
+}
+
+function getMasterSpreadsheet_() {
+  try {
+    var active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (e) {}
+
+  var id = PropertiesService.getScriptProperties().getProperty('MASTER_ID');
+  if (id) {
+    try { return SpreadsheetApp.openById(id); } catch (e) {}
+  }
+  return null;
+}
+
+/** 
+ * Fungsi bantuan jika script dibuat sebagai Standalone Script (bukan dari Ekstensi > Apps Script).
+ * Masukkan ID atau URL Google Spreadsheet Master Anda di sini.
+ */
+function setMasterSpreadsheetId(urlOrId) {
+  var id = String(urlOrId || '').trim();
+  var m = id.match(/[-\w]{25,}/);
+  if (m) id = m[0];
+  if (!id) throw new Error('ID atau URL spreadsheet tidak valid.');
+  var ss = SpreadsheetApp.openById(id);
+  PropertiesService.getScriptProperties().setProperty('MASTER_ID', ss.getId());
+  var info = '✓ MASTER_ID berhasil disetel ke spreadsheet: "' + ss.getName() + '" (' + ss.getId() + ')';
+  Logger.log(info);
+  alertSafe_(info);
+  return ss.getId();
+}
+
 function onOpen() {
-  SpreadsheetApp.getUi().createMenu('Watuireng')
-    .addItem('1. Setup awal', 'setup')
-    .addItem('2. Cek koneksi file', 'checkConnections')
-    .addSeparator()
-    .addItem('3. Atur API Token (untuk Vercel/PWA)', 'setApiToken')
-    .addItem('4. Atur PIN petugas (opsional)', 'setPin')
-    .addItem('5. Info URL API & Token', 'showApiInfo')
-    .addToUi();
+  var ui = getUiSafe_();
+  if (!ui) {
+    Logger.log('ℹ onOpen() dipanggil dari Script Editor. Menu "Watuireng" akan otomatis muncul saat tab Google Sheets dibuka/di-refresh di browser.');
+    return;
+  }
+  try {
+    ui.createMenu('Watuireng')
+      .addItem('1. Setup awal', 'setup')
+      .addItem('2. Cek koneksi file', 'checkConnections')
+      .addSeparator()
+      .addItem('3. Atur API Token (untuk Vercel/PWA)', 'setApiToken')
+      .addItem('4. Atur PIN petugas (opsional)', 'setPin')
+      .addItem('5. Info URL API & Token', 'showApiInfo')
+      .addToUi();
+  } catch (e) {
+    Logger.log('Gagal membuat menu: ' + e.message);
+  }
 }
 
 function setup() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getMasterSpreadsheet_();
+  if (!ss) {
+    var errMsg = 'Spreadsheet master tidak ditemukan!\n\n' +
+                 'PENTING: Pastikan Anda membuka script ini melalui file master Google Sheets:\n' +
+                 '  ▸ Buka file Google Sheets Anda di browser\n' +
+                 '  ▸ Klik menu [Ekstensi] > [Apps Script]\n\n' +
+                 'Jika script ini dibuat terpisah (Standalone), jalankan fungsi berikut di editor:\n' +
+                 '  setMasterSpreadsheetId("TEMPEL_ID_ATAU_URL_SPREADSHEET_DI_SINI")';
+    Logger.log(errMsg);
+    alertSafe_(errMsg);
+    throw new Error(errMsg);
+  }
+
   PropertiesService.getScriptProperties().setProperty('MASTER_ID', ss.getId());
 
   var cfg = ss.getSheetByName(APP.SHEET_CONFIG) || ss.insertSheet(APP.SHEET_CONFIG);
@@ -79,30 +149,57 @@ function setup() {
     db.setFrozenRows(1);
   }
   db.getRange('D:E').setNumberFormat('@');   // tanggal tetap teks yyyy-MM-dd
-  SpreadsheetApp.getUi().alert('Setup selesai.\nIsi URL/ID ketujuh file di sheet CONFIG, lalu jalankan menu "Cek koneksi file".');
+  
+  var doneMsg = '✓ Setup selesai.\nSheet CONFIG dan DB_INPUT berhasil disiapkan di "' + ss.getName() + '".\n\n' +
+                'Silakan isi URL/ID ketujuh file di sheet CONFIG, lalu jalankan "checkConnections".';
+  Logger.log(doneMsg);
+  alertSafe_(doneMsg);
+}
+
+/** Atur API Token langsung via kode (mudah dijalankan dari editor Apps Script). */
+function setApiTokenManual(token) {
+  var t = String(token || '').trim();
+  var props = PropertiesService.getScriptProperties();
+  if (t) {
+    props.setProperty('API_TOKEN', t);
+    var msg = '✓ API Token berhasil disimpan: "' + t + '"\nSalin token ini ke pengaturan PWA Vercel.';
+    Logger.log(msg);
+    alertSafe_(msg);
+  } else {
+    props.deleteProperty('API_TOKEN');
+    var msg2 = 'API Token dinonaktifkan.';
+    Logger.log(msg2);
+    alertSafe_(msg2);
+  }
 }
 
 function setApiToken() {
-  var ui = SpreadsheetApp.getUi();
+  var ui = getUiSafe_();
   var current = PropertiesService.getScriptProperties().getProperty('API_TOKEN') || '';
+
+  if (!ui) {
+    var guide = 'Untuk menyetel API Token langsung dari Script Editor, gunakan fungsi setApiTokenManual("TOKEN_ANDA").\n' +
+                'Contoh: setApiTokenManual("watuireng-secret-2026")\n' +
+                'Token aktif saat ini: ' + (current || '(Belum disetel)');
+    Logger.log(guide);
+    return;
+  }
+
   var promptMsg = 'Masukkan Token Rahasia (API Token) untuk frontend Vercel / GitHub Pages:\n' +
                   (current ? 'Token aktif saat ini: ' + current + '\n\n' : '\n') +
                   'Kosongkan jika ingin menonaktifkan token.';
   var r = ui.prompt('Atur API Token', promptMsg, ui.ButtonSet.OK_CANCEL);
   if (r.getSelectedButton() !== ui.Button.OK) return;
   var token = r.getResponseText().trim();
-  var props = PropertiesService.getScriptProperties();
-  if (token) {
-    props.setProperty('API_TOKEN', token);
-    ui.alert('✓ API Token berhasil disimpan!\n\nToken: ' + token + '\n\nSalin token ini ke menu Pengaturan di aplikasi Vercel / PWA.');
-  } else {
-    props.deleteProperty('API_TOKEN');
-    ui.alert('API Token dinonaktifkan.');
-  }
+  setApiTokenManual(token);
 }
 
 function setPin() {
-  var ui = SpreadsheetApp.getUi();
+  var ui = getUiSafe_();
+  if (!ui) {
+    Logger.log('Gunakan dialog di Google Sheets atau set manual via Script Properties untuk PIN.');
+    return;
+  }
   var r = ui.prompt('PIN petugas (kosongkan untuk menonaktifkan PIN)');
   if (r.getSelectedButton() !== ui.Button.OK) return;
   var pin = r.getResponseText().trim();
@@ -112,11 +209,13 @@ function setPin() {
 }
 
 function showApiInfo() {
-  var ui = SpreadsheetApp.getUi();
   var props = PropertiesService.getScriptProperties();
-  var token = props.getProperty('API_TOKEN') || '(Belum disetel — klik menu "Atur API Token")';
+  var token = props.getProperty('API_TOKEN') || '(Belum disetel — jalankan setApiTokenManual)';
   var pin = props.getProperty('APP_PIN') || '(Tidak aktif)';
-  var masterId = props.getProperty('MASTER_ID') || SpreadsheetApp.getActiveSpreadsheet().getId();
+  var masterId = props.getProperty('MASTER_ID') || '';
+  if (!masterId) {
+    try { masterId = SpreadsheetApp.getActiveSpreadsheet().getId(); } catch (e) { masterId = '(Belum disetel)'; }
+  }
 
   var msg = '=== INFORMASI API WATUIRENG ===\n\n' +
             '• Master Spreadsheet ID: ' + masterId + '\n' +
@@ -128,7 +227,8 @@ function showApiInfo() {
             '3. Execute as: "Me"\n' +
             '4. Who has access: "Anyone" (wajib agar petugas tanpa akun Google bisa posting data)\n' +
             '5. Salin Web app URL (berakhiran /exec) dan tempelkan ke aplikasi Vercel beserta API Token.';
-  ui.alert(msg);
+  Logger.log(msg);
+  alertSafe_(msg);
 }
 
 function checkConnections() {
@@ -149,7 +249,9 @@ function checkConnections() {
       out.push((missing.length ? '⚠ ' : '✓ ') + f[0] + ' — ' + ss.getName() + (missing.length ? ' (sheet tidak ada: ' + missing.join(', ') + ')' : ''));
     } catch (e) { out.push('✗ ' + f[0] + ' — ' + e.message); }
   });
-  SpreadsheetApp.getUi().alert(out.join('\n'));
+  var report = out.join('\n');
+  Logger.log('=== HASIL CEK KONEKSI FILE ===\n' + report);
+  alertSafe_(report);
 }
 
 /* ================================================================
@@ -951,9 +1053,9 @@ function obatCol_(d) { return APP.OBAT_WEEK_START[Math.floor((d - 1) / 7)] + ((d
  * ================================================================ */
 var _files = {};
 function master_() {
-  var id = PropertiesService.getScriptProperties().getProperty('MASTER_ID');
-  if (!id) throw new Error('Belum setup: buka spreadsheet master → menu Watuireng → Setup awal');
-  return SpreadsheetApp.openById(id);
+  var ss = getMasterSpreadsheet_();
+  if (ss) return ss;
+  throw new Error('Belum setup: MASTER_ID belum disetel. Buka file Google Sheets Anda lalu klik [Ekstensi] > [Apps Script] dan jalankan setup(), atau gunakan setMasterSpreadsheetId("ID_SPREADSHEET").');
 }
 function file_(key) {
   if (_files[key]) return _files[key];
