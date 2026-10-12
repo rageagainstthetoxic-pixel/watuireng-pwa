@@ -3487,6 +3487,7 @@ async function submitCurrentForm() {
         bijianBucek: parseNum('val-bijianBucek'),
         kgTotal: kgTotal,
         pakanKg: pakanKg,
+        jenisPakan: document.getElementById('val-jenisPakan')?.value || 'L-208',
         pakanJenis: document.getElementById('val-jenisPakan')?.value || 'L-208',
         obat: collectMedicines(),
         ket: document.getElementById('val-keterangan')?.value?.trim() || ''
@@ -3532,7 +3533,7 @@ async function submitCurrentForm() {
       const total = Math.max(0, (qty * harga) - diskon);
       payload = {
         tanggal: targetDate,
-        jenis: document.getElementById('pakan-jenis')?.value || 'KONSENTRAT_124',
+        jenis: document.getElementById('pakan-jenis')?.value || 'L-208',
         qty: qty,
         harga: harga,
         diskon: diskon,

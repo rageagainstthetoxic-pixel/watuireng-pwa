@@ -583,7 +583,7 @@ function vHarian_(p) {
   ['deplesi', 'butir', 'bijianBucek', 'bijianPutih'].forEach(function (k) { if (o[k] !== null && o[k] % 1 !== 0) throw new Error(f[k] + ' harus bilangan bulat'); });
   maxChk_(o.pakanKg, APP.MAX.pakanKg, 'Pakan (kg)');
   ['hargaPakan', 'hargaTelur', 'biayaObat', 'biayaOp', 'biayaLain'].forEach(function (k) { maxChk_(o[k], APP.MAX.rupiah, f[k]); });
-  o.jenisPakan = txt_(p.jenisPakan, 20).toUpperCase();
+  o.jenisPakan = txt_(p.jenisPakan || p.pakanJenis, 20).toUpperCase();
   if (o.jenisPakan && !APP.FEEDS[o.jenisPakan]) throw new Error('Jenis pakan tidak dikenal: ' + o.jenisPakan);
   if (o.pakanKg && !o.jenisPakan) throw new Error('Pilih jenis pakan');
   if (!o.pakanKg) o.jenisPakan = o.jenisPakan || '';
@@ -663,9 +663,9 @@ function vKas_(p) {
   o.qty = numOpt_(p.qty, 'Qty'); o.harga = numOpt_(p.harga, 'Harga @'); o.nominal = numOpt_(p.nominal, 'Nominal');
   if (o.nominal === null && o.qty !== null && o.harga !== null) o.nominal = o.qty * o.harga;
   if (!(o.nominal > 0)) throw new Error('Nominal (atau Qty × Harga) wajib > 0');
-  o.ket = inList_(p.ket, APP.KAS_KET, 'Kategori');
-  o.sub = inList_(p.sub || APP.KAS_SUB[0], APP.KAS_SUB, 'SUB');
-  o.metode = inList_(p.metode || APP.KAS_METODE[0], APP.KAS_METODE, 'Cash/Transfer');
+  var mtd = String(p.metode || '').trim();
+  if (norm_(mtd) === 'tunai') mtd = 'Cash';
+  o.metode = inList_(mtd || APP.KAS_METODE[0], APP.KAS_METODE, 'Cash/Transfer');
   maxChk_(o.nominal, APP.MAX.rupiah, 'Nominal');
   return o;
 }
