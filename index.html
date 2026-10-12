@@ -635,6 +635,183 @@
       box-shadow: none;
     }
 
+    /* =========================================================
+       Plus UI Preview-First System (Executive Summary & Calm Mobile)
+       ========================================================= */
+    .preview-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    .preview-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .preview-badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .preview-badge-status.recorded {
+      background: var(--pri-light);
+      color: var(--pri);
+      border: 1px solid var(--pri-border);
+    }
+    .preview-badge-status.empty {
+      background: #f1f5f9;
+      color: var(--fg-muted);
+      border: 1px solid var(--border);
+    }
+    .preview-metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .preview-metric-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .preview-metric-box .metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .preview-metric-box .metric-val {
+      font-size: clamp(16px, 4.5vw, 20px);
+      font-weight: 800;
+      color: var(--fg);
+      font-family: var(--font-mono);
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .preview-metric-box .metric-sub {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--pri);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .preview-detail-collapsible {
+      margin-top: 10px;
+      border-top: 1px dashed var(--border);
+      padding-top: 10px;
+      font-size: 12.5px;
+    }
+    .preview-detail-collapsible summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--fg-secondary);
+      user-select: none;
+    }
+    .preview-detail-content {
+      padding: 8px 0 2px;
+      color: var(--fg-secondary);
+      line-height: 1.5;
+    }
+    .preview-actions-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    /* Form Mode Edit Header Bar */
+    .form-edit-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      margin-bottom: 12px;
+    }
+    .btn-back-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card-muted);
+      color: var(--fg-secondary);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+    .btn-back-preview:active {
+      background: #e2e8f0;
+      transform: scale(0.96);
+    }
+
+    /* Optional Details Collapsible inside Form */
+    details.optional-details-card {
+      background: #f8fafc;
+      border: 1px dashed var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    details.optional-details-card summary {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--fg-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+    details.optional-details-card[open] {
+      background: #ffffff;
+      border-style: solid;
+      border-color: var(--border);
+    }
+
+    /* Kartu Kandang Beranda */
+    .home-coop-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .home-coop-card:active {
+      transform: scale(0.98);
+      background: #fdfdfd;
+    }
+    .home-coop-card.done {
+      border-color: var(--pri-border);
+      background: #ffffff;
+    }
+
     /* Navigasi Bawah Plus UI */
     nav.bottom-nav-bar {
       position: fixed;
@@ -1067,7 +1244,7 @@
 <body>
 <div class="app-shell">
 
-  <!-- HEADER UTAMA PLUS UI -->
+  <!-- HEADER UTAMA PLUS UI (TERPADU & RAMPING) -->
   <header class="plus-header">
     <div class="brand-group" onclick="switchNav('home')">
       <div class="brand-icon">
@@ -1077,11 +1254,11 @@
       </div>
       <div>
         <div class="brand-title">Watuireng Poultry</div>
-        <div class="brand-subtitle">Input Harian Peternakan</div>
+        <div class="brand-subtitle"><span id="bar-operator-name">Mba Erlin</span> · Petugas</div>
       </div>
     </div>
 
-    <div style="display:flex; align-items:center;">
+    <div style="display:flex; align-items:center; gap:6px;">
       <button class="status-pill online" id="pill-status-connection" onclick="switchNav('queue')">
         <span class="status-indicator-dot"></span>
         <span id="text-status-connection">Tersambung</span>
@@ -1095,14 +1272,8 @@
     </div>
   </header>
 
-  <!-- BAR INFORMASI PETUGAS TUNGGAL -->
-  <div class="operator-bar">
-    <div class="operator-info">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Petugas: <b id="bar-operator-name">Mba Erlin</b></span>
-    </div>
-    <div class="operator-date" id="bar-today-date">Memuat tanggal...</div>
-  </div>
+  <!-- Sinkronisasi Kompatibilitas Skrip -->
+  <span id="bar-today-date" class="d-none"></span>
 
   <!-- PEMBERITAHUAN OFFLINE & ANTREAN RAMAH MOBILE -->
   <div class="offline-notice d-none" id="notice-offline-bar">
@@ -1121,32 +1292,45 @@
 
     <!-- VIEW 1: BERANDA -->
     <section id="view-home">
-      <div class="card">
+      <div class="card" style="margin-bottom:12px;">
         <div class="card-title">
           <span>Status Pencatatan Harian</span>
-          <span style="font-size:12px; font-weight:600; color:var(--fg-muted);" id="home-coop-progress">0/3 Selesai</span>
+          <span style="font-size:12px; font-weight:700; color:var(--pri);" id="home-coop-progress">0/3 Selesai</span>
         </div>
-        <p class="card-description">Pilih kandang untuk memeriksa dan memasukkan data produksi telur serta konsumsi pakan hari ini.</p>
+        <p class="card-description" style="margin-bottom:10px;">Ketuk kandang untuk melihat pratinjau hasil produksi dan konsumsi pakan hari ini.</p>
 
-        <div class="coop-segment-group">
-          <div class="coop-btn" onclick="openCoopDirect(1)">
-            <span class="coop-name">Kandang 1</span>
-            <span class="coop-badge-status pending" id="home-status-k1">Belum</span>
+        <!-- Kartu Ringkasan Per Kandang -->
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div class="home-coop-card" onclick="openCoopDirect(1)" id="home-coop-card-1">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="coop-name" style="font-size:14px; font-weight:800; color:var(--fg);">Kandang 1</span>
+              <span class="coop-badge-status pending" id="home-status-k1">Belum</span>
+            </div>
+            <div id="home-summary-k1" style="font-size:12px; color:var(--fg-muted); margin-top:3px;">
+              Ketuk untuk membuka pratinjau catatan hari ini
+            </div>
           </div>
-          <div class="coop-btn" onclick="openCoopDirect(2)">
-            <span class="coop-name">Kandang 2</span>
-            <span class="coop-badge-status pending" id="home-status-k2">Belum</span>
+
+          <div class="home-coop-card" onclick="openCoopDirect(2)" id="home-coop-card-2">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="coop-name" style="font-size:14px; font-weight:800; color:var(--fg);">Kandang 2</span>
+              <span class="coop-badge-status pending" id="home-status-k2">Belum</span>
+            </div>
+            <div id="home-summary-k2" style="font-size:12px; color:var(--fg-muted); margin-top:3px;">
+              Ketuk untuk membuka pratinjau catatan hari ini
+            </div>
           </div>
-          <div class="coop-btn" onclick="openCoopDirect(3)">
-            <span class="coop-name">Kandang 3</span>
-            <span class="coop-badge-status pending" id="home-status-k3">Belum</span>
+
+          <div class="home-coop-card" onclick="openCoopDirect(3)" id="home-coop-card-3">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="coop-name" style="font-size:14px; font-weight:800; color:var(--fg);">Kandang 3</span>
+              <span class="coop-badge-status pending" id="home-status-k3">Belum</span>
+            </div>
+            <div id="home-summary-k3" style="font-size:12px; color:var(--fg-muted); margin-top:3px;">
+              Ketuk untuk membuka pratinjau catatan hari ini
+            </div>
           </div>
         </div>
-
-        <button class="btn-primary-action" onclick="openCoopDirect(1)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Mulai Input Kandang
-        </button>
       </div>
 
       <!-- Akses Cepat Seluruh 7 Form -->
@@ -1215,147 +1399,161 @@
       </div>
 
       <!-- ==========================================
-           FORM 1: HARIAN KANDANG
+           FORM 1: HARIAN KANDANG (PREVIEW-FIRST)
            ========================================== -->
       <div id="form-container-harian">
-        <div class="card" style="padding:14px 16px; margin-bottom:12px;">
-          <div style="font-size:13px; font-weight:700; color:var(--fg); margin-bottom:8px;">Pilih Kandang:</div>
+        <!-- Pilihan Kandang -->
+        <div class="card" style="padding:10px 12px; margin-bottom:10px;">
           <div class="coop-segment-group" style="margin-bottom:0;">
-            <button class="coop-btn active" id="tab-kandang-1" onclick="selectCoop(1)">
+            <button type="button" class="coop-btn active" id="tab-kandang-1" onclick="selectCoop(1)">
               <span class="coop-name">Kandang 1</span>
+              <span class="coop-badge-status pending" id="tab-status-k1">Belum</span>
             </button>
-            <button class="coop-btn" id="tab-kandang-2" onclick="selectCoop(2)">
+            <button type="button" class="coop-btn" id="tab-kandang-2" onclick="selectCoop(2)">
               <span class="coop-name">Kandang 2</span>
+              <span class="coop-badge-status pending" id="tab-status-k2">Belum</span>
             </button>
-            <button class="coop-btn" id="tab-kandang-3" onclick="selectCoop(3)">
+            <button type="button" class="coop-btn" id="tab-kandang-3" onclick="selectCoop(3)">
               <span class="coop-name">Kandang 3</span>
+              <span class="coop-badge-status pending" id="tab-status-k3">Belum</span>
             </button>
           </div>
         </div>
 
-        <div class="card">
-          <!-- 1. Deplesi -->
-          <div class="field-row">
-            <label class="field-label" for="val-deplesi">1. Deplesi / Ayam Mati / Afkir (Ekor)</label>
-            <div class="field-helper">Jumlah ekor ayam yang mati atau diafkir pada kandang ini</div>
-            <div class="stepper-layout">
-              <button class="btn-step-action" onclick="stepNumber('val-deplesi', -1)">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </button>
-              <input type="text" inputmode="numeric" class="input-field-num mono" id="val-deplesi" value="0" oninput="calculateRealtime()">
-              <button class="btn-step-action" onclick="stepNumber('val-deplesi', 1)">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </button>
-            </div>
-            <div class="preset-chip-list">
-              <button class="preset-chip accent" onclick="setDirect('val-deplesi', 0)">0 (Nihil)</button>
-              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 1)">+1 Ekor</button>
-              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 2)">+2 Ekor</button>
-              <button class="preset-chip" onclick="incrementDirect('val-deplesi', 5)">+5 Ekor</button>
-            </div>
+        <!-- 1. PANEL PRATINJAU (DEFAULT - TENANG & BEBAS RAMAI) -->
+        <div id="harian-preview-panel">
+          <!-- Diisi otomatis oleh renderHarianPreview() -->
+        </div>
+
+        <!-- 2. PANEL FORM EDIT (HANYA AKTIF SAAT OPERATOR MEMILIH EDIT/CATAT) -->
+        <div id="harian-form-panel" class="d-none">
+          <div class="form-edit-bar">
+            <button type="button" class="btn-back-preview" onclick="exitEditMode()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span>Kembali ke Pratinjau</span>
+            </button>
+            <span style="font-size:12.5px; font-weight:700; color:var(--fg-secondary);" id="edit-mode-indicator-text">
+              Mode Edit Kandang 1
+            </span>
           </div>
 
-          <!-- 2. Butir Telur -->
-          <div class="field-row">
-            <label class="field-label" for="val-butir">2. Produksi Telur (Butir)</label>
-            <div class="field-helper">Total butir telur utuh yang dipanen dari kandang ini</div>
-            <input type="text" inputmode="numeric" class="input-field-num" style="margin-bottom:8px;" id="val-butir" placeholder="0" oninput="calculateRealtime()">
-            <div class="preset-chip-list">
-              <button class="preset-chip" onclick="incrementDirect('val-butir', 100)">+100 Butir</button>
-              <button class="preset-chip" onclick="incrementDirect('val-butir', 500)">+500 Butir</button>
-              <button class="preset-chip accent" onclick="incrementDirect('val-butir', 1000)">+1.000 Butir</button>
-            </div>
-          </div>
-
-          <!-- 3. Timbangan Telur Bagus -->
-          <div class="field-row">
-            <label class="field-label" for="val-kgBagus">3. Timbangan Telur Bagus (Kg)</label>
-            <div class="field-helper">Timbangan telur normal (1 krat kotak standar = 15 kg)</div>
-            <input type="text" inputmode="decimal" class="input-field-num" style="margin-bottom:8px;" id="val-kgBagus" placeholder="0" oninput="calculateRealtime()">
-            <div class="preset-chip-list">
-              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 15)">+1 Krat (15 kg)</button>
-              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 30)">+2 Krat (30 kg)</button>
-              <button class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 45)">+3 Krat (45 kg)</button>
-              <button class="preset-chip" onclick="incrementDirect('val-kgBagus', 5)">+5 kg</button>
-            </div>
-          </div>
-
-          <!-- Telur Sortiran -->
-          <div class="field-row">
-            <label class="field-label">Telur Sortiran (Opsional)</label>
-            <div class="field-helper">Diisi jika terdapat telur warna putih, retak halus, atau rusak</div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-              <div>
-                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Putihan (kg):</span>
-                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgPutih" placeholder="0" oninput="calculateRealtime()">
-              </div>
-              <div>
-                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucek / Retak (kg):</span>
-                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
+          <div class="card">
+            <!-- 1. Deplesi -->
+            <div class="field-row">
+              <label class="field-label" for="val-deplesi">1. Deplesi / Ayam Mati / Afkir (Ekor)</label>
+              <div class="field-helper">Jumlah ekor ayam mati atau afkir kandang ini</div>
+              <div class="stepper-layout">
+                <button type="button" class="btn-step-action" onclick="stepNumber('val-deplesi', -1)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <input type="text" inputmode="numeric" class="input-field-num mono" id="val-deplesi" value="0" oninput="calculateRealtime()">
+                <button type="button" class="btn-step-action" onclick="stepNumber('val-deplesi', 1)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button type="button" class="preset-chip accent" style="height:48px;" onclick="setDirect('val-deplesi', 0)">0 (Nihil)</button>
               </div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-              <div>
-                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucek Parah (kg):</span>
-                <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
+
+            <!-- 2. Butir Telur -->
+            <div class="field-row">
+              <label class="field-label" for="val-butir">2. Produksi Telur (Butir)</label>
+              <div class="field-helper">Total butir telur dipanen dari kandang ini</div>
+              <div style="display:flex; gap:8px;">
+                <input type="text" inputmode="numeric" class="input-field-num" id="val-butir" placeholder="0" oninput="calculateRealtime()">
+                <button type="button" class="preset-chip accent" style="height:48px; flex-shrink:0;" onclick="incrementDirect('val-butir', 1000)">+1.000</button>
               </div>
-              <div>
-                <span style="font-size:12.5px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:4px;">Bucekan (Biji):</span>
-                <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucek" placeholder="0" oninput="calculateRealtime()">
+            </div>
+
+            <!-- 3. Timbangan Telur Bagus -->
+            <div class="field-row">
+              <label class="field-label" for="val-kgBagus">3. Timbangan Telur Bagus (Kg)</label>
+              <div class="field-helper">Timbangan telur normal (1 krat = 15 kg)</div>
+              <input type="text" inputmode="decimal" class="input-field-num" style="margin-bottom:8px;" id="val-kgBagus" placeholder="0" oninput="calculateRealtime()">
+              <div class="preset-chip-list">
+                <button type="button" class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 15)">+1 Krat (15 kg)</button>
+                <button type="button" class="preset-chip accent" onclick="incrementDirect('val-kgBagus', 30)">+2 Krat (30 kg)</button>
+                <button type="button" class="preset-chip" onclick="incrementDirect('val-kgBagus', 5)">+5 kg</button>
               </div>
             </div>
-          </div>
 
-          <!-- Ringkasan Timbangan Harian -->
-          <div class="summary-calc-card">
-            <div class="summary-calc-header">
-              <span>Ringkasan Produksi Telur</span>
-              <span class="summary-status-tag ok" id="metric-quality-status">Kategori: Normal</span>
-            </div>
-            <div class="summary-calc-value" id="metric-total-weight">0,00 kg</div>
-            <div style="font-size:13px; color:#065f46; font-weight:600;" id="metric-average-egg">
-              Rata-rata: masukkan angka butir &amp; kg
-            </div>
-          </div>
+            <!-- Accordion Sortiran Telur (Tenang & Ramping) -->
+            <details class="optional-details-card">
+              <summary>+ Tambah Rincian Sortiran (Putih / Retak / Bucek)</summary>
+              <div style="padding-top:10px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Putihan (kg):</span>
+                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgPutih" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Retak / Bucek (kg):</span>
+                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucek Parah (kg):</span>
+                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucekan (Biji):</span>
+                    <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucek" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                </div>
+              </div>
+            </details>
 
-          <!-- 4. Pakan Keluar -->
-          <div class="field-row">
-            <label class="field-label" for="val-pakanKg">4. Pakan Keluar (Kg)</label>
-            <div class="field-helper">Jumlah pakan yang diberikan untuk kandang ini</div>
-            <div style="display:flex; gap:8px; margin-bottom:8px;">
-              <select id="val-jenisPakan" class="input-select-field" style="flex:1;">
-                <option value="L-208" selected>L-208</option>
-                <option value="GROWER KH">GROWER KH</option>
-                <option value="PRE LAYER">PRE LAYER</option>
-                <option value="L-20">L-20</option>
-              </select>
-              <input type="text" inputmode="decimal" class="input-field-num" style="flex:1;" id="val-pakanKg" placeholder="Jumlah kg" oninput="calculateRealtime()">
+            <!-- Ringkasan Timbangan Harian -->
+            <div class="summary-calc-card">
+              <div class="summary-calc-header">
+                <span>Total Timbangan Telur</span>
+                <span class="summary-status-tag ok" id="metric-quality-status">Kategori: Normal</span>
+              </div>
+              <div class="summary-calc-value" id="metric-total-weight">0,00 kg</div>
+              <div style="font-size:12.5px; color:#065f46; font-weight:600;" id="metric-average-egg">
+                Rata-rata: masukkan angka butir &amp; kg
+              </div>
             </div>
-            <div class="preset-chip-list">
-              <button class="preset-chip" onclick="incrementDirect('val-pakanKg', 50)">+50 kg</button>
-              <button class="preset-chip accent" onclick="incrementDirect('val-pakanKg', 100)">+100 kg</button>
-              <button class="preset-chip" onclick="incrementDirect('val-pakanKg', 150)">+150 kg</button>
+
+            <!-- 4. Pakan Keluar -->
+            <div class="field-row">
+              <label class="field-label" for="val-pakanKg">4. Pakan Keluar (Kg)</label>
+              <div class="field-helper">Jumlah pakan yang diberikan untuk kandang ini</div>
+              <div style="display:flex; gap:8px; margin-bottom:8px;">
+                <select id="val-jenisPakan" class="input-select-field" style="flex:1;">
+                  <option value="L-208" selected>L-208</option>
+                  <option value="GROWER KH">GROWER KH</option>
+                  <option value="PRE LAYER">PRE LAYER</option>
+                  <option value="L-20">L-20</option>
+                </select>
+                <input type="text" inputmode="decimal" class="input-field-num" style="flex:1;" id="val-pakanKg" placeholder="Jumlah kg" oninput="calculateRealtime()">
+              </div>
+              <div class="preset-chip-list">
+                <button type="button" class="preset-chip" onclick="incrementDirect('val-pakanKg', 50)">+50 kg</button>
+                <button type="button" class="preset-chip accent" onclick="incrementDirect('val-pakanKg', 100)">+100 kg</button>
+                <button type="button" class="preset-chip" onclick="incrementDirect('val-pakanKg', 150)">+150 kg</button>
+              </div>
             </div>
-          </div>
 
-          <!-- Obat yang Dipakai Hari Ini -->
-          <div class="field-row">
-            <label class="field-label">Obat yang Dipakai (Bila Ada)</label>
-            <div class="field-helper">Pilih obat dan jumlah yang dicampurkan</div>
-            <div id="medicine-list-container"></div>
-            <button type="button" class="preset-chip" style="margin-top:6px;" onclick="addMedicineRow()">+ Tambah Baris Obat</button>
-          </div>
+            <!-- Accordion Catatan Obat -->
+            <details class="optional-details-card">
+              <summary>+ Tambah Catatan Obat (Bila Ada)</summary>
+              <div style="padding-top:10px;">
+                <div id="medicine-list-container"></div>
+                <button type="button" class="preset-chip" style="margin-top:6px;" onclick="addMedicineRow()">+ Tambah Baris Obat</button>
+              </div>
+            </details>
 
-          <!-- Keterangan -->
-          <div class="field-row">
-            <label class="field-label" for="val-keterangan">Catatan Keterangan Kandang</label>
-            <div class="field-helper">Catatan tambahan dari lapangan</div>
-            <div class="voice-input-wrapper">
-              <input type="text" class="input-field-num" style="padding-right:110px;" id="val-keterangan" placeholder="Kondisi ayam sehat, pakan habis...">
-              <button type="button" class="btn-voice-dictate" id="btn-dictate-trigger" onclick="toggleSpeechDictation('val-keterangan')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                <span>Dikte</span>
-              </button>
+            <!-- Keterangan Lapangan -->
+            <div class="field-row" style="margin-bottom:0; border-bottom:none;">
+              <label class="field-label" for="val-keterangan">Catatan Keterangan Kandang</label>
+              <div class="voice-input-wrapper">
+                <input type="text" class="input-field-num" style="padding-right:90px;" id="val-keterangan" placeholder="Kondisi ayam sehat, pakan habis...">
+                <button type="button" class="btn-voice-dictate" id="btn-dictate-trigger" onclick="toggleSpeechDictation('val-keterangan')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                  <span>Dikte</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2182,6 +2380,7 @@ const APP = {
   selectedCoop: 1,
   selectedDate: new Date().toISOString().slice(0, 10),
   operatorName: 'Mba Erlin',
+  isEditing: false, // Default Preview-First Mode
   arahKas: 'keluar',
   isOnline: navigator.onLine,
   isSyncing: false,
@@ -2290,16 +2489,16 @@ function switchFormType(formKey) {
   hapticPulse('light');
   APP.activeForm = formKey;
 
-  // Toggle pills
+  // Toggle subnav pills
   let activePill = null;
-  document.querySelectorAll('#pill-nav-container .pill-item').forEach(p => {
+  document.querySelectorAll('#subnav-form-pills .pill-item').forEach(p => {
     const isAct = p.dataset.form === formKey;
     p.classList.toggle('active', isAct);
     if (isAct) activePill = p;
   });
 
   if (activePill) {
-    autoCenterActiveElement(activePill, document.getElementById('pill-nav-container'));
+    autoCenterActiveElement(activePill, document.getElementById('subnav-form-pills'));
   }
 
   // Toggle form containers
@@ -2308,8 +2507,18 @@ function switchFormType(formKey) {
     if (el) el.classList.toggle('d-none', k !== formKey);
   });
 
-  updateSubmitButtonLabel();
-  checkExistingEntry();
+  const saveBar = document.getElementById('floating-save-bar');
+  if (formKey === 'harian') {
+    APP.isEditing = false;
+    exitEditMode();
+    renderHarianPreview(APP.selectedCoop, APP.selectedDate);
+  } else {
+    if (saveBar && APP.currentTab === 'input') {
+      saveBar.classList.remove('d-none');
+    }
+    updateSubmitButtonLabel();
+    checkExistingEntry();
+  }
 }
 
 function openFormType(formKey) {
@@ -2345,14 +2554,300 @@ function setPresetDate(offsetDays) {
   document.getElementById('btn-chip-today').classList.toggle('accent', offsetDays === 0);
   document.getElementById('btn-chip-yesterday').classList.toggle('accent', offsetDays === -1);
 
+  APP.isEditing = false;
+  exitEditMode();
   checkExistingEntry();
+  renderHarianPreview(APP.selectedCoop, formatted);
+  updateHomeCoopCards();
 }
 
 function onDateChanged(val) {
   if (val) {
     APP.selectedDate = val;
+    APP.isEditing = false;
+    exitEditMode();
     checkExistingEntry();
+    renderHarianPreview(APP.selectedCoop, val);
+    updateHomeCoopCards();
   }
+}
+
+/* =========================================================
+   Sistem Pratinjau (Preview First) & Manajemen Mode Edit
+   ========================================================= */
+function findHarianRecord(kandangNum, dateStr) {
+  const k = Number(kandangNum || APP.selectedCoop);
+  const d = dateStr || APP.selectedDate;
+
+  // Cek antrean lokal dulu
+  const inQ = (APP.queue || []).find(q => q.type === 'harian' && Number(q.kandang) === k && (q.tanggal === d || q.date === d));
+  if (inQ) return inQ;
+
+  // Cek riwayat
+  const inH = (APP.history || []).find(r => r.type === 'harian' && Number(r.kandang) === k && (r.date === d || r.tanggal === d));
+  if (inH) return inH;
+
+  return null;
+}
+
+function renderHarianPreview(kandangNum, targetDate) {
+  kandangNum = Number(kandangNum || APP.selectedCoop);
+  targetDate = targetDate || APP.selectedDate;
+
+  const container = document.getElementById('harian-preview-panel');
+  if (!container) return;
+
+  // Update indikator status kandang 1, 2, 3 di tab atas
+  for (let i = 1; i <= 3; i++) {
+    const tab = document.getElementById(`tab-kandang-${i}`);
+    if (tab) tab.classList.toggle('active', i === kandangNum);
+    const badge = document.getElementById(`tab-status-k${i}`);
+    if (badge) {
+      const rec = findHarianRecord(i, targetDate);
+      badge.textContent = rec ? 'Selesai' : 'Belum';
+      badge.className = `coop-badge-status ${rec ? 'done' : 'pending'}`;
+    }
+  }
+
+  const record = findHarianRecord(kandangNum, targetDate);
+
+  if (record) {
+    const p = record.payload || {};
+    const butir = Number(p.butir || 0);
+    const kgTotal = Number(p.kgTotal || p.kgBagus || 0);
+    const pakanKg = Number(p.pakanKg || 0);
+    const pakanJenis = p.pakanJenis || p.jenisPakan || 'L-208';
+    const deplesi = Number(p.deplesi || 0);
+
+    let avgGram = '-';
+    let kualitasLabel = 'Normal (Standar)';
+    if (butir > 0 && kgTotal > 0) {
+      const g = Math.round((kgTotal / butir) * 1000 * 10) / 10;
+      avgGram = `${g} gram`;
+      if (g >= 50 && g <= 65) kualitasLabel = 'Normal (50-65g)';
+      else if (g < 50) kualitasLabel = 'Kecil / Muda (<50g)';
+      else kualitasLabel = 'Besar / Jumbo (>65g)';
+    }
+
+    const putihKg = Number(p.kgPutih || 0);
+    const retakKg = Number(p.kgBucek || 0);
+    const rusakKg = Number(p.kgBucekParah || 0);
+    const bijiBucek = Number(p.bijianBucek || 0);
+    const adaSortiran = putihKg > 0 || retakKg > 0 || rusakKg > 0 || bijiBucek > 0;
+    const adaKet = !!(p.ket && p.ket.trim());
+
+    container.innerHTML = `
+      <div class="preview-card">
+        <div class="preview-header-bar">
+          <div class="preview-badge-status recorded">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Sudah Tercatat Hari Ini</span>
+          </div>
+          <div style="font-size:11.5px; color:var(--fg-muted); font-weight:600;">
+            ${record.time || '08:00 WIB'} · ${record.petugas || 'Mba Erlin'}
+          </div>
+        </div>
+
+        <div style="margin-top:10px; font-size:15px; font-weight:800; color:var(--fg);">
+          Ringkasan Kandang ${kandangNum}
+        </div>
+        <div style="font-size:12px; color:var(--fg-muted); margin-bottom:12px;">
+          Tanggal: <b>${targetDate}</b>
+        </div>
+
+        <!-- 4 Kotak Metrik Eksekutif (Grid 2x2 Clean) -->
+        <div class="preview-metrics-grid">
+          <div class="preview-metric-box">
+            <span class="metric-label">Produksi Telur</span>
+            <span class="metric-val">${butir.toLocaleString('id-ID')} btr</span>
+            <span class="metric-sub">${kgTotal.toLocaleString('id-ID')} kg</span>
+          </div>
+          <div class="preview-metric-box">
+            <span class="metric-label">Rata-rata Telur</span>
+            <span class="metric-val">${avgGram}</span>
+            <span class="metric-sub" style="color:var(--fg-secondary); font-size:11px;">${kualitasLabel}</span>
+          </div>
+          <div class="preview-metric-box">
+            <span class="metric-label">Konsumsi Pakan</span>
+            <span class="metric-val">${pakanKg} kg</span>
+            <span class="metric-sub">${pakanJenis}</span>
+          </div>
+          <div class="preview-metric-box">
+            <span class="metric-label">Ayam Mati/Afkir</span>
+            <span class="metric-val" style="color:${deplesi > 0 ? 'var(--warn)' : 'var(--fg)'};">${deplesi} ekor</span>
+            <span class="metric-sub" style="color:var(--fg-muted); font-size:11px;">${deplesi === 0 ? 'Nihil (Sehat)' : 'Deplesi'}</span>
+          </div>
+        </div>
+
+        ${adaSortiran || adaKet ? `
+          <details class="preview-detail-collapsible">
+            <summary>Lihat Rincian Sortiran &amp; Catatan</summary>
+            <div class="preview-detail-content">
+              ${adaSortiran ? `
+                <div style="margin-bottom:6px;">
+                  <b>Sortiran:</b> Putih ${putihKg} kg · Retak ${retakKg} kg · Rusak ${rusakKg} kg ${bijiBucek > 0 ? `· Bucekan ${bijiBucek} biji` : ''}
+                </div>
+              ` : ''}
+              ${adaKet ? `
+                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:6px; padding:8px 10px; font-style:italic;">
+                  &ldquo;${p.ket}&rdquo;
+                </div>
+              ` : ''}
+            </div>
+          </details>
+        ` : ''}
+
+        <!-- Tombol Aksi Pratinjau -->
+        <div class="preview-actions-bar">
+          <button type="button" class="btn-primary-action" onclick="enterEditMode()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Koreksi / Edit Catatan Ini</span>
+          </button>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button type="button" class="preset-chip" style="justify-content:center; padding:10px;" onclick="copySingleCoopWA(${kandangNum})">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Salin WA</span>
+            </button>
+            <button type="button" class="preset-chip accent" style="justify-content:center; padding:10px;" onclick="selectCoop(${kandangNum < 3 ? kandangNum + 1 : 1})">
+              <span>Ke Kandang ${kandangNum < 3 ? kandangNum + 1 : 1} &rarr;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    // Tampilan Kosong (Belum Tercatat)
+    container.innerHTML = `
+      <div class="preview-card" style="text-align:center; padding:28px 16px;">
+        <div class="preview-badge-status empty" style="margin-bottom:12px;">
+          <span>Belum Ada Data Hari Ini</span>
+        </div>
+        <div style="font-size:16px; font-weight:800; color:var(--fg); margin-bottom:4px;">
+          Kandang ${kandangNum} Belum Dicatat
+        </div>
+        <p style="font-size:12.5px; color:var(--fg-muted); margin:0 auto 20px; max-width:320px; line-height:1.4;">
+          Data produksi telur dan pakan untuk tanggal <b>${targetDate}</b> belum dimasukkan ke sistem.
+        </p>
+
+        <button type="button" class="btn-primary-action" onclick="enterEditMode()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Mulai Isi Catatan Kandang ${kandangNum}</span>
+        </button>
+      </div>
+    `;
+  }
+}
+
+function enterEditMode() {
+  hapticPulse('medium');
+  APP.isEditing = true;
+
+  const previewPanel = document.getElementById('harian-preview-panel');
+  const formPanel = document.getElementById('harian-form-panel');
+  const indicatorTxt = document.getElementById('edit-mode-indicator-text');
+  const floatingBar = document.getElementById('floating-save-bar');
+
+  if (previewPanel) previewPanel.classList.add('d-none');
+  if (formPanel) formPanel.classList.remove('d-none');
+  if (indicatorTxt) indicatorTxt.textContent = `Mode Edit Kandang ${APP.selectedCoop}`;
+  if (floatingBar) floatingBar.classList.remove('d-none');
+
+  // Pre-fill existing data jika ada
+  const existing = findHarianRecord(APP.selectedCoop, APP.selectedDate);
+  if (existing && existing.payload) {
+    fillFormValues('harian', existing.payload);
+  } else {
+    resetForm('harian');
+  }
+
+  updateSubmitButtonLabel();
+  window.scrollTo({ top: 80, behavior: 'smooth' });
+}
+
+function exitEditMode() {
+  hapticPulse('light');
+  APP.isEditing = false;
+
+  const previewPanel = document.getElementById('harian-preview-panel');
+  const formPanel = document.getElementById('harian-form-panel');
+  const floatingBar = document.getElementById('floating-save-bar');
+
+  if (previewPanel) previewPanel.classList.remove('d-none');
+  if (formPanel) formPanel.classList.add('d-none');
+  if (floatingBar) floatingBar.classList.add('d-none');
+
+  renderHarianPreview(APP.selectedCoop, APP.selectedDate);
+}
+
+function updateHomeCoopCards() {
+  const targetDate = APP.selectedDate || new Date().toISOString().slice(0, 10);
+  let completedCount = 0;
+
+  for (let i = 1; i <= 3; i++) {
+    const rec = findHarianRecord(i, targetDate);
+    const cardEl = document.getElementById(`home-coop-card-${i}`);
+    const badgeEl = document.getElementById(`home-status-k${i}`);
+    const sumEl = document.getElementById(`home-summary-k${i}`);
+
+    if (rec) {
+      completedCount++;
+      const p = rec.payload || {};
+      const butir = Number(p.butir || 0);
+      const kg = Number(p.kgTotal || p.kgBagus || 0);
+      const pakan = Number(p.pakanKg || 0);
+
+      if (cardEl) cardEl.classList.add('done');
+      if (badgeEl) {
+        badgeEl.textContent = '✓ Selesai';
+        badgeEl.className = 'coop-badge-status done';
+      }
+      if (sumEl) {
+        sumEl.textContent = `${butir.toLocaleString('id-ID')} butir · ${kg} kg · Pakan ${pakan} kg`;
+        sumEl.style.color = '#047857';
+        sumEl.style.fontWeight = '600';
+      }
+    } else {
+      if (cardEl) cardEl.classList.remove('done');
+      if (badgeEl) {
+        badgeEl.textContent = 'Belum';
+        badgeEl.className = 'coop-badge-status pending';
+      }
+      if (sumEl) {
+        sumEl.textContent = 'Ketuk untuk membuka pratinjau catatan hari ini';
+        sumEl.style.color = 'var(--fg-muted)';
+        sumEl.style.fontWeight = 'normal';
+      }
+    }
+  }
+
+  const progEl = document.getElementById('home-coop-progress');
+  if (progEl) {
+    progEl.textContent = `${completedCount}/3 Selesai`;
+  }
+}
+
+function copySingleCoopWA(kandangNum) {
+  const rec = findHarianRecord(kandangNum, APP.selectedDate);
+  if (!rec) {
+    notify('Belum ada data untuk disalin', 'warn');
+    return;
+  }
+  const p = rec.payload || {};
+  let txt = `*CATATAN KANDANG ${kandangNum} - WATUIRENG*\n`;
+  txt += `Tanggal: ${rec.date || APP.selectedDate}\n`;
+  txt += `Petugas: ${rec.petugas || 'Mba Erlin'}\n`;
+  txt += `------------------------------\n`;
+  txt += `• Produksi Telur: ${Number(p.butir || 0).toLocaleString('id-ID')} butir (${p.kgTotal || p.kgBagus || 0} kg)\n`;
+  txt += `• Konsumsi Pakan: ${p.pakanKg || 0} kg (${p.pakanJenis || 'L-208'})\n`;
+  txt += `• Deplesi / Mati: ${p.deplesi || 0} ekor\n`;
+  if (p.kgPutih || p.kgBucek || p.kgBucekParah) {
+    txt += `• Sortiran: Putih ${p.kgPutih || 0} kg, Retak ${p.kgBucek || 0} kg, Rusak ${p.kgBucekParah || 0} kg\n`;
+  }
+  if (p.ket) txt += `• Catatan: ${p.ket}\n`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    notify(`Rincian Kandang ${kandangNum} disalin ke clipboard!`, 'success');
+  });
 }
 
 /* =========================================================
@@ -2361,15 +2856,15 @@ function onDateChanged(val) {
 function selectCoop(k) {
   hapticPulse('medium');
   APP.selectedCoop = k;
-  for (let i = 1; i <= 3; i++) {
-    const tab = document.getElementById(`tab-kandang-${i}`);
-    if (tab) tab.classList.toggle('active', i === k);
-  }
+  APP.isEditing = false;
+  exitEditMode();
   updateSubmitButtonLabel();
-  checkExistingEntry();
+  renderHarianPreview(k, APP.selectedDate);
 }
 
 function openCoopDirect(k) {
+  APP.selectedCoop = k;
+  APP.isEditing = false;
   switchFormType('harian');
   selectCoop(k);
   switchNav('input');
@@ -2762,7 +3257,14 @@ function checkExistingEntry() {
   const kd = formType === 'harian' ? APP.selectedCoop : '';
   const notice = document.getElementById('koreksi-notice-card');
 
-  // Periksa di antrean lokal
+  if (formType === 'harian') {
+    renderHarianPreview(APP.selectedCoop, tgl);
+    updateHomeCoopCards();
+    if (notice) notice.classList.add('d-none');
+    return;
+  }
+
+  // Periksa di antrean lokal untuk form lain
   const inQueue = APP.queue.find(q => q.type === formType && q.tanggal === tgl && (formType !== 'harian' || Number(q.kandang) === Number(kd)));
   if (inQueue) {
     if (notice) notice.classList.remove('d-none');
@@ -2770,7 +3272,7 @@ function checkExistingEntry() {
     return;
   }
 
-  // Periksa di riwayat server
+  // Periksa di riwayat server untuk form lain
   const inHistory = APP.history.find(r => r.type === formType && r.date === tgl && (formType !== 'harian' || Number(r.kandang) === Number(kd)));
   if (inHistory && inHistory.payload) {
     if (notice) notice.classList.remove('d-none');
@@ -3136,6 +3638,11 @@ async function submitCurrentForm() {
     // Tampilkan modal konfirmasi sukses Plus UI
     showSuccessModal(record);
     resetForm(formType);
+    if (formType === 'harian') {
+      exitEditMode();
+      renderHarianPreview(APP.selectedCoop, targetDate);
+      updateHomeCoopCards();
+    }
 
   } catch (err) {
     hapticPulse('warn');
@@ -3566,6 +4073,8 @@ async function refreshHistoryFromServer() {
     APP.history = [...INITIAL_DEMO_RECORDS];
   }
 
+  updateHomeCoopCards();
+  renderHarianPreview(APP.selectedCoop, APP.selectedDate);
   renderHistoryList();
 }
 
@@ -3896,30 +4405,17 @@ function editCurrentRecordInForm() {
   // Switch form
   if (r.type) {
     switchFormType(r.type);
-    if (r.type === 'harian' && r.kandang) {
-      selectCoop(Number(r.kandang));
+    if (r.type === 'harian') {
+      if (r.kandang) APP.selectedCoop = Number(r.kandang);
+      enterEditMode();
+      fillFormValues('harian', r.payload);
+    } else {
+      fillFormValues(r.type, r.payload);
     }
   }
 
-  // Populate fields
-  const p = r.payload || {};
-  if (r.type === 'harian') {
-    if (p.deplesi != null) document.getElementById('val-deplesi').value = p.deplesi;
-    if (p.butirBagus != null) document.getElementById('val-butir-bagus').value = p.butirBagus;
-    if (p.kgBagus != null) document.getElementById('val-kg-bagus').value = p.kgBagus;
-    if (p.butirRetak != null) document.getElementById('val-butir-retak').value = p.butirRetak;
-    if (p.kgRetak != null) document.getElementById('val-kg-retak').value = p.kgRetak;
-    if (p.butirRusak != null) document.getElementById('val-butir-rusak').value = p.butirRusak;
-    if (p.kgRusak != null) document.getElementById('val-kg-rusak').value = p.kgRusak;
-    if (p.pakanJenis != null) document.getElementById('val-pakan-jenis').value = p.pakanJenis;
-    if (p.pakanPagiKg != null) document.getElementById('val-pakan-pagi').value = p.pakanPagiKg;
-    if (p.pakanSoreKg != null) document.getElementById('val-pakan-sore').value = p.pakanSoreKg;
-    if (p.ket != null) document.getElementById('val-keterangan').value = p.ket;
-    calculateRealtime();
-  }
-
   switchNav('input');
-  notify('Mode koreksi aktif: Memuat data tanggal ' + r.date, 'info');
+  notify('Mode koreksi aktif: Memuat data ' + (r.kandang ? 'Kandang ' + r.kandang : ''), 'info');
 }
 
 function copyWhatsAppDailyReport() {
@@ -4006,11 +4502,27 @@ function applyTabChange(navKey) {
   });
 
   const saveBar = document.getElementById('floating-save-bar');
-  if (saveBar) saveBar.classList.toggle('d-none', navKey !== 'input');
+  if (saveBar) {
+    if (navKey === 'input') {
+      if (APP.activeForm === 'harian') {
+        saveBar.classList.toggle('d-none', !APP.isEditing);
+      } else {
+        saveBar.classList.remove('d-none');
+      }
+    } else {
+      saveBar.classList.add('d-none');
+    }
+  }
 
   window.scrollTo(0, 0);
 
-  if (navKey === 'queue') {
+  if (navKey === 'home') {
+    updateHomeCoopCards();
+  } else if (navKey === 'input') {
+    if (APP.activeForm === 'harian') {
+      renderHarianPreview(APP.selectedCoop, APP.selectedDate);
+    }
+  } else if (navKey === 'queue') {
     renderQueueList();
   } else if (navKey === 'history') {
     renderHistoryList();
@@ -4191,12 +4703,16 @@ async function initApp() {
   await DB.init();
   loadPersistedSettings();
   await refreshQueueStatus();
+  updateHomeCoopCards();
+  renderHarianPreview(APP.selectedCoop, APP.selectedDate);
 
   const formattedDate = new Date().toLocaleDateString('id-ID', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
   });
-  document.getElementById('bar-today-date').textContent = formattedDate;
-  document.getElementById('global-input-date').value = APP.selectedDate;
+  const dateEl = document.getElementById('bar-today-date');
+  if (dateEl) dateEl.textContent = formattedDate;
+  const inputDate = document.getElementById('global-input-date');
+  if (inputDate) inputDate.value = APP.selectedDate;
 
   const hash = location.hash.replace(/^#\/?/, '').split('/')[0];
   if (hash && ['home', 'input', 'queue', 'history', 'settings'].includes(hash)) {
@@ -4206,6 +4722,7 @@ async function initApp() {
   }
 
   renderHistoryList();
+  updateHomeCoopCards();
 
   if (APP.isOnline && APP.gasUrl) {
     refreshHistoryFromServer();
