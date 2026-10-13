@@ -1543,7 +1543,7 @@
 
             <!-- Accordion Sortiran Telur (Tenang & Ramping) -->
             <details class="optional-details-card">
-              <summary>+ Tambah Rincian Sortiran (Putih / Retak / Bucek)</summary>
+              <summary>+ Tambah Rincian Sortiran (Putih / Retak / Bucek / Pecah)</summary>
               <div style="padding-top:10px;">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
                   <div>
@@ -1551,24 +1551,28 @@
                     <input type="text" inputmode="decimal" class="input-field-num" id="val-kgPutih" placeholder="0" oninput="calculateRealtime()">
                   </div>
                   <div>
-                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Retak / Bucek (kg):</span>
-                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Putihan (Biji):</span>
+                    <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianPutih" placeholder="0" oninput="calculateRealtime()">
                   </div>
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
                   <div>
-                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucek Parah (kg):</span>
-                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Retak / Bentik (kg):</span>
+                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
                   </div>
                   <div>
-                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucekan (Biji):</span>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bentik / Bucekan (Biji):</span>
                     <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucek" placeholder="0" oninput="calculateRealtime()">
                   </div>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                   <div>
-                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Putihan (Biji):</span>
-                    <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianPutih" placeholder="0" oninput="calculateRealtime()">
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Pecah / Bucek Parah (kg):</span>
+                    <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Pecah / Bucek Parah (Biji):</span>
+                    <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucekParah" placeholder="0" oninput="calculateRealtime()">
                   </div>
                 </div>
               </div>
@@ -3304,6 +3308,7 @@ function resetForm(type) {
     setVal('val-kgBucekParah', '');
     setVal('val-bijianBucek', '');
     setVal('val-bijianPutih', '');
+    setVal('val-bijianBucekParah', '');
     setVal('val-pakanKg', '');
     setVal('val-keterangan', '');
     const medBox = document.getElementById('medicine-list-container');
@@ -3395,6 +3400,7 @@ function fillFormValues(type, p) {
     setV('val-kgBucekParah', p.kgBucekParah);
     setV('val-bijianBucek', p.bijianBucek);
     setV('val-bijianPutih', p.bijianPutih);
+    setV('val-bijianBucekParah', p.bijianBucekParah);
     setV('val-pakanKg', p.pakanKg);
     setV('val-jenisPakan', p.jenisPakan || p.pakanJenis || 'L-208');
     setV('val-keterangan', p.ket || '');
@@ -3504,6 +3510,7 @@ async function submitCurrentForm() {
     const kgBucekParah = parseNumOpt('val-kgBucekParah');
     const bijianBucek = parseNumOpt('val-bijianBucek');
     const bijianPutih = parseNumOpt('val-bijianPutih');
+    const bijianBucekParah = parseNumOpt('val-bijianBucekParah');
     const pakanKg = parseNumOpt('val-pakanKg');
     const jenisPakan = (pakanKg != null && pakanKg > 0) ? (document.getElementById('val-jenisPakan')?.value || 'L-208') : null;
     const medicines = collectMedicines();
@@ -3512,7 +3519,7 @@ async function submitCurrentForm() {
     const eggWeights = [kgBagus, kgPutih, kgBucek, kgBucekParah].filter(x => x != null && x > 0);
     const kgTotal = eggWeights.length > 0 ? Math.round(eggWeights.reduce((a, b) => a + b, 0) * 100) / 100 : null;
 
-    const hasAny = deplesi != null || butir != null || kgTotal != null || pakanKg != null || bijianBucek != null || bijianPutih != null || medicines.length > 0 || ket;
+    const hasAny = deplesi != null || butir != null || kgTotal != null || pakanKg != null || bijianBucek != null || bijianPutih != null || bijianBucekParah != null || medicines.length > 0 || ket;
     if (!hasAny) {
       validationError = 'Mohon isi setidaknya salah satu data kandang (telur, pakan, deplesi, atau obat).';
     } else {
@@ -3527,6 +3534,7 @@ async function submitCurrentForm() {
         kgBucekParah: kgBucekParah,
         bijianBucek: bijianBucek,
         bijianPutih: bijianPutih,
+        bijianBucekParah: bijianBucekParah,
         kgTotal: kgTotal,
         pakanKg: pakanKg,
         jenisPakan: jenisPakan,

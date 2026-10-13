@@ -573,16 +573,24 @@ function r3_(x) { return Math.round(x * 1000) / 1000; }
 function vHarian_(p) {
   var o = { tanggal: reqDate_(p.tanggal), kandang: Number(p.kandang), _warn: [] };
   if (APP.KANDANG.indexOf(o.kandang) < 0) throw new Error('Kandang tidak valid');
-  var f = { deplesi: 'Deplesi', butir: 'Butir', kgBagus: 'Kg bagus', kgPutih: 'Kg putih', kgBucek: 'Kg bucek',
-            kgBucekParah: 'Kg bucek parah', bijianBucek: 'Bucekan (bijian)', bijianPutih: 'Putihan (bijian)',
-            pakanKg: 'Pakan (kg)', hargaPakan: 'Harga pakan', hargaTelur: 'Harga telur', biayaObat: 'Biaya obat',
-            biayaOp: 'Biaya operasional', biayaLain: 'Lain-lain' };
+  var f = {
+    deplesi: 'Deplesi', butir: 'Butir', kgBagus: 'Kg bagus', kgPutih: 'Kg putih', kgBucek: 'Kg bucek',
+    kgBucekParah: 'Kg bucek parah', bijianBucek: 'Bucekan (bijian)', bijianPutih: 'Putihan (bijian)',
+    bijianBucekParah: 'Pecah (bijian)', beratBadan: 'Berat badan',
+    pakanKg: 'Pakan (kg)', hargaPakan: 'Harga pakan', hargaTelur: 'Harga telur',
+    hargaPutih: 'Harga putih', hargaBucek: 'Harga bucek',
+    biayaObat: 'Biaya obat', biayaOp: 'Biaya operasional', biayaLain: 'Lain-lain'
+  };
   Object.keys(f).forEach(function (k) { o[k] = numOpt_(p[k], f[k]); });
   maxChk_(o.deplesi, APP.MAX.deplesi, 'Deplesi'); maxChk_(o.butir, APP.MAX.butir, 'Butir');
   ['kgBagus', 'kgPutih', 'kgBucek', 'kgBucekParah'].forEach(function (k) { maxChk_(o[k], APP.MAX.kg, f[k]); });
-  ['deplesi', 'butir', 'bijianBucek', 'bijianPutih'].forEach(function (k) { if (o[k] !== null && o[k] % 1 !== 0) throw new Error(f[k] + ' harus bilangan bulat'); });
+  ['deplesi', 'butir', 'bijianBucek', 'bijianPutih', 'bijianBucekParah'].forEach(function (k) {
+    if (o[k] !== null && o[k] % 1 !== 0) throw new Error(f[k] + ' harus bilangan bulat');
+  });
   maxChk_(o.pakanKg, APP.MAX.pakanKg, 'Pakan (kg)');
-  ['hargaPakan', 'hargaTelur', 'biayaObat', 'biayaOp', 'biayaLain'].forEach(function (k) { maxChk_(o[k], APP.MAX.rupiah, f[k]); });
+  ['hargaPakan', 'hargaTelur', 'hargaPutih', 'hargaBucek', 'biayaObat', 'biayaOp', 'biayaLain'].forEach(function (k) {
+    maxChk_(o[k], APP.MAX.rupiah, f[k]);
+  });
   o.jenisPakan = txt_(p.jenisPakan || p.pakanJenis, 20).toUpperCase();
   if (o.jenisPakan && !APP.FEEDS[o.jenisPakan]) throw new Error('Jenis pakan tidak dikenal: ' + o.jenisPakan);
   if (o.pakanKg && !o.jenisPakan) throw new Error('Pilih jenis pakan');
@@ -604,7 +612,7 @@ function vHarian_(p) {
     if (g < 40 || g > 80) o._warn.push('Rata-rata berat telur ' + Math.round(g) + ' g/butir — di luar kisaran 40–80 g, cek kg/butir.');
   }
   if (o.kgTotal > 0 && !(o.butir > 0)) o._warn.push('Kg telur diisi tapi butir kosong.');
-  var any = ['deplesi', 'butir', 'kgBagus', 'kgPutih', 'kgBucek', 'kgBucekParah', 'bijianBucek', 'bijianPutih', 'pakanKg', 'hargaPakan', 'hargaTelur', 'biayaObat', 'biayaOp', 'biayaLain']
+  var any = ['deplesi', 'butir', 'kgBagus', 'kgPutih', 'kgBucek', 'kgBucekParah', 'bijianBucek', 'bijianPutih', 'bijianBucekParah', 'beratBadan', 'pakanKg', 'hargaPakan', 'hargaTelur', 'hargaPutih', 'hargaBucek', 'biayaObat', 'biayaOp', 'biayaLain']
     .some(function (k) { return o[k] !== null && o[k] !== undefined; }) || o.obat.length || o.ket;
   if (!any) throw new Error('Belum ada data yang diisi');
   return o;
@@ -743,20 +751,62 @@ function postRecording_(o, ctx) {
   var row = findDateRow_(sh, 1, o.tanggal, 11);
   if (row < 0) throw new Error('tanggal ' + o.tanggal + ' tidak ada di kolom A');
   var map = {};
+  // Kolom 3 (C): Deplesi
   if (o.deplesi !== null && o.deplesi !== undefined) map[3] = o.deplesi;
+  // Kolom 5 (E): Jenis Pakan
   if (o.jenisPakan) map[5] = o.jenisPakan;
+  // Kolom 6 (F): Produksi Telur - Total Panen Butir
   if (o.butir !== null && o.butir !== undefined) map[6] = o.butir;
+  // Kolom 7 (G): Produksi Telur - Total Panen Kg
   if (o.kgTotal !== null && o.kgTotal !== undefined) map[7] = o.kgTotal;
-  if (o.kgBagus !== null && o.kgBagus !== undefined) map[8] = o.kgBagus;
-  if (o.kgPutih !== null && o.kgPutih !== undefined) map[9] = o.kgPutih;
-  if (o.kgBucek !== null && o.kgBucek !== undefined) map[10] = o.kgBucek;
-  if (o.pakanKg !== null && o.pakanKg !== undefined) map[11] = o.pakanKg;
-  if (o.ket) map[17] = o.ket;
-  if (o.hargaTelur !== null && o.hargaTelur !== undefined) map[21] = o.hargaTelur;
-  if (o.hargaPakan !== null && o.hargaPakan !== undefined) map[24] = o.hargaPakan;
-  if (o.biayaObat !== null && o.biayaObat !== undefined) map[27] = o.biayaObat;
-  if (o.biayaOp !== null && o.biayaOp !== undefined) map[28] = o.biayaOp;
-  if (o.biayaLain !== null && o.biayaLain !== undefined) map[29] = o.biayaLain;
+
+  // Kolom 8 (H) & 9 (I): Telur Bagus Butir & Kg adalah rumus Excel:
+  // H = F - J - L - N  (Total Butir - Putih Butir - Bentik Butir - Pecah Butir)
+  // I = G - K - M - O  (Total Kg - Putih Kg - Bentik Kg - Pecah Kg)
+  // Jangan timpa nilai sel ini, pastikan rumus ada jika kosong:
+  if (!sh.getRange(row, 8).getFormula()) sh.getRange(row, 8).setFormula('=F' + row + '-J' + row + '-L' + row + '-N' + row);
+  if (!sh.getRange(row, 9).getFormula()) sh.getRange(row, 9).setFormula('=G' + row + '-K' + row + '-M' + row + '-O' + row);
+
+  // Kolom 10 (J): Telur Putih Butir
+  if (o.bijianPutih !== null && o.bijianPutih !== undefined) map[10] = o.bijianPutih;
+  // Kolom 11 (K): Telur Putih Kg
+  if (o.kgPutih !== null && o.kgPutih !== undefined) map[11] = o.kgPutih;
+
+  // Kolom 12 (L): Telur Bentik / Bucekan Butir
+  if (o.bijianBucek !== null && o.bijianBucek !== undefined) map[12] = o.bijianBucek;
+  // Kolom 13 (M): Telur Bentik / Bucekan Kg
+  if (o.kgBucek !== null && o.kgBucek !== undefined) map[13] = o.kgBucek;
+
+  // Kolom 14 (N): Telur Pecah / Bucek Parah Butir
+  if (o.bijianBucekParah !== null && o.bijianBucekParah !== undefined) map[14] = o.bijianBucekParah;
+  // Kolom 15 (O): Telur Pecah / Bucek Parah Kg
+  if (o.kgBucekParah !== null && o.kgBucekParah !== undefined) map[15] = o.kgBucekParah;
+
+  // Kolom 16 (P): Pakan Kg
+  if (o.pakanKg !== null && o.pakanKg !== undefined) map[16] = o.pakanKg;
+
+  // Kolom 22 (V): Keterangan (Obat/Catatan)
+  if (o.ket) map[22] = o.ket;
+
+  // Kolom 23 (W): Berat Badan (bila diisi)
+  if (o.beratBadan !== null && o.beratBadan !== undefined) map[23] = o.beratBadan;
+
+  // Kolom 26 (Z): Harga Telur Bagus
+  if (o.hargaTelur !== null && o.hargaTelur !== undefined) map[26] = o.hargaTelur;
+  // Kolom 27 (AA): Harga Telur Putih
+  if (o.hargaPutih !== null && o.hargaPutih !== undefined) map[27] = o.hargaPutih;
+  // Kolom 28 (AB): Harga Telur Bentik
+  if (o.hargaBucek !== null && o.hargaBucek !== undefined) map[28] = o.hargaBucek;
+  // Kolom 29 (AC): Harga Pakan
+  if (o.hargaPakan !== null && o.hargaPakan !== undefined) map[29] = o.hargaPakan;
+
+  // Kolom 32 (AF): Biaya Obat
+  if (o.biayaObat !== null && o.biayaObat !== undefined) map[32] = o.biayaObat;
+  // Kolom 33 (AG): Biaya Operasional
+  if (o.biayaOp !== null && o.biayaOp !== undefined) map[33] = o.biayaOp;
+  // Kolom 34 (AH): Biaya Lain
+  if (o.biayaLain !== null && o.biayaLain !== undefined) map[34] = o.biayaLain;
+
   writeRow_(sh, row, map, ctx, 'Rec K' + o.kandang);
   return 'baris ' + row;
 }
