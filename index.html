@@ -1511,7 +1511,7 @@
                 <button type="button" class="btn-step-action" onclick="stepNumber('val-deplesi', -1)">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
-                <input type="text" inputmode="numeric" class="input-field-num mono" id="val-deplesi" value="0" oninput="calculateRealtime()">
+                <input type="text" inputmode="numeric" class="input-field-num mono" id="val-deplesi" placeholder="0" oninput="calculateRealtime()">
                 <button type="button" class="btn-step-action" onclick="stepNumber('val-deplesi', 1)">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
@@ -1555,7 +1555,7 @@
                     <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucek" placeholder="0" oninput="calculateRealtime()">
                   </div>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
                   <div>
                     <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucek Parah (kg):</span>
                     <input type="text" inputmode="decimal" class="input-field-num" id="val-kgBucekParah" placeholder="0" oninput="calculateRealtime()">
@@ -1563,6 +1563,12 @@
                   <div>
                     <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Bucekan (Biji):</span>
                     <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianBucek" placeholder="0" oninput="calculateRealtime()">
+                  </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr; gap:10px;">
+                  <div>
+                    <span style="font-size:12px; font-weight:600; color:var(--fg-secondary); display:block; margin-bottom:3px;">Putihan (Biji):</span>
+                    <input type="text" inputmode="numeric" class="input-field-num" id="val-bijianPutih" placeholder="0" oninput="calculateRealtime()">
                   </div>
                 </div>
               </div>
@@ -1788,11 +1794,11 @@
           <div class="summary-calc-card">
             <div class="summary-calc-header">
               <span>Ringkasan Distribusi &amp; Stok</span>
-              <span class="summary-status-tag ok" id="metric-stok-status">Tercatat</span>
+              <span class="summary-status-tag" id="metric-stok-status">Siap Input</span>
             </div>
-            <div class="summary-calc-value" id="calc-total-kirim">Kirim: 0 kg</div>
-            <div style="font-size:12.5px; color:#065f46; font-weight:600; margin-top:3px;" id="calc-detail-stok">
-              Sisa Gudang: 0 kg · Lainnya: 0 kg
+            <div class="summary-calc-value" id="calc-total-kirim">Belum Ada Input</div>
+            <div style="font-size:12.5px; color:var(--fg-secondary); font-weight:600; margin-top:3px;" id="calc-detail-stok">
+              Isi data kirim, bawa, atau sisa gudang
             </div>
           </div>
         </div>
@@ -2680,14 +2686,18 @@ function renderHarianPreview(kandangNum, targetDate) {
 
   if (record) {
     const p = record.payload || {};
+    const hasButir = p.butir != null && p.butir !== '';
+    const hasKg = p.kgTotal != null || p.kgBagus != null;
     const butir = Number(p.butir || 0);
     const kgTotal = Number(p.kgTotal || p.kgBagus || 0);
+    const hasPakan = p.pakanKg != null && p.pakanKg !== '' && Number(p.pakanKg) > 0;
     const pakanKg = Number(p.pakanKg || 0);
-    const pakanJenis = p.pakanJenis || p.jenisPakan || 'L-208';
+    const pakanJenis = p.pakanJenis || p.jenisPakan || '';
+    const hasDeplesi = p.deplesi != null && p.deplesi !== '';
     const deplesi = Number(p.deplesi || 0);
 
     let avgGram = '-';
-    let kualitasLabel = 'Normal (Standar)';
+    let kualitasLabel = 'Menunggu Data';
     if (butir > 0 && kgTotal > 0) {
       const g = Math.round((kgTotal / butir) * 1000 * 10) / 10;
       avgGram = `${g} gram`;
@@ -2700,7 +2710,8 @@ function renderHarianPreview(kandangNum, targetDate) {
     const retakKg = Number(p.kgBucek || 0);
     const rusakKg = Number(p.kgBucekParah || 0);
     const bijiBucek = Number(p.bijianBucek || 0);
-    const adaSortiran = putihKg > 0 || retakKg > 0 || rusakKg > 0 || bijiBucek > 0;
+    const bijiPutih = Number(p.bijianPutih || 0);
+    const adaSortiran = putihKg > 0 || retakKg > 0 || rusakKg > 0 || bijiBucek > 0 || bijiPutih > 0;
     const adaKet = !!(p.ket && p.ket.trim());
 
     container.innerHTML = `
@@ -2726,8 +2737,8 @@ function renderHarianPreview(kandangNum, targetDate) {
         <div class="preview-metrics-grid">
           <div class="preview-metric-box">
             <span class="metric-label">Produksi Telur</span>
-            <span class="metric-val">${butir.toLocaleString('id-ID')} btr</span>
-            <span class="metric-sub">${kgTotal.toLocaleString('id-ID')} kg</span>
+            <span class="metric-val">${(hasButir && butir > 0) ? `${butir.toLocaleString('id-ID')} btr` : '-'}</span>
+            <span class="metric-sub">${(hasKg && kgTotal > 0) ? `${kgTotal.toLocaleString('id-ID')} kg` : 'Belum ditimbang'}</span>
           </div>
           <div class="preview-metric-box">
             <span class="metric-label">Rata-rata Telur</span>
@@ -2736,13 +2747,13 @@ function renderHarianPreview(kandangNum, targetDate) {
           </div>
           <div class="preview-metric-box">
             <span class="metric-label">Konsumsi Pakan</span>
-            <span class="metric-val">${pakanKg} kg</span>
-            <span class="metric-sub">${pakanJenis}</span>
+            <span class="metric-val">${hasPakan ? `${pakanKg} kg` : '-'}</span>
+            <span class="metric-sub">${hasPakan ? (pakanJenis || 'Pakan') : 'Tidak dicatat'}</span>
           </div>
           <div class="preview-metric-box">
             <span class="metric-label">Ayam Mati/Afkir</span>
-            <span class="metric-val" style="color:${deplesi > 0 ? 'var(--warn)' : 'var(--fg)'};">${deplesi} ekor</span>
-            <span class="metric-sub" style="color:var(--fg-muted); font-size:11px;">${deplesi === 0 ? 'Nihil (Sehat)' : 'Deplesi'}</span>
+            <span class="metric-val" style="color:${deplesi > 0 ? 'var(--warn)' : 'var(--fg)'};">${hasDeplesi ? `${deplesi} ekor` : '-'}</span>
+            <span class="metric-sub" style="color:var(--fg-muted); font-size:11px;">${hasDeplesi ? (deplesi === 0 ? 'Nihil (Sehat)' : 'Deplesi') : 'Tidak ada data'}</span>
           </div>
         </div>
 
@@ -2948,6 +2959,16 @@ function parseNum(idOrEl) {
   return isNaN(n) ? 0 : n;
 }
 
+function parseNumOpt(idOrEl) {
+  const el = typeof idOrEl === 'string' ? document.getElementById(idOrEl) : idOrEl;
+  if (!el) return null;
+  const val = String(el.value || '').trim();
+  if (val === '') return null;
+  const cleaned = val.replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? null : n;
+}
+
 function stepNumber(fieldId, delta) {
   hapticPulse('light');
   const el = document.getElementById(fieldId);
@@ -3025,8 +3046,8 @@ function calculateRealtime() {
   } else {
     if (avgLabel) avgLabel.textContent = 'Rata-rata: masukkan angka butir & kg';
     if (statusTag) {
-      statusTag.className = 'summary-status-tag ok';
-      statusTag.textContent = 'Kategori: Normal';
+      statusTag.className = 'summary-status-tag';
+      statusTag.textContent = totalKg > 0 || butir > 0 ? 'Menunggu Lengkap' : 'Siap Input';
     }
   }
 }
@@ -3048,15 +3069,22 @@ function calcTelurStok() {
   const sKg = parseNum('stok-sisaBagusKg'), sP = parseNum('stok-sisaPutih'), sB = parseNum('stok-sisaBucek'), sBP = parseNum('stok-sisaBucekParah');
   const totalSisa = (s15 * 15) + (s10 * 10) + sKg + sP + sB + sBP;
 
-  const pecah = parseNum('stok-pecah'), beli = parseNum('stok-beliLuar'), masak = parseNum('stok-dimasak'), warga = parseNum('stok-warga');
-
+  const any = totalKirim > 0 || totalBawa > 0 || totalJual > 0 || totalSisa > 0;
   const kirimEl = document.getElementById('calc-total-kirim');
-  if (kirimEl) {
-    kirimEl.textContent = `Kirim: ${Math.round(totalKirim * 100) / 100} kg`;
-  }
   const detailEl = document.getElementById('calc-detail-stok');
+  const statusEl = document.getElementById('metric-stok-status');
+
+  if (kirimEl) {
+    kirimEl.textContent = any ? `Kirim: ${Math.round(totalKirim * 100) / 100} kg` : 'Belum Ada Input';
+  }
   if (detailEl) {
-    detailEl.textContent = `Bawa: ${Math.round(totalBawa * 100) / 100} kg · Jual: ${Math.round(totalJual * 100) / 100} kg · Sisa: ${Math.round(totalSisa * 100) / 100} kg`;
+    detailEl.textContent = any
+      ? `Bawa: ${Math.round(totalBawa * 100) / 100} kg · Jual: ${Math.round(totalJual * 100) / 100} kg · Sisa: ${Math.round(totalSisa * 100) / 100} kg`
+      : 'Isi data kirim, bawa, atau sisa gudang';
+  }
+  if (statusEl) {
+    statusEl.textContent = any ? 'Terisi' : 'Siap Input';
+    statusEl.className = any ? 'summary-status-tag ok' : 'summary-status-tag';
   }
 }
 
@@ -3066,7 +3094,7 @@ function calcPakanMasuk() {
   const diskon = parseNum('pakan-diskon');
   const total = Math.max(0, (qty * harga) - diskon);
   const el = document.getElementById('calc-total-pakan');
-  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+  if (el) el.textContent = total > 0 ? ('Rp ' + Math.round(total).toLocaleString('id-ID')) : 'Rp 0 (Masukkan Qty & Harga)';
 }
 
 function calcObatMasuk() {
@@ -3076,7 +3104,7 @@ function calcObatMasuk() {
   const potongan = parseNum('obat-potongan');
   const total = Math.max(0, (qty * harga) + ppn - potongan);
   const el = document.getElementById('calc-total-obat');
-  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+  if (el) el.textContent = total > 0 ? ('Rp ' + Math.round(total).toLocaleString('id-ID')) : 'Rp 0 (Masukkan Qty & Harga)';
 }
 
 function selectArahKas(arah) {
@@ -3112,7 +3140,9 @@ function calcKasTotal() {
   const nominal = parseNum('kas-nominal');
   const el = document.getElementById('calc-total-kas');
   if (el) {
-    el.textContent = `Rp ${Math.round(nominal).toLocaleString('id-ID')} (${APP.arahKas === 'masuk' ? 'Pemasukan' : 'Pengeluaran'})`;
+    el.textContent = nominal > 0
+      ? `Rp ${Math.round(nominal).toLocaleString('id-ID')} (${APP.arahKas === 'masuk' ? 'Pemasukan' : 'Pengeluaran'})`
+      : `Rp 0 (Masukkan Nominal)`;
   }
 }
 
@@ -3129,7 +3159,7 @@ function calcJualTelur() {
   const total = totBagus + totPutih + totBucek + totPlastik;
 
   const totalEl = document.getElementById('calc-total-jual-telur');
-  if (totalEl) totalEl.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+  if (totalEl) totalEl.textContent = total > 0 ? ('Rp ' + Math.round(total).toLocaleString('id-ID')) : 'Rp 0 (Isi Kg & Harga)';
 
   const detailEl = document.getElementById('calc-jual-detail');
   if (detailEl) {
@@ -3180,7 +3210,7 @@ function calcJualLain() {
   const harga = parseNum('lain-harga');
   const total = qty * harga;
   const el = document.getElementById('calc-total-jual-lain');
-  if (el) el.textContent = 'Rp ' + Math.round(total).toLocaleString('id-ID');
+  if (el) el.textContent = total > 0 ? ('Rp ' + Math.round(total).toLocaleString('id-ID')) : 'Rp 0 (Isi Qty & Harga)';
 }
 
 /* =========================================================
@@ -3193,6 +3223,7 @@ function addMedicineRow(nama = '', qty = '') {
   row.className = 'medicine-entry-row';
   row.innerHTML = `
     <select class="input-select-field med-name">
+      <option value="" ${!nama ? 'selected disabled' : ''}>-- Pilih Obat --</option>
       <option value="VITA STRESS" ${nama === 'VITA STRESS' ? 'selected' : ''}>VITA STRESS (gram)</option>
       <option value="NEOMYCIN" ${nama === 'NEOMYCIN' ? 'selected' : ''}>NEOMYCIN (gram)</option>
       <option value="EGG STIMULANT" ${nama === 'EGG STIMULANT' ? 'selected' : ''}>EGG STIMULANT (gram)</option>
@@ -3265,13 +3296,14 @@ function toggleSpeechDictation(targetInputId) {
 function resetForm(type) {
   if (type === 'harian') {
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-    setVal('val-deplesi', '0');
+    setVal('val-deplesi', '');
     setVal('val-butir', '');
     setVal('val-kgBagus', '');
     setVal('val-kgPutih', '');
     setVal('val-kgBucek', '');
     setVal('val-kgBucekParah', '');
     setVal('val-bijianBucek', '');
+    setVal('val-bijianPutih', '');
     setVal('val-pakanKg', '');
     setVal('val-keterangan', '');
     const medBox = document.getElementById('medicine-list-container');
@@ -3355,15 +3387,16 @@ function fillFormValues(type, p) {
   const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = (val != null ? val : ''); };
 
   if (type === 'harian') {
-    setV('val-deplesi', p.deplesi != null ? p.deplesi : '0');
+    setV('val-deplesi', p.deplesi != null ? p.deplesi : '');
     setV('val-butir', p.butir);
     setV('val-kgBagus', p.kgBagus);
     setV('val-kgPutih', p.kgPutih);
     setV('val-kgBucek', p.kgBucek);
     setV('val-kgBucekParah', p.kgBucekParah);
     setV('val-bijianBucek', p.bijianBucek);
+    setV('val-bijianPutih', p.bijianPutih);
     setV('val-pakanKg', p.pakanKg);
-    setV('val-jenisPakan', p.jenisPakan || 'L-208');
+    setV('val-jenisPakan', p.jenisPakan || p.pakanJenis || 'L-208');
     setV('val-keterangan', p.ket || '');
     const medBox = document.getElementById('medicine-list-container');
     if (medBox) {
@@ -3463,17 +3496,25 @@ async function submitCurrentForm() {
   let validationError = '';
 
   if (formType === 'harian') {
-    const butir = parseNum('val-butir');
-    const kgBagus = parseNum('val-kgBagus');
-    const kgPutih = parseNum('val-kgPutih');
-    const kgBucek = parseNum('val-kgBucek');
-    const kgBucekParah = parseNum('val-kgBucekParah');
-    const pakanKg = parseNum('val-pakanKg');
-    const deplesi = parseNum('val-deplesi');
-    const kgTotal = Math.round((kgBagus + kgPutih + kgBucek + kgBucekParah) * 100) / 100;
+    const deplesi = parseNumOpt('val-deplesi');
+    const butir = parseNumOpt('val-butir');
+    const kgBagus = parseNumOpt('val-kgBagus');
+    const kgPutih = parseNumOpt('val-kgPutih');
+    const kgBucek = parseNumOpt('val-kgBucek');
+    const kgBucekParah = parseNumOpt('val-kgBucekParah');
+    const bijianBucek = parseNumOpt('val-bijianBucek');
+    const bijianPutih = parseNumOpt('val-bijianPutih');
+    const pakanKg = parseNumOpt('val-pakanKg');
+    const jenisPakan = (pakanKg != null && pakanKg > 0) ? (document.getElementById('val-jenisPakan')?.value || 'L-208') : null;
+    const medicines = collectMedicines();
+    const ket = document.getElementById('val-keterangan')?.value?.trim() || null;
 
-    if (butir === 0 && kgTotal === 0 && pakanKg === 0 && deplesi === 0) {
-      validationError = 'Mohon isi butir/kg telur atau konsumsi pakan kandang.';
+    const eggWeights = [kgBagus, kgPutih, kgBucek, kgBucekParah].filter(x => x != null && x > 0);
+    const kgTotal = eggWeights.length > 0 ? Math.round(eggWeights.reduce((a, b) => a + b, 0) * 100) / 100 : null;
+
+    const hasAny = deplesi != null || butir != null || kgTotal != null || pakanKg != null || bijianBucek != null || bijianPutih != null || medicines.length > 0 || ket;
+    if (!hasAny) {
+      validationError = 'Mohon isi setidaknya salah satu data kandang (telur, pakan, deplesi, atau obat).';
     } else {
       payload = {
         tanggal: targetDate,
@@ -3484,53 +3525,93 @@ async function submitCurrentForm() {
         kgPutih: kgPutih,
         kgBucek: kgBucek,
         kgBucekParah: kgBucekParah,
-        bijianBucek: parseNum('val-bijianBucek'),
+        bijianBucek: bijianBucek,
+        bijianPutih: bijianPutih,
         kgTotal: kgTotal,
         pakanKg: pakanKg,
-        jenisPakan: document.getElementById('val-jenisPakan')?.value || 'L-208',
-        pakanJenis: document.getElementById('val-jenisPakan')?.value || 'L-208',
-        obat: collectMedicines(),
-        ket: document.getElementById('val-keterangan')?.value?.trim() || ''
+        jenisPakan: jenisPakan,
+        pakanJenis: jenisPakan,
+        obat: medicines,
+        ket: ket || ''
       };
-      sumText = `Kandang ${APP.selectedCoop} · ${butir.toLocaleString('id-ID')} btr · ${kgTotal} kg · Pakan ${pakanKg} kg`;
+      sumText = `Kandang ${APP.selectedCoop}` +
+        (butir != null ? ` · ${butir.toLocaleString('id-ID')} btr` : '') +
+        (kgTotal != null ? ` · ${kgTotal} kg` : '') +
+        (pakanKg != null ? ` · Pakan ${pakanKg} kg` : '') +
+        (deplesi != null && deplesi > 0 ? ` · Deplesi ${deplesi} ekor` : '');
     }
   } else if (formType === 'telur_stok') {
-    payload = {
-      tanggal: targetDate,
-      kirimBagus15: parseNum('stok-kirimBagus15'),
-      kirimBagus10: parseNum('stok-kirimBagus10'),
-      kirimBagusKg: parseNum('stok-kirimBagusKg'),
-      kirimPutih: parseNum('stok-kirimPutih'),
-      kirimBucek: parseNum('stok-kirimBucek'),
-      bawaBagusKotak: parseNum('stok-bawaBagusKotak'),
-      bawaBagusKg: parseNum('stok-bawaBagusKg'),
-      bawaPutih: parseNum('stok-bawaPutih'),
-      bawaBucek: parseNum('stok-bawaBucek'),
-      jualBagusKotak: parseNum('stok-jualBagusKotak'),
-      jualBagusKg: parseNum('stok-jualBagusKg'),
-      jualPutih: parseNum('stok-jualPutih'),
-      jualBucek: parseNum('stok-jualBucek'),
-      sisaBagus15: parseNum('stok-sisaBagus15'),
-      sisaBagus10: parseNum('stok-sisaBagus10'),
-      sisaBagusKg: parseNum('stok-sisaBagusKg'),
-      sisaPutih: parseNum('stok-sisaPutih'),
-      sisaBucek: parseNum('stok-sisaBucek'),
-      sisaBucekParah: parseNum('stok-sisaBucekParah'),
-      pecah: parseNum('stok-pecah'),
-      beliLuar: parseNum('stok-beliLuar'),
-      dimasak: parseNum('stok-dimasak'),
-      warga: parseNum('stok-warga'),
-      ket: document.getElementById('stok-ket')?.value?.trim() || ''
-    };
-    sumText = `Kirim ${payload.kirimBagus15} krat (${payload.kirimBagusKg} kg) · Sisa ${payload.sisaBagus15} krat (${payload.sisaBagusKg} kg)`;
+    const kirimBagus15 = parseNumOpt('stok-kirimBagus15');
+    const kirimBagus10 = parseNumOpt('stok-kirimBagus10');
+    const kirimBagusKg = parseNumOpt('stok-kirimBagusKg');
+    const kirimPutih = parseNumOpt('stok-kirimPutih');
+    const kirimBucek = parseNumOpt('stok-kirimBucek');
+    const bawaBagusKotak = parseNumOpt('stok-bawaBagusKotak');
+    const bawaBagusKg = parseNumOpt('stok-bawaBagusKg');
+    const bawaPutih = parseNumOpt('stok-bawaPutih');
+    const bawaBucek = parseNumOpt('stok-bawaBucek');
+    const jualBagusKotak = parseNumOpt('stok-jualBagusKotak');
+    const jualBagusKg = parseNumOpt('stok-jualBagusKg');
+    const jualPutih = parseNumOpt('stok-jualPutih');
+    const jualBucek = parseNumOpt('stok-jualBucek');
+    const sisaBagus15 = parseNumOpt('stok-sisaBagus15');
+    const sisaBagus10 = parseNumOpt('stok-sisaBagus10');
+    const sisaBagusKg = parseNumOpt('stok-sisaBagusKg');
+    const sisaPutih = parseNumOpt('stok-sisaPutih');
+    const sisaBucek = parseNumOpt('stok-sisaBucek');
+    const sisaBucekParah = parseNumOpt('stok-sisaBucekParah');
+    const pecah = parseNumOpt('stok-pecah');
+    const beliLuar = parseNumOpt('stok-beliLuar');
+    const dimasak = parseNumOpt('stok-dimasak');
+    const warga = parseNumOpt('stok-warga');
+    const ketStok = document.getElementById('stok-ket')?.value?.trim() || null;
+
+    const stokVals = [kirimBagus15, kirimBagus10, kirimBagusKg, kirimPutih, kirimBucek, bawaBagusKotak, bawaBagusKg, bawaPutih, bawaBucek, jualBagusKotak, jualBagusKg, jualPutih, jualBucek, sisaBagus15, sisaBagus10, sisaBagusKg, sisaPutih, sisaBucek, sisaBucekParah, pecah, beliLuar, dimasak, warga];
+    const hasStok = stokVals.some(x => x != null) || ketStok;
+    if (!hasStok) {
+      validationError = 'Mohon isi setidaknya satu data stok / distribusi telur.';
+    } else {
+      payload = {
+        tanggal: targetDate,
+        kirimBagus15: kirimBagus15,
+        kirimBagus10: kirimBagus10,
+        kirimBagusKg: kirimBagusKg,
+        kirimPutih: kirimPutih,
+        kirimBucek: kirimBucek,
+        bawaBagusKotak: bawaBagusKotak,
+        bawaBagusKg: bawaBagusKg,
+        bawaPutih: bawaPutih,
+        bawaBucek: bawaBucek,
+        jualBagusKotak: jualBagusKotak,
+        jualBagusKg: jualBagusKg,
+        jualPutih: jualPutih,
+        jualBucek: jualBucek,
+        sisaBagus15: sisaBagus15,
+        sisaBagus10: sisaBagus10,
+        sisaBagusKg: sisaBagusKg,
+        sisaPutih: sisaPutih,
+        sisaBucek: sisaBucek,
+        sisaBucekParah: sisaBucekParah,
+        pecah: pecah,
+        beliLuar: beliLuar,
+        dimasak: dimasak,
+        warga: warga,
+        ket: ketStok || ''
+      };
+      sumText = 'Stok & Distribusi Telur' +
+        (kirimBagus15 != null ? ` · Kirim ${kirimBagus15} krat` : '') +
+        (kirimBagusKg != null ? ` (${kirimBagusKg} kg)` : '') +
+        (sisaBagus15 != null ? ` · Sisa ${sisaBagus15} krat` : '') +
+        (sisaBagusKg != null ? ` (${sisaBagusKg} kg)` : '');
+    }
   } else if (formType === 'pakan_masuk') {
-    const qty = parseNum('pakan-qty');
-    const harga = parseNum('pakan-harga');
-    if (qty === 0 || harga === 0) {
+    const qty = parseNumOpt('pakan-qty');
+    const harga = parseNumOpt('pakan-harga');
+    if (qty == null || harga == null || qty <= 0 || harga <= 0) {
       validationError = 'Mohon isi jumlah kg pakan dan harga beli per kg.';
     } else {
-      const diskon = parseNum('pakan-diskon');
-      const total = Math.max(0, (qty * harga) - diskon);
+      const diskon = parseNumOpt('pakan-diskon');
+      const total = Math.max(0, (qty * harga) - (diskon || 0));
       payload = {
         tanggal: targetDate,
         jenis: document.getElementById('pakan-jenis')?.value || 'L-208',
@@ -3544,14 +3625,14 @@ async function submitCurrentForm() {
       sumText = `${payload.jenis} · ${qty.toLocaleString('id-ID')} kg · Rp ${Math.round(total).toLocaleString('id-ID')}`;
     }
   } else if (formType === 'obat_masuk') {
-    const qty = parseNum('obat-qty');
-    if (qty === 0) {
+    const qty = parseNumOpt('obat-qty');
+    if (qty == null || qty <= 0) {
       validationError = 'Mohon isi jumlah obat yang masuk.';
     } else {
-      const harga = parseNum('obat-harga');
-      const ppn = parseNum('obat-ppn');
-      const potongan = parseNum('obat-potongan');
-      const total = Math.max(0, (qty * harga) + ppn - potongan);
+      const harga = parseNumOpt('obat-harga');
+      const ppn = parseNumOpt('obat-ppn');
+      const potongan = parseNumOpt('obat-potongan');
+      const total = Math.max(0, (qty * (harga || 0)) + (ppn || 0) - (potongan || 0));
       payload = {
         tanggal: targetDate,
         obat: document.getElementById('obat-nama')?.value || 'VITA STRESS',
@@ -3563,10 +3644,10 @@ async function submitCurrentForm() {
         supplier: document.getElementById('obat-supplier')?.value || '',
         jatuhTempo: document.getElementById('obat-jatuhTempo')?.value || ''
       };
-      sumText = `${payload.obat} · ${qty} unit · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+      sumText = `${payload.obat} · ${qty} unit` + (total > 0 ? ` · Rp ${Math.round(total).toLocaleString('id-ID')}` : '');
     }
   } else if (formType === 'kas') {
-    const nominal = parseNum('kas-nominal');
+    const nominal = parseNumOpt('kas-nominal');
     const nama = document.getElementById('kas-nama')?.value?.trim();
     if (!nominal || !nama) {
       validationError = 'Mohon isi uraian transaksi dan nominal kas.';
@@ -3576,63 +3657,72 @@ async function submitCurrentForm() {
         arah: APP.arahKas,
         nama: nama,
         nominal: nominal,
-        sub: document.getElementById('kas-sub')?.value || '',
-        metode: document.getElementById('kas-metode')?.value || 'Tunai',
+        sub: document.getElementById('kas-sub')?.value || 'Operasional',
+        metode: document.getElementById('kas-metode')?.value || 'Cash',
         ket: document.getElementById('kas-ket')?.value || ''
       };
       sumText = `[${APP.arahKas === 'masuk' ? '+' : '-'}] ${nama} · Rp ${nominal.toLocaleString('id-ID')}`;
     }
   } else if (formType === 'jual_telur') {
-    const bagusKg = parseNum('jual-bagusKg');
-    const bagusHarga = parseNum('jual-bagusHarga');
-    const putihKg = parseNum('jual-putihKg');
-    const putihHarga = parseNum('jual-putihHarga');
-    const bucekKg = parseNum('jual-bucekKg');
-    const bucekHarga = parseNum('jual-bucekHarga');
-    const plastikKg = parseNum('jual-plastikKg');
-    const plastikHarga = parseNum('jual-plastikHarga');
-    const total = (bagusKg * bagusHarga) + (putihKg * putihHarga) + (bucekKg * bucekHarga) + (plastikKg * plastikHarga);
+    const bagusKg = parseNumOpt('jual-bagusKg');
+    const bagusHarga = parseNumOpt('jual-bagusHarga');
+    const putihKg = parseNumOpt('jual-putihKg');
+    const putihHarga = parseNumOpt('jual-putihHarga');
+    const bucekKg = parseNumOpt('jual-bucekKg');
+    const bucekHarga = parseNumOpt('jual-bucekHarga');
+    const plastikKg = parseNumOpt('jual-plastikKg');
+    const plastikHarga = parseNumOpt('jual-plastikHarga');
 
-    if (total === 0) {
-      validationError = 'Mohon isi setidaknya satu rincian penjualan telur (kg & harga).';
+    const grades = [
+      { k: 'Bagus', kg: bagusKg, h: bagusHarga },
+      { k: 'Putih', kg: putihKg, h: putihHarga },
+      { k: 'Bucek', kg: bucekKg, h: bucekHarga },
+      { k: 'Plastik', kg: plastikKg, h: plastikHarga }
+    ];
+    const activeGrades = grades.filter(g => g.kg != null && g.kg > 0);
+    if (activeGrades.length === 0) {
+      validationError = 'Mohon isi minimal satu jenis telur yang terjual (kg & harga).';
     } else {
-      const chk = document.getElementById('jual-uangTelur');
-      payload = {
-        tanggal: targetDate,
-        nama: document.getElementById('jual-nama')?.value?.trim() || 'Pembeli Umum',
-        bagusKg: bagusKg, bagusHarga: bagusHarga,
-        putihKg: putihKg, putihHarga: putihHarga,
-        bucekKg: bucekKg, bucekHarga: bucekHarga,
-        plastikKg: plastikKg, plastikHarga: plastikHarga,
-        uangTelur: chk ? chk.checked : false,
-        total: total,
-        metode: document.getElementById('jual-metode')?.value || 'Tunai',
-        kredit: parseNum('jual-kredit'),
-        ket: document.getElementById('jual-ket')?.value?.trim() || ''
-      };
-      sumText = `Penjualan ${payload.nama} · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+      const incomplete = activeGrades.find(g => g.h == null || g.h <= 0);
+      if (incomplete) {
+        validationError = `Harga untuk telur ${incomplete.k} wajib diisi.`;
+      } else {
+        let total = 0;
+        activeGrades.forEach(g => { total += g.kg * g.h; });
+        const chk = document.getElementById('jual-uangTelur');
+        payload = {
+          tanggal: targetDate,
+          bagusKg: bagusKg, bagusHarga: bagusHarga,
+          putihKg: putihKg, putihHarga: putihHarga,
+          bucekKg: bucekKg, bucekHarga: bucekHarga,
+          plastikKg: plastikKg, plastikHarga: plastikHarga,
+          uangTelur: chk ? chk.checked : false,
+          total: total
+        };
+        sumText = `Penjualan Telur · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+      }
     }
   } else if (formType === 'jual_lain') {
-    const qty = parseNum('lain-qty');
-    const harga = parseNum('lain-harga');
+    const qty = parseNumOpt('lain-qty');
+    const harga = parseNumOpt('lain-harga');
+    const nama = document.getElementById('lain-nama')?.value?.trim();
     const jenis = document.getElementById('lain-jenis')?.value || 'sak';
-    if (qty === 0 || harga === 0) {
-      validationError = 'Mohon isi jumlah kuantitas dan harga satuan.';
+    if (!nama || qty == null || harga == null || qty <= 0 || harga <= 0) {
+      validationError = 'Mohon lengkapi nama pembeli, jumlah (qty), dan harga.';
     } else {
+      const kredit = parseNumOpt('lain-kredit');
       const total = qty * harga;
       payload = {
         tanggal: targetDate,
         jenis: jenis,
-        nama: document.getElementById('lain-nama')?.value?.trim() || jenis,
+        nama: nama,
         qty: qty,
         satuan: document.getElementById('lain-satuan')?.value || 'karung',
         harga: harga,
-        total: total,
-        metode: document.getElementById('lain-metode')?.value || 'Tunai',
-        kredit: parseNum('lain-kredit'),
-        ket: document.getElementById('lain-ket')?.value?.trim() || ''
+        kredit: kredit,
+        total: total
       };
-      sumText = `Jual ${jenis} (${qty} ${payload.satuan}) · Rp ${Math.round(total).toLocaleString('id-ID')}`;
+      sumText = `${jenis.toUpperCase()} · ${nama} (${qty} ${payload.satuan}) · Rp ${Math.round(total).toLocaleString('id-ID')}`;
     }
   }
 

@@ -586,9 +586,9 @@ function vHarian_(p) {
   o.jenisPakan = txt_(p.jenisPakan || p.pakanJenis, 20).toUpperCase();
   if (o.jenisPakan && !APP.FEEDS[o.jenisPakan]) throw new Error('Jenis pakan tidak dikenal: ' + o.jenisPakan);
   if (o.pakanKg && !o.jenisPakan) throw new Error('Pilih jenis pakan');
-  if (!o.pakanKg) o.jenisPakan = o.jenisPakan || '';
-  var kgs = [o.kgBagus, o.kgPutih, o.kgBucek, o.kgBucekParah];
-  o.kgTotal = kgs.some(function (x) { return x !== null; }) ? r3_(kgs.reduce(function (a, b) { return a + (b || 0); }, 0)) : null;
+  if (!o.pakanKg) o.jenisPakan = '';
+  var kgs = [o.kgBagus, o.kgPutih, o.kgBucek, o.kgBucekParah].filter(function (x) { return x !== null && x > 0; });
+  o.kgTotal = kgs.length ? r3_(kgs.reduce(function (a, b) { return a + b; }, 0)) : null;
   var daftarObat = obatNames_().map(function (x) { return x.nama; });
   o.obat = (Array.isArray(p.obat) ? p.obat : []).map(function (x) {
     var nama = txt_(x && x.nama, 60), qty = Number(String((x && x.qty) || '').replace(',', '.'));
@@ -605,8 +605,8 @@ function vHarian_(p) {
   }
   if (o.kgTotal > 0 && !(o.butir > 0)) o._warn.push('Kg telur diisi tapi butir kosong.');
   var any = ['deplesi', 'butir', 'kgBagus', 'kgPutih', 'kgBucek', 'kgBucekParah', 'bijianBucek', 'bijianPutih', 'pakanKg', 'hargaPakan', 'hargaTelur', 'biayaObat', 'biayaOp', 'biayaLain']
-    .some(function (k) { return o[k] !== null; }) || o.obat.length || o.ket;
-  if (!any) throw new Error('Belum ada data yang diisi (bila nihil, isi 0 pada Deplesi)');
+    .some(function (k) { return o[k] !== null && o[k] !== undefined; }) || o.obat.length || o.ket;
+  if (!any) throw new Error('Belum ada data yang diisi');
   return o;
 }
 
@@ -742,20 +742,23 @@ function postRecording_(o, ctx) {
   var sh = sheet_(file_('REC_K' + o.kandang), 'Data Harian');
   var row = findDateRow_(sh, 1, o.tanggal, 11);
   if (row < 0) throw new Error('tanggal ' + o.tanggal + ' tidak ada di kolom A');
-  var cur = sh.getRange(row, 1, 1, 34).getValues()[0];
-  var map = {
-    3: o.deplesi, 5: o.jenisPakan || null, 6: o.butir, 7: o.kgTotal,
-    8: o.kgBagus, 9: o.kgPutih, 10: o.kgBucek, 11: o.pakanKg,
-    17: o.ket || null, 21: o.hargaTelur, 27: o.biayaObat, 28: o.biayaOp, 29: o.biayaLain
-  };
-  var hp = o.hargaPakan, auto = false;
-  if (hp === null && o.pakanKg && o.jenisPakan && cur[23] === '') {
-    hp = latestFeedPrice_(o.jenisPakan, o.tanggal);
-    auto = hp !== null;
-  }
-  if (hp !== null) map[24] = hp;
+  var map = {};
+  if (o.deplesi !== null && o.deplesi !== undefined) map[3] = o.deplesi;
+  if (o.jenisPakan) map[5] = o.jenisPakan;
+  if (o.butir !== null && o.butir !== undefined) map[6] = o.butir;
+  if (o.kgTotal !== null && o.kgTotal !== undefined) map[7] = o.kgTotal;
+  if (o.kgBagus !== null && o.kgBagus !== undefined) map[8] = o.kgBagus;
+  if (o.kgPutih !== null && o.kgPutih !== undefined) map[9] = o.kgPutih;
+  if (o.kgBucek !== null && o.kgBucek !== undefined) map[10] = o.kgBucek;
+  if (o.pakanKg !== null && o.pakanKg !== undefined) map[11] = o.pakanKg;
+  if (o.ket) map[17] = o.ket;
+  if (o.hargaTelur !== null && o.hargaTelur !== undefined) map[21] = o.hargaTelur;
+  if (o.hargaPakan !== null && o.hargaPakan !== undefined) map[24] = o.hargaPakan;
+  if (o.biayaObat !== null && o.biayaObat !== undefined) map[27] = o.biayaObat;
+  if (o.biayaOp !== null && o.biayaOp !== undefined) map[28] = o.biayaOp;
+  if (o.biayaLain !== null && o.biayaLain !== undefined) map[29] = o.biayaLain;
   writeRow_(sh, row, map, ctx, 'Rec K' + o.kandang);
-  return 'baris ' + row + (auto ? ', harga pakan otomatis dari nota (' + hp + ')' : '');
+  return 'baris ' + row;
 }
 
 function syncRecap_(date, ctx) {
@@ -769,16 +772,33 @@ function syncRecap_(date, ctx) {
     var p = latest[k]; if (!p) return;
     seen = true;
     Object.keys(sum).forEach(function (g) { sum[g] += p[g] || 0; });
-    if (p.bijianBucek !== null && p.bijianBucek !== undefined) map[2 + 2 * (k - 1)] = p.bijianBucek;
-    if (p.bijianPutih !== null && p.bijianPutih !== undefined) map[3 + 2 * (k - 1)] = p.bijianPutih;
+    if (p.bijianBucek !== null && p.bijianBucek !== undefined && p.bijianBucek > 0) map[2 + 2 * (k - 1)] = p.bijianBucek;
+    if (p.bijianPutih !== null && p.bijianPutih !== undefined && p.bijianPutih > 0) map[3 + 2 * (k - 1)] = p.bijianPutih;
   });
   if (!seen) return 'tidak ada data';
-  map[9] = sum.kgBagus ? r3_(sum.kgBagus) : '';
-  map[10] = sum.kgPutih ? r3_(sum.kgPutih) : '';
-  map[11] = sum.kgBucek ? r3_(sum.kgBucek) : '';
-  map[12] = sum.kgBucekParah ? r3_(sum.kgBucekParah) : '';
+  if (sum.kgBagus > 0) map[9] = r3_(sum.kgBagus);
+  if (sum.kgPutih > 0) map[10] = r3_(sum.kgPutih);
+  if (sum.kgBucek > 0) map[11] = r3_(sum.kgBucek);
+  if (sum.kgBucekParah > 0) map[12] = r3_(sum.kgBucekParah);
   writeRow_(sh, row, map, ctx, 'Recap');
   if (!sh.getRange(row, 8).getFormula()) sh.getRange(row, 8).setFormula('=SUM(I' + row + ':L' + row + ')');
+
+  // Mirror Produksi Harian to STOK TELUR
+  try {
+    var shStok = sheet_(file_('RECAP'), 'STOK TELUR');
+    var rowStok = findDateRow_(shStok, 1, date, 4);
+    if (rowStok > 0) {
+      var mapStok = {};
+      if (sum.kgBagus > 0) mapStok[2] = r3_(sum.kgBagus);
+      if (sum.kgPutih > 0) mapStok[3] = r3_(sum.kgPutih);
+      if (sum.kgBucek > 0) mapStok[4] = r3_(sum.kgBucek);
+      if (sum.kgBucekParah > 0) mapStok[5] = r3_(sum.kgBucekParah);
+      if (Object.keys(mapStok).length > 0) {
+        writeRow_(shStok, rowStok, mapStok, ctx, 'Stok Telur Produksi');
+      }
+    }
+  } catch (errStok) {}
+
   return 'baris ' + row;
 }
 
@@ -801,7 +821,10 @@ function postPakanMasuk_(o, ctx) {
     var sh = sheet_(file_('PAKAN'), 'NOTA PAKAN');
     var row = firstFree_(sh, 3, [1, 4, 5], 9);
     sh.getRange(row, 1).setValue(dateFor_(sh.getParent(), o.tanggal));
-    var map = { 3: o.noFaktur || null, 4: APP.FEEDS[o.jenis].nota, 5: o.qty, 6: o.harga, 8: o.diskon, 9: o.supplier || null };
+    var map = { 4: APP.FEEDS[o.jenis].nota, 5: o.qty, 6: o.harga };
+    if (o.noFaktur) map[3] = o.noFaktur;
+    if (o.diskon !== null && o.diskon !== undefined && o.diskon > 0) map[8] = o.diskon;
+    if (o.supplier) map[9] = o.supplier;
     writeRow_(sh, row, map, ctx, 'Nota');
     if (!sh.getRange(row, 7).getFormula()) sh.getRange(row, 7).setFormula('=E' + row + '*F' + row);
     return 'baris ' + row;
@@ -817,7 +840,11 @@ function postObatMasuk_(o, ctx) {
     var ss = sh.getParent();
     sh.getRange(row, 1).setValue(dateFor_(ss, o.tanggal));
     if (o.jatuhTempo) sh.getRange(row, 2).setValue(dateFor_(ss, o.jatuhTempo));
-    var map = { 3: o.nama, 4: o.qty, 5: o.satuan || null, 6: o.harga, 7: o.ppn, 8: o.potongan, 10: o.ket || null, 11: o.pengingat || null };
+    var map = { 3: o.nama, 4: o.qty, 5: o.satuan || null, 6: o.harga };
+    if (o.ppn !== null && o.ppn !== undefined && o.ppn > 0) map[7] = o.ppn;
+    if (o.potongan !== null && o.potongan !== undefined && o.potongan > 0) map[8] = o.potongan;
+    if (o.ket) map[10] = o.ket;
+    if (o.pengingat) map[11] = o.pengingat;
     writeRow_(sh, row, map, ctx, 'Faktur');
     if (!sh.getRange(row, 9).getFormula()) sh.getRange(row, 9).setFormula('=D' + row + '*F' + row + '+G' + row + '-H' + row);
     return 'baris ' + row;
@@ -833,7 +860,14 @@ function postKas_(o, ctx) {
     var sh = sheet_(file_('KEUANGAN'), 'KAS OPERASIONAL');
     var row = firstFree_(sh, 5, [1, 2, 5, 6], 10);
     sh.getRange(row, 1).setValue(dateFor_(sh.getParent(), o.tanggal));
-    var map = { 2: o.nama, 3: o.qty, 4: o.harga, 5: o.arah === 'masuk' ? o.nominal : null, 6: o.arah === 'keluar' ? o.nominal : null, 8: o.ket || null, 9: o.sub, 10: o.metode };
+    var map = { 2: o.nama };
+    if (o.qty !== null && o.qty !== undefined && o.qty > 0) map[3] = o.qty;
+    if (o.harga !== null && o.harga !== undefined && o.harga > 0) map[4] = o.harga;
+    if (o.arah === 'masuk') map[5] = o.nominal;
+    else map[6] = o.nominal;
+    if (o.ket) map[8] = o.ket;
+    if (o.sub) map[9] = o.sub;
+    if (o.metode) map[10] = o.metode;
     writeRow_(sh, row, map, ctx, 'Kas');
     if (!sh.getRange(row, 7).getFormula()) sh.getRange(row, 7).setFormula(row === 5 ? '=E5-F5' : '=G' + (row - 1) + '+E' + row + '-F' + row);
     return 'baris ' + row;
@@ -888,7 +922,9 @@ function postJualLain_(o, ctx) {
     var sh = sheet_(file_('KEUANGAN'), cfg[0]);
     var row = firstFree_(sh, cfg[1], [1, 2, 3, 7], 8);
     sh.getRange(row, 1).setValue(dateFor_(sh.getParent(), o.tanggal));
-    writeRow_(sh, row, { 2: o.nama, 3: o.qty, 4: o.satuan || null, 5: o.harga, 7: o.kredit }, ctx, o.jenis);
+    var map = { 2: o.nama, 3: o.qty, 4: o.satuan || null, 5: o.harga };
+    if (o.kredit !== null && o.kredit !== undefined && o.kredit > 0) map[7] = o.kredit;
+    writeRow_(sh, row, map, ctx, o.jenis);
     if (!sh.getRange(row, 6).getFormula()) sh.getRange(row, 6).setFormula('=C' + row + '*E' + row);
     if (!sh.getRange(row, 8).getFormula()) {
       var first = row === cfg[1] && o.jenis === 'sak';
